@@ -8,8 +8,13 @@ namespace Checkers
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
+            var board = new Board();
+
+
+            Console.WriteLine(board);
+            Console.ReadLine();
         }
     }
 }
