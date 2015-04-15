@@ -26,7 +26,7 @@ namespace Checkers
                     }
                 }
 
-                if (row % 2 != 0)
+                else
                 {
                     for (int column = 0; column < board.GetLength(1); column++)
                     {

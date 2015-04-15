@@ -1,14 +1,13 @@
 ﻿== GAME
 * can create game
 game checks, if a checker can move to that field
-checker can become queen
 checker can beat the opponent's checker
 switches player after each move
 checks for winner
 
 == BOARD
 * can create board
-can display board
+* can display board
 board can draw checker
 
 == PLAYER
@@ -18,6 +17,8 @@ player can make a move
 player can surrender =)
 
 == CHECKER
+* can create a checker
 checker can move
+checker can become queen
 checker changes its appearance, when becomes queen
 checker moves according to the coordinates set
