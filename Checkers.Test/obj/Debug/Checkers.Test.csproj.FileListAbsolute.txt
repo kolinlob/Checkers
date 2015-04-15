@@ -1,0 +1,7 @@
+C:\Users\Splinter\Documents\Visual Studio 2013\Projects\AndriiCheckers\Checkers.Test\bin\Debug\Checkers.Test.dll
+C:\Users\Splinter\Documents\Visual Studio 2013\Projects\AndriiCheckers\Checkers.Test\bin\Debug\Checkers.Test.pdb
+C:\Users\Splinter\Documents\Visual Studio 2013\Projects\AndriiCheckers\Checkers.Test\bin\Debug\Checkers.exe
+C:\Users\Splinter\Documents\Visual Studio 2013\Projects\AndriiCheckers\Checkers.Test\bin\Debug\Checkers.pdb
+C:\Users\Splinter\Documents\Visual Studio 2013\Projects\AndriiCheckers\Checkers.Test\obj\Debug\Checkers.Test.csprojResolveAssemblyReference.cache
+C:\Users\Splinter\Documents\Visual Studio 2013\Projects\AndriiCheckers\Checkers.Test\obj\Debug\Checkers.Test.dll
+C:\Users\Splinter\Documents\Visual Studio 2013\Projects\AndriiCheckers\Checkers.Test\obj\Debug\Checkers.Test.pdb
