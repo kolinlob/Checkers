@@ -49,7 +49,11 @@ namespace Checkers
             {
                 Console.Write("   " + (board.GetLength(0) - row) + " |");
 
+<<<<<<< HEAD
                 for (int column = 0; column < board.GetLength(1); column++)
+=======
+                else
+>>>>>>> b9fe8532dc5a1c2c377319563375eb3dc27b817c
                 {
                     if (counter % (board.GetLength(0) + 1) == 0)
                         counter++;
