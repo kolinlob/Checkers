@@ -12,8 +12,8 @@ namespace Checkers
         {
             var board = new Board();
 
-
-            Console.WriteLine(board);
+            Console.ForegroundColor = ConsoleColor.White;
+            board.DrawBoard();
             Console.ReadLine();
         }
     }
