@@ -11,3 +11,9 @@ E:\Visual Studio Community 2013 - Projects\IT Labs\AndriiCheckers\Checkers\obj\D
 E:\Visual Studio Community 2013 - Projects\IT Labs\AndriiCheckers\Checkers\bin\Debug\Checkers.exe
 E:\Visual Studio Community 2013 - Projects\IT Labs\AndriiCheckers\Checkers\bin\Debug\Checkers.pdb
 E:\Visual Studio Community 2013 - Projects\IT Labs\AndriiCheckers\Checkers\obj\Debug\Checkers.csprojResolveAssemblyReference.cache
+C:\Users\inikora\Documents\Visual Studio 2013\Projects\AndriiCheckers\Checkers\bin\Debug\Checkers.exe.config
+C:\Users\inikora\Documents\Visual Studio 2013\Projects\AndriiCheckers\Checkers\obj\Debug\Checkers.exe
+C:\Users\inikora\Documents\Visual Studio 2013\Projects\AndriiCheckers\Checkers\obj\Debug\Checkers.pdb
+C:\Users\inikora\Documents\Visual Studio 2013\Projects\AndriiCheckers\Checkers\bin\Debug\Checkers.exe
+C:\Users\inikora\Documents\Visual Studio 2013\Projects\AndriiCheckers\Checkers\bin\Debug\Checkers.pdb
+C:\Users\inikora\Documents\Visual Studio 2013\Projects\AndriiCheckers\Checkers\obj\Debug\Checkers.csprojResolveAssemblyReference.cache

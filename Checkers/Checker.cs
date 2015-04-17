@@ -1,8 +1,8 @@
-namespace Checkers
+﻿namespace Checkers
 {
     public class Checker
     {
-        private char symbol = 'x';
+        private char symbol = '☻';
 
         public void Set(char symbol)
         {
