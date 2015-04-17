@@ -17,11 +17,7 @@ player can make a move
 player can surrender =)
 
 == CHECKER
-<<<<<<< HEAD
-can create checker
-=======
 * can create a checker
->>>>>>> b9fe8532dc5a1c2c377319563375eb3dc27b817c
 checker can move
 checker can become queen
 checker changes its appearance, when becomes queen
