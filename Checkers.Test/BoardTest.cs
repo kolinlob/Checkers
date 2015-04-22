@@ -23,14 +23,17 @@ namespace Checkers.Test
         public void CanDisplayBoard()
         {
             var board = new Board();
-            var expected = "0 1 0 1 0 1 0 1 \r\n" +
-                           "1 0 1 0 1 0 1 0 \r\n" +
-                           "0 1 0 1 0 1 0 1 \r\n" +
-                           "1 0 1 0 1 0 1 0 \r\n" +
-                           "0 1 0 1 0 1 0 1 \r\n" +
-                           "1 0 1 0 1 0 1 0 \r\n" +
-                           "0 1 0 1 0 1 0 1 \r\n" +
-                           "1 0 1 0 1 0 1 0 \r\n";
+            var expected =
+                "      A  B  C  D  E  F  G  H \r\n" +
+                "   8  ☻  ☻  ☻  ☻  ☻  ☻  ☻  ☻  8\r\n" +
+                "   7  ☻  ☻  ☻  ☻  ☻  ☻  ☻  ☻  7\r\n" +
+                "   6  ☻  ☻  ☻  ☻  ☻  ☻  ☻  ☻  6\r\n" +
+                "   5  ☻  ☻  ☻  ☻  ☻  ☻  ☻  ☻  5\r\n" +
+                "   4  ☻  ☻  ☻  ☻  ☻  ☻  ☻  ☻  4\r\n" +
+                "   3  ☻  ☻  ☻  ☻  ☻  ☻  ☻  ☻  3\r\n" +
+                "   2  ☻  ☻  ☻  ☻  ☻  ☻  ☻  ☻  2\r\n" +
+                "   1  ☻  ☻  ☻  ☻  ☻  ☻  ☻  ☻  1\r\n" +
+                "      A  B  C  D  E  F  G  H \r\n";
 
             Assert.AreEqual(expected, board.ToString());
         }
