@@ -2,14 +2,26 @@
 {
     public class Checker
     {
-        private char symbol = '☻';
+        char symbol = '☻';
+        public bool isWhite { get; set; }
+        public bool isQueen { get; set; }
+        public int verticalCoord { get; set; }
+        public int horizontalCoord { get; set; }
+
+        public Checker(bool isWhite, bool isQueen, int horizontalCoord, int verticalCoord)
+        {
+            this.isWhite = isWhite;
+            this.isQueen = isQueen;
+            this.horizontalCoord = horizontalCoord;
+            this.verticalCoord = verticalCoord;
+        }
 
         public void Set(char symbol)
         {
             this.symbol = symbol;
         }
 
-        public char GetValue()
+        public char Draw()
         {
             return symbol;
         }

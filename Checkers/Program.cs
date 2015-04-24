@@ -8,12 +8,15 @@ namespace Checkers
 {
     class Program
     {
+        
         static void Main()
         {
-            var board = new Board();
+            var game = new Game();
+            
 
-            Console.ForegroundColor = ConsoleColor.White;
-            board.DrawBoard();
+            game.Start();
+            
+            
             Console.ReadLine();
         }
     }

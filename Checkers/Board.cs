@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace Checkers
@@ -6,8 +7,9 @@ namespace Checkers
     public class Board
     {
         private Cell[,] board = new Cell[8, 8];
+        //List<Checker> checkersSet = new List<Checker>();
 
-        public void DrawBoard()
+        public void Draw(List<Checker> checkersSet)
         {
             int counter = 0;
 
@@ -29,14 +31,25 @@ namespace Checkers
                     if (counter % 2 == 0)
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
                     else
-                        Console.BackgroundColor = ConsoleColor.White;
+                        Console.BackgroundColor = ConsoleColor.Gray;
                     
                     counter++;
 
                     board[row, column] = new Cell();
+                    foreach (var checker in checkersSet)
+                    {
+                        if (row == checker.horizontalCoord && column == checker.verticalCoord)
+                        {
+                            board[row, column].Draw(checker);
+                        }
+                        else
+                        {
+                            board[row, column].Draw();
+                        }
+                    }
+                    
 
-
-                    Console.Write(" " + board[row, column].GetValue().GetValue() + " ");
+                    
                     Console.BackgroundColor = ConsoleColor.Black;
                 }
                 Console.BackgroundColor = ConsoleColor.Black;
@@ -90,7 +103,7 @@ namespace Checkers
                     board[row, column] = new Cell();
 
 
-                    result += " " + board[row, column].GetValue().GetValue() + " ";
+                    //result += board[row, column].Draw();
                     Console.BackgroundColor = ConsoleColor.Black;
                 }
                 Console.BackgroundColor = ConsoleColor.Black;
