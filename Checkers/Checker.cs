@@ -1,8 +1,10 @@
-﻿namespace Checkers
+﻿using System;
+
+namespace Checkers
 {
     public class Checker
     {
-        char symbol = '☻';
+        char symbol = '☼';
         public bool isWhite { get; set; }
         public bool isQueen { get; set; }
         public int verticalCoord { get; set; }
@@ -18,12 +20,18 @@
 
         public void Set(char symbol)
         {
-            this.symbol = symbol;
+            this.symbol = symbol;          
         }
 
         public char Draw()
         {
+            SetColor(isWhite ? ConsoleColor.Yellow : ConsoleColor.Red);
             return symbol;
+        }
+
+        protected void SetColor(ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
         }
 
     }

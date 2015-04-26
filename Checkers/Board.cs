@@ -22,34 +22,47 @@ namespace Checkers
             for (int row = 0; row < board.GetLength(0); row++)
             {
                 Console.Write("   " + (board.GetLength(0) - row) + " ");
-                
+
                 for (int column = 0; column < board.GetLength(1); column++)
                 {
                     if (counter % (board.GetLength(0) + 1) == 0)
                         counter++;
+                    board[row, column] = new Cell();
 
                     if (counter % 2 == 0)
+                    {
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
+
+                        Console.Write(" ");
+
+                        foreach (var checker in checkersSet)
+                        {
+                            if (row == checker.horizontalCoord && column == checker.verticalCoord)
+                            {
+                                Console.Write(board[row, column].Draw(checker));
+                                board[row, column].isEmpty = false;
+                            }
+                        }
+                        if (board[row, column].isEmpty)
+                            Console.Write(board[row, column].Draw());
+
+                        Console.ForegroundColor = ConsoleColor.White;
+
+                        Console.Write(" ");
+                    }
                     else
+                    {
                         Console.BackgroundColor = ConsoleColor.Gray;
-                    
+                        Console.Write("   ");
+                    }
+
                     counter++;
 
-                    board[row, column] = new Cell();
-                    foreach (var checker in checkersSet)
-                    {
-                        if (row == checker.horizontalCoord && column == checker.verticalCoord)
-                        {
-                            board[row, column].Draw(checker);
-                        }
-                        else
-                        {
-                            board[row, column].Draw();
-                        }
-                    }
-                    
 
-                    
+
+
+
+
                     Console.BackgroundColor = ConsoleColor.Black;
                 }
                 Console.BackgroundColor = ConsoleColor.Black;
@@ -78,10 +91,10 @@ namespace Checkers
 
             int counter = 0;
 
-           result += "     ";
+            result += "     ";
             for (int column = 0; column < board.GetLength(1); column++)
                 result += " " + Convert.ToChar(column + 65) + " ";
-           
+
             result += Environment.NewLine;
 
             for (int row = 0; row < board.GetLength(0); row++)
@@ -116,7 +129,7 @@ namespace Checkers
             result += "     ";
             for (int column = 0; column < board.GetLength(1); column++)
                 result += " " + Convert.ToChar(column + 65) + " ";
-            
+
             result += Environment.NewLine;
 
             return result;

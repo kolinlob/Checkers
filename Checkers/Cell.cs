@@ -6,6 +6,9 @@ namespace Checkers
     {
         //private Checker checker = new Checker();
 
+        private char symbol;
+        private ConsoleColor color;
+        public bool isEmpty { get; set; }
 
 
         //public void Set(Checker checker)
@@ -13,35 +16,27 @@ namespace Checkers
         //    this.checker = checker;
         //}
 
-        public void Draw()
+        public char Draw()
         {
-            Console.Write(" " + " " + " ");
+            return ' ';
         }
 
-        public void Draw(Checker checker)
+        public char Draw(Checker checker)
         {
-            Console.Write(" " + checker.Draw() + " ");
+            return checker.Draw();
         }
-
-
-        private char symbol;
-
-        private ConsoleColor color;
-        private bool IsKing;
-
-        private string value;
 
         public Cell(ConsoleColor color)
         {
             this.color = color;
-            IsKing = true;
+            this.isEmpty = isEmpty;
             symbol = '☼';
             SetColor();
         }
 
         public Cell()
         {
-            symbol = ' ';
+            isEmpty = true;
         }
 
         protected void SetColor()
@@ -49,19 +44,9 @@ namespace Checkers
             Console.ForegroundColor = color;
         }
 
-        public void SetSymbol()
-        {
-            if (IsKing)
-                symbol = 'K';
-        }
-
         public char GetSymbol()
         {
             return symbol;
         }
-
-
-
-        
     }
-    }
+}

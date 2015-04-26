@@ -8,7 +8,7 @@ namespace Checkers.Test
         [TestMethod]
         public void CanCreateChecker()
         {
-            var checker = new Checker();
+            var checker = new Checker(true, false, 0, 1);
 
             Assert.IsNotNull(checker);
         }
