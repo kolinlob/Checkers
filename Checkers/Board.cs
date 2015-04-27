@@ -7,7 +7,6 @@ namespace Checkers
     public class Board
     {
         private Cell[,] board = new Cell[8, 8];
-        //List<Checker> checkersSet = new List<Checker>();
 
         public void Draw(List<Checker> checkersSet)
         {

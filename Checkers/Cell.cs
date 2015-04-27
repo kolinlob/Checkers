@@ -4,8 +4,6 @@ namespace Checkers
 {
     public class Cell
     {
-        //private Checker checker = new Checker();
-
         private char symbol;
         private ConsoleColor color;
         public bool isEmpty { get; set; }
