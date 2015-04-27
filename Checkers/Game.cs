@@ -61,13 +61,17 @@ namespace Checkers
 
         private void MakeMove(Board board)
         {
+            Console.Write("ID шашки: ");
             int selectedCheckerID = GetInt();
+
+            Console.Write("строка, куда ходить: ");
             checkersSet[selectedCheckerID].horizontalCoord = GetInt();
+
+            Console.Write("колонка, куда ходить: ");
             checkersSet[selectedCheckerID].verticalCoord = GetInt();
 
             const int delayNpcMoveMiliseconds = 1500;
             Thread.Sleep(delayNpcMoveMiliseconds);
-
             Console.SetCursorPosition(0, 0);
 
             board.Draw(checkersSet);
