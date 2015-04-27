@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Checkers
 {
@@ -44,6 +45,30 @@ namespace Checkers
             checkersSet.Add(new Checker(false, false, 7, 6));
 
             Console.ForegroundColor = ConsoleColor.White;
+
+            board.Draw(checkersSet);
+
+
+            MakeMove(board);
+        }
+
+
+        private int GetInt()
+        {
+            return Convert.ToInt32(Console.ReadLine());
+        }
+
+
+        private void MakeMove(Board board)
+        {
+            int selectedCheckerID = GetInt();
+            checkersSet[selectedCheckerID].horizontalCoord = GetInt();
+            checkersSet[selectedCheckerID].verticalCoord = GetInt();
+
+            const int delayNpcMoveMiliseconds = 1500;
+            Thread.Sleep(delayNpcMoveMiliseconds);
+
+            Console.SetCursorPosition(0, 0);
 
             board.Draw(checkersSet);
         }
