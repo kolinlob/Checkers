@@ -7,19 +7,14 @@ using System.Threading.Tasks;
 namespace Checkers
 {
     class Program
-    {
-        
+    {   
         static void Main()
         {
             var game = new Game();
-            
-
             game.Start();
-            
+            game.SelectCell();
             
             Console.ReadLine();
         }
     }
-
-
 }
