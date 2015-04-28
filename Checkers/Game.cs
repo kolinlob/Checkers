@@ -47,12 +47,12 @@ namespace Checkers
 
         public void MakeMove(Board board)
         {
-            Console.Write("\r\n # исходной клетки (например, B6): ");
+            Console.Write("\r\nВыберите шашку (например, B6): ");
             int[] adressOld = SelectCell();
             int selectedRowOld = adressOld[0];
             int selectedColOld = adressOld[1];
 
-            Console.Write("\r\n # целевой клетки (например, С5): ");
+            Console.Write("Целевая клетка (например, С5): ");
             foreach (var checker in checkersSet)
             {
                 if (selectedRowOld == checker.horizontalCoord && selectedColOld == checker.verticalCoord)
@@ -70,31 +70,35 @@ namespace Checkers
             board.Draw(checkersSet);
         }
 
-        public int GetInt()
-        {
-            return Convert.ToInt32(Console.ReadLine());
-        }
-
         public int[] SelectCell()
         {
             Encoding ascii = Encoding.ASCII;
-            string input = Console.ReadLine().ToUpper();
-            int row = 0;
-            int col = 0;
-
-            Byte[] encodedBytes = ascii.GetBytes(input);
+            string input = Console.ReadLine();
+            while (InputIsNull(input))
+            {
+                const string nullInputError = "Некорректный ввод.                      \r\nПовторите попытку: ";
+                Console.Write(nullInputError);
+                input = Console.ReadLine();
+            }
+            
+            Byte[] encodedBytes = ascii.GetBytes(input.ToUpper());
 
             string firstChar = Convert.ToString(encodedBytes[0]);
             string secondChar = Convert.ToString(encodedBytes[1]);
 
-            var canParse1 = Int32.TryParse(firstChar, out col);
-            var canParse2 = Int32.TryParse(secondChar, out row);
+            int col = Convert.ToInt32(firstChar);
+            int row = Convert.ToInt32(secondChar);
             
             int selectedCheckerCol = col - 65;
             int selectedCheckerRow = 56 - row;
 
             int[] adress = { selectedCheckerRow, selectedCheckerCol };
             return adress;
+        }
+
+        private bool InputIsNull(string input)
+        {
+            return (input.Length < 2);
         }
     }
 }

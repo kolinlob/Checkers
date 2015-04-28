@@ -58,12 +58,12 @@ namespace Checkers
                 Margin(row);
             }
             Console.WriteLine();
+            Console.WriteLine();
             ColumnHeader();
         }
 
         private void ColumnHeader()
         {
-            Console.WriteLine();
             Console.Write("     ");
             for (int column = 0; column < board.GetLength(1); column++)
                 Console.Write("  " + Convert.ToChar(column + 65) + "  ");
@@ -98,7 +98,7 @@ namespace Checkers
         {
             string result = string.Empty;
 
-            result += Environment.NewLine;
+            //result += Environment.NewLine;
             result += "     ";
             for (int column = 0; column < board.GetLength(1); column++)
                 result += "  " + Convert.ToChar(column + 65) + "  ";
