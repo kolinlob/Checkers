@@ -34,5 +34,17 @@ namespace Checkers
             Console.ForegroundColor = color;
         }
 
+
+        public override int GetHashCode()
+        {
+
+            return String.Format("({0} {1} {2} {3})", isWhite, isQueen, horizontalCoord, verticalCoord).GetHashCode();
+        }
+
+        public override bool Equals(object other)
+        {
+            return this.GetHashCode() == other.GetHashCode();
+        }
+
     }
 }

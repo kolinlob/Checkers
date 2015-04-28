@@ -36,5 +36,17 @@ namespace Checkers.Test
             Assert.AreNotEqual(expectedhorizontalCoord, actualhorizontalCoord);
             //Assert.AreNotEqual(expectedVerticalCoord, actualVerticalCoord);
         }
+
+        [TestMethod]
+        public void CheckerProperties()
+        {
+
+            Checker actualChecker = new Checker(true, false, 0, 1);
+
+            Checker expectedChecker = new Checker(true, false, 0, 1);
+
+            Assert.AreEqual(expectedChecker, actualChecker);
+
+        }
     }
 }
