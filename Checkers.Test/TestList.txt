@@ -20,7 +20,7 @@ player can surrender =)
 == CHECKER
 * can create a checker
 * checker property is corect
-checker can move
-checker can become queen
++-checker can be moved
+* checker can become queen
 checker changes its appearance, when becomes queen
 checker moves according to the new coordinates set

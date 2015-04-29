@@ -10,10 +10,6 @@ namespace Checkers
         public bool IsUsable { get; set; }
 
 
-        //public void Set(Checker checker)
-        //{
-        //    this.checker = checker;
-        //}
 
         public void Draw()
         {
