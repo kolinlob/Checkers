@@ -33,12 +33,12 @@ namespace Checkers
                         {
                             if (row == checker.horizontalCoord && column == checker.verticalCoord)
                             {
-                                Console.Write(board[row, column].Draw(checker));
-                                board[row, column].isEmpty = false;
+                                board[row, column].Draw(checker);
+                                board[row, column].IsEmpty = false;
                             }
                         }
-                        if (board[row, column].isEmpty)
-                            Console.Write(board[row, column].Draw());
+                        if (board[row, column].IsEmpty)
+                            board[row, column].Draw();
 
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.Write("  ");
@@ -94,6 +94,11 @@ namespace Checkers
             }
         }
 
+        public bool IsEmpty(int row, int col)
+        {
+            return (board[row, col].IsEmpty);
+        }
+
         public override string ToString()
         {
             string result = string.Empty;
@@ -128,7 +133,7 @@ namespace Checkers
                         if (row >= 3 && row < 5)
                         {
                             board[row, column] = new Cell();
-                            result += "  " + board[row, column].Draw() + "  ";
+                            //result += "  " + board[row, column].Draw() + "  ";
                         }
                         if (row >= 5 && row < 8)
                         {
@@ -139,7 +144,7 @@ namespace Checkers
                     else
                     {
                         board[row, column] = new Cell();
-                        result += "  " + board[row, column].Draw() + "  ";
+                        //result += "  " + board[row, column].Draw() + "  ";
                     }
                     counter++;
                 }

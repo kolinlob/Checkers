@@ -6,7 +6,8 @@ namespace Checkers
     {
         private char symbol;
         private ConsoleColor color;
-        public bool isEmpty { get; set; }
+        public bool IsEmpty { get; set; }
+        public bool IsUsable { get; set; }
 
 
         //public void Set(Checker checker)
@@ -14,27 +15,29 @@ namespace Checkers
         //    this.checker = checker;
         //}
 
-        public char Draw()
+        public void Draw()
         {
-            return ' ';
+            Console.Write(' ');
         }
 
-        public char Draw(Checker checker)
+        public void Draw(Checker checker)
         {
-            return checker.Draw();
+            Console.Write(checker.Draw());
         }
 
         public Cell(ConsoleColor color)
         {
             this.color = color;
-            this.isEmpty = isEmpty;
-            symbol = '☼';
+            IsEmpty = true;
+            IsUsable = true;
+            symbol = ' ';
             SetColor();
         }
 
         public Cell()
         {
-            isEmpty = true;
+            IsEmpty = true;
+            IsUsable = false;
         }
 
         protected void SetColor()
