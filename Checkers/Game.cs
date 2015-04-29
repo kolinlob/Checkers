@@ -98,7 +98,10 @@ namespace Checkers
         {
             Encoding ascii = Encoding.ASCII;
             string input = Console.ReadLine();
-            while (input == null || !IsOfCorrectLength(input))
+            //int selectedCheckerCol = 0;
+            //int selectedCheckerRow = 0;
+
+            while (input == null || !IsOfCorrectLength(input))// || selectedCheckerCol < 0 || selectedCheckerCol > 7 || selectedCheckerRow < 0 || selectedCheckerRow > 7)
             {
                 const string incorrectInputError = "Некорректный ввод. Повторите попытку: ";
                 Console.Write(incorrectInputError);
@@ -108,19 +111,9 @@ namespace Checkers
 
             Byte[] encodedBytes = ascii.GetBytes(input.ToUpper());
 
-            string firstChar = Convert.ToString(encodedBytes[0]);
-            string secondChar = Convert.ToString(encodedBytes[1]);
+            int selectedCheckerCol = Convert.ToInt32(encodedBytes[0]) - 65;
+            int selectedCheckerRow = 56 - Convert.ToInt32(encodedBytes[1]);
 
-            int columnCode = Convert.ToInt32(firstChar);
-            int rowCode = Convert.ToInt32(secondChar);
-
-            int selectedCheckerCol = columnCode - 65;
-            int selectedCheckerRow = 56 - rowCode;
-
-            if (selectedCheckerCol < 0 || selectedCheckerCol > 7 || selectedCheckerRow < 0 || selectedCheckerRow > 7)
-            {
-                SelectCell();
-            }
             int[] adress = { selectedCheckerRow, selectedCheckerCol };
             return adress;
         }
