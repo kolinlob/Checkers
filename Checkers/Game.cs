@@ -23,7 +23,7 @@ namespace Checkers
                 MakeMove(board);
         }
 
-        private void CreateCheckers(string color = "whites")
+        public void CreateCheckers(string color = "whites")
         {
             int start = 0;
             int end = 3;
@@ -32,7 +32,7 @@ namespace Checkers
             if (color == "blacks")
             {
                 start = 5;
-                end = 9;
+                end = 8;
                 isWhite = false;
             }
 

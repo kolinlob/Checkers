@@ -56,6 +56,24 @@ namespace Checkers.Test
 
             Assert.AreEqual(expected, board.ToString());
         }
+
+        
+        [TestMethod]   //?
+        public void IsCellOcupied()
+        {
+
+            Game game = new Game();
+
+            Board board = new Board();
+            game.CreateCheckers();
+
+            board.Draw(game.checkersSet);
+
+            bool expected = board.IsEmpty(3, 0);
+
+            Assert.IsTrue(expected);
+
+        }
     }
 
 

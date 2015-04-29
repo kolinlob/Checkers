@@ -40,13 +40,17 @@ namespace Checkers.Test
         [TestMethod]
         public void CheckerProperties()
         {
+            var game = new Game();
+            game.CreateCheckers();
 
-            Checker actualChecker = new Checker(true, false, 0, 1);
+            Checker actualChecker = game.checkersSet[0];
 
             Checker expectedChecker = new Checker(true, false, 0, 1);
 
             Assert.AreEqual(expectedChecker, actualChecker);
 
         }
+
+
     }
 }
