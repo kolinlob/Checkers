@@ -123,20 +123,12 @@ namespace Checkers
             return (input.Length == 2);
         }
 
-
-
-        public void SetQueen(Checker checker)
+        public void CheckerBecomesQueen(Checker checker)
         {
-
-
-            if ((checker.horizontalCoord == 7 && checker.isWhite) || (checker.horizontalCoord == 0 && !checker.isWhite))
-             
+            if ((checker.isWhite && checker.horizontalCoord == 7) || (!checker.isWhite && checker.horizontalCoord == 0))
             {
                 checker.isQueen = true;
             }
-
-
         }
-
     }
 }

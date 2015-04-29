@@ -52,34 +52,34 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void WhiteCheckerIsQueen()
+        public void WhiteCheckerCanBecomeQueen()
         {
             Game game = new Game();
             game.CreateCheckers();
 
-            game.checkersSet[0].horizontalCoord = 7;
-            game.checkersSet[0].verticalCoord = 0;
+            game.checkersSet[5].horizontalCoord = 7;
+            game.checkersSet[5].verticalCoord = 0;
 
-            game.SetQueen(game.checkersSet[0]);
+            game.CheckerBecomesQueen(game.checkersSet[5]);
 
-            bool expected = game.checkersSet[0].isQueen;
+            bool expected = game.checkersSet[5].isQueen;
 
             Assert.IsTrue(expected);
         }
 
 
         [TestMethod]
-        public void BlacksCheckerIsQueen()
+        public void BlackCheckerCanBecomeQueen()
         {
             Game game = new Game();
             game.CreateCheckers("blacks");
 
-            game.checkersSet[11].horizontalCoord = 0;
-            game.checkersSet[11].verticalCoord = 1;
+            game.checkersSet[7].horizontalCoord = 0;
+            game.checkersSet[7].verticalCoord = 1;
 
-            game.SetQueen(game.checkersSet[11]);
+            game.CheckerBecomesQueen(game.checkersSet[7]);
 
-            bool expected = game.checkersSet[11].isQueen;
+            bool expected = game.checkersSet[7].isQueen;
 
             Assert.IsTrue(expected);
         }

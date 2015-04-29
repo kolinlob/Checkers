@@ -103,7 +103,6 @@ namespace Checkers
         {
             string result = string.Empty;
 
-            //result += Environment.NewLine;
             result += "     ";
             for (int column = 0; column < board.GetLength(1); column++)
                 result += "  " + Convert.ToChar(column + 65) + "  ";
@@ -121,32 +120,8 @@ namespace Checkers
 
                 for (int column = 0; column < board.GetLength(1); column++)
                 {
-                    if (counter % (board.GetLength(0) + 1) == 0)
-                        counter++;
-                    if (counter % 2 == 0)
-                    {
-                        if (row >= 0 && row < 3)
-                        {
-                            board[row, column] = new Cell(ConsoleColor.Red);
-                            result += "  " + board[row, column].GetSymbol() + "  ";
-                        }
-                        if (row >= 3 && row < 5)
-                        {
                             board[row, column] = new Cell();
-                            //result += "  " + board[row, column].Draw() + "  ";
-                        }
-                        if (row >= 5 && row < 8)
-                        {
-                            board[row, column] = new Cell(ConsoleColor.Yellow);
-                            result += "  " + board[row, column].GetSymbol() + "  ";
-                        }
-                    }
-                    else
-                    {
-                        board[row, column] = new Cell();
-                        //result += "  " + board[row, column].Draw() + "  ";
-                    }
-                    counter++;
+                            result += "  " + Convert.ToString(board[row, column].GetSymbol()) + "  ";
                 }
                 result += " " + (board.GetLength(0) - row) + " ";
                 result += "\r\n     ";

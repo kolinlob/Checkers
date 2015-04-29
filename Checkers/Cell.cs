@@ -9,8 +9,6 @@ namespace Checkers
         public bool IsEmpty { get; set; }
         public bool IsUsable { get; set; }
 
-
-
         public void Draw()
         {
             Console.Write(' ');
@@ -41,9 +39,9 @@ namespace Checkers
             Console.ForegroundColor = color;
         }
 
-        public char GetSymbol()
+        public string GetSymbol()
         {
-            return symbol;
+            return Convert.ToString(symbol);
         }
     }
 }

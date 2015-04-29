@@ -16,15 +16,12 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void WhitesCheckersAreInStartPosition()
+        public void WhiteCheckersAreInStartPosition()
         {
             Game game = new Game();
             game.CreateCheckers();
 
-
             List<Checker> expected = new List<Checker>();
-
-
             expected.Add(new Checker(true, false, 0, 1));
             expected.Add(new Checker(true, false, 0, 3));
             expected.Add(new Checker(true, false, 0, 5));
@@ -38,21 +35,16 @@ namespace Checkers.Test
             expected.Add(new Checker(true, false, 2, 5));
             expected.Add(new Checker(true, false, 2, 7));
 
-           
-
             CollectionAssert.AreEqual(expected, game.checkersSet);
         }
 
         [TestMethod]
-        public void BlacksCheckersAreInStartPosition()
+        public void BlackCheckersAreInStartPosition()
         {
             Game game = new Game();
             game.CreateCheckers("blacks");
 
-
             List<Checker> expected = new List<Checker>();
-
-            
             expected.Add(new Checker(false, false, 5, 0));
             expected.Add(new Checker(false, false, 5, 2));
             expected.Add(new Checker(false, false, 5, 4));
@@ -66,7 +58,6 @@ namespace Checkers.Test
             expected.Add(new Checker(false, false, 7, 4));
             expected.Add(new Checker(false, false, 7, 6));
 
-            
             CollectionAssert.AreEqual(expected, game.checkersSet);
         }
         
