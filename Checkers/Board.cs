@@ -103,12 +103,11 @@ namespace Checkers
         {
             string result = string.Empty;
 
-            result += "     ";
+            result += "\r\n     ";
             for (int column = 0; column < board.GetLength(1); column++)
                 result += "  " + Convert.ToChar(column + 65) + "  ";
             result += Environment.NewLine;
 
-            int counter = 0;
             for (int row = 0; row < board.GetLength(0); row++)
             {
                 result += "\r\n     ";

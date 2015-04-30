@@ -22,7 +22,7 @@ namespace Checkers.Test
         public void CanDisplayBoard()
         {
             var board = new Board();
-            var expected = "       A    B    C    D    E    F    G    H  \r\n"      +
+            var expected = "\r\n       A    B    C    D    E    F    G    H  \r\n" +
                            "\r\n"                                                   +
                            "                                             \r\n"      +
                            "   8                                          8 \r\n"   +
