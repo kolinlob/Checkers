@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+using System.Linq;
 using System.Threading;
 
 namespace Checkers
@@ -10,17 +9,20 @@ namespace Checkers
     {
         public List<Checker> checkersSet = new List<Checker>();
         private Board board;
+        private Move move;
+        private Player player;
+
+
 
         public void Start()
         {
             this.board = new Board();
+            this.move = new Move();
+            this.player = new Player();
 
             CreateCheckers("whites");
             CreateCheckers("blacks");
             board.Draw(checkersSet);
-
-            //while (true)
-            //    MakeMove(board);
         }
 
         public void CreateCheckers(string color = "whites")
@@ -46,11 +48,28 @@ namespace Checkers
             }
         }
 
-        public void MakeMove(Board board)
+
+        public bool CanMove(int[] adressNew)
         {
-            Console.SetCursorPosition(0, 28);
+            return (board.IsEmpty(adressNew[0], adressNew[1]) && board.IsUsable(adressNew[0], adressNew[1]));
+        }
+
+        public void CheckerBecomesQueen(Checker checker)
+        {
+            if ((checker.IsWhite && checker.HorizontalCoord == 7) || (!checker.IsWhite && checker.HorizontalCoord == 0))
+            {
+                checker.IsQueen = true;
+                checker.ChageSymbol();
+            }
+        }
+
+        public void MakeMove()
+        {
+            const int delayNpcMoveMiliseconds = 500;
+            Console.SetCursorPosition(0, 29);
             Console.Write("\r\nВыберите шашку (например, B6): ");
-            int[] adressOld = SelectCell();
+
+            int[] adressOld = player.SelectCell();
             int selectedRowOld = adressOld[0];
             int selectedColOld = adressOld[1];
 
@@ -59,7 +78,7 @@ namespace Checkers
             {
                 if (selectedRowOld == checker.HorizontalCoord && selectedColOld == checker.VerticalCoord)
                 {
-                    int[] adressNew = SelectCell();
+                    int[] adressNew = player.SelectCell();
                     if (CanMove(adressNew))
                     {
                         checker.HorizontalCoord = adressNew[0];
@@ -69,17 +88,16 @@ namespace Checkers
                     else
                     {
                         Console.WriteLine("Нельзя ходить в выбранную клетку!");
-                        //return;
+                        Thread.Sleep(delayNpcMoveMiliseconds);
                     }
                 }
             }
 
-            const int delayNpcMoveMiliseconds = 500;
             Thread.Sleep(delayNpcMoveMiliseconds);
             Console.SetCursorPosition(0, 0);
             board.Draw(checkersSet);
 
-            Console.SetCursorPosition(0, 28);
+            Console.SetCursorPosition(0, 29);
             for (int i = 0; i < 5; i++)
             {
                 for (int j = 0; j < 45; j++)
@@ -90,47 +108,12 @@ namespace Checkers
             }
         }
 
-        public bool CanMove(int[] adressNew)
+        public bool GameIsOver()
         {
-            return (board.IsEmpty(adressNew[0], adressNew[1]) && board.IsUsable(adressNew[0], adressNew[1]));
-        }
+            bool noWhites = checkersSet.Count(checker => checker.IsWhite) == 0;
+            bool noBlacks = checkersSet.Count(checker => checker.IsWhite == false) == 0;
 
-        public int[] SelectCell()
-        {
-            Encoding ascii = Encoding.ASCII;
-            string input = Console.ReadLine();
-            //int selectedCheckerCol = 0;
-            //int selectedCheckerRow = 0;
-
-            while (input == null || !IsOfCorrectLength(input))// || selectedCheckerCol < 0 || selectedCheckerCol > 7 || selectedCheckerRow < 0 || selectedCheckerRow > 7)
-            {
-                const string incorrectInputError = "Некорректный ввод. Повторите попытку: ";
-                Console.Write(incorrectInputError);
-
-                input = Console.ReadLine();
-            }
-
-            Byte[] encodedBytes = ascii.GetBytes(input.ToUpper());
-
-            int selectedCheckerCol = Convert.ToInt32(encodedBytes[0]) - 65;
-            int selectedCheckerRow = 56 - Convert.ToInt32(encodedBytes[1]);
-
-            int[] adress = { selectedCheckerRow, selectedCheckerCol };
-            return adress;
-        }
-
-        private bool IsOfCorrectLength(string input)
-        {
-            return (input.Length == 2);
-        }
-
-        public void CheckerBecomesQueen(Checker checker)
-        {
-            if ((checker.IsWhite && checker.HorizontalCoord == 7) || (!checker.IsWhite && checker.HorizontalCoord == 0))
-            {
-                checker.IsQueen = true;
-                checker.ChageSymbol();
-            }
+            return (noWhites || noBlacks);
         }
     }
 }

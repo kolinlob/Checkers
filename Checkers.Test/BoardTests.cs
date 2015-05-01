@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Checkers.Test
 {
     [TestClass]
-    public class BoardTest
+    public class BoardTests
     {
         [TestMethod]
         public void CanCreateBoard()

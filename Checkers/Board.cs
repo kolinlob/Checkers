@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace Checkers
 {
@@ -59,12 +58,12 @@ namespace Checkers
                 Margin(row);
             }
             Console.WriteLine();
-            Console.WriteLine();
             ColumnHeader();
         }
 
         private void ColumnHeader()
         {
+            Console.WriteLine();
             Console.Write("     ");
             for (int column = 0; column < board.GetLength(1); column++)
                 Console.Write("  " + Convert.ToChar(column + 65) + "  ");

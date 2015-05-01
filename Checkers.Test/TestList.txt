@@ -4,10 +4,12 @@
 * game checks, if a checker can move to that field
 checker can beat the opponent's checker
 switches player after each move
-checks for winner
+*(50%) checks for winner (as of now only checks if no whites/blacks remained on the board)
 
 == CELL
-
+* can create cell
+* check if cell is usable
+* check if cell is empty
 
 == BOARD
 * can create board
@@ -24,9 +26,13 @@ can display board
 
 
 == PLAYER
-player can choose their checker
+* player can select checker
+player can select one checker of own ones
 player can set coordinates for a checker to move
 player can make a move
 player can surrender =)
 
 == MOVE
+
+
+

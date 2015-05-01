@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Checkers.Test
 {
     [TestClass]
-    public class GameTest
+    public class GameTests
     {
         [TestMethod]
         public void CanCreateGame()
@@ -66,18 +66,43 @@ namespace Checkers.Test
         {
             var game = new Game();
             game.Start();
-            
+
             int[] adress = { 2, 2 };
             bool expected = game.CanMove(adress);
-            
+
             Assert.IsFalse(expected);
         }
 
         [TestMethod]
         public void CannotMoveToOccupiedBlackCell()
         {
-            int[] adress = { };
-            //Assert.IsTrue(game.CanMove(adress));
+            var game = new Game();
+            game.Start();
+
+            int[] adress = { 2, 1 };
+            bool expected = game.CanMove(adress);
+
+            Assert.IsFalse(expected);
+        }
+
+        [TestMethod]
+        public void GameIsOver_When_No_Black_CheckersRemained()
+        {
+            var game = new Game();
+            game.Start();
+            game.checkersSet.RemoveAll(checker => checker.IsWhite == false);
+
+            Assert.IsTrue(game.GameIsOver());
+        }
+
+        [TestMethod]
+        public void GameIsOver_When_No_White_CheckersRemained()
+        {
+            var game = new Game();
+            game.Start();
+            game.checkersSet.RemoveAll(checker => checker.IsWhite);
+
+            Assert.IsTrue(game.GameIsOver());
         }
     }
 }

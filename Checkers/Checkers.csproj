@@ -46,6 +46,7 @@
     <Compile Include="Checker.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Move.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
