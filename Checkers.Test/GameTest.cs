@@ -60,6 +60,30 @@ namespace Checkers.Test
 
             CollectionAssert.AreEqual(expected, game.checkersSet);
         }
-        
+
+        [TestMethod]
+        public void CannotMoveToWhiteCell()
+        {
+            var game = new Game();
+            var board = new Board();
+            game.CreateCheckers();
+            game.CreateCheckers("blacks");
+
+            board.Draw(game.checkersSet);
+
+            //var selectedChecker = game.checkersSet[8];
+
+            int[] adress = { 2, 1 };
+            bool expected = game.CanMove(adress);
+            
+            Assert.IsFalse(expected);
+        }
+
+        [TestMethod]
+        public void CannotMoveToOccupiedBlackCell()
+        {
+            int[] adress = { };
+            //Assert.IsTrue(game.CanMove(adress));
+        }
     }
 }

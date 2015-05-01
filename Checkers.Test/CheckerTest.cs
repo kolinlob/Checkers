@@ -1,4 +1,4 @@
-using System;
+Ôªøusing System;
 using System.Collections.Generic;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -16,25 +16,18 @@ namespace Checkers.Test
             Assert.IsNotNull(checker);
         }
 
-        [TestMethod] //‰ÓÓ·ËÚË
-        public void CheckerCanBeMoved()
+        [TestMethod]
+        public void CheckerCanBeMovedToSpecifiedCoordinates()
         {
-            var game = new Game();
-            game.CreateCheckers();
+            var checker = new Checker(true, false, 0,1);
+            
+            checker.HorizontalCoord = 3;
+            checker.VerticalCoord = 0;
 
-            int expectedhorizontalCoord = game.checkersSet[8].horizontalCoord;
-            //int expectedVerticalCoord = game.checkersSet[8].verticalCoord;
+            var actual = checker;
+            var expected = new Checker(true, false, 3, 0);
 
-
-            game.checkersSet[8].horizontalCoord = 3;
-            //game.checkersSet[8].verticalCoord = 0;
-
-
-            int actualhorizontalCoord = game.checkersSet[8].horizontalCoord;
-            //int actualVerticalCoord = game.checkersSet[8].verticalCoord;
-
-            Assert.AreNotEqual(expectedhorizontalCoord, actualhorizontalCoord);
-            //Assert.AreNotEqual(expectedVerticalCoord, actualVerticalCoord);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -48,7 +41,6 @@ namespace Checkers.Test
             Checker expectedChecker = new Checker(true, false, 0, 1);
 
             Assert.AreEqual(expectedChecker, actualChecker);
-
         }
 
         [TestMethod]
@@ -57,12 +49,12 @@ namespace Checkers.Test
             Game game = new Game();
             game.CreateCheckers();
 
-            game.checkersSet[5].horizontalCoord = 7;
-            game.checkersSet[5].verticalCoord = 0;
+            game.checkersSet[5].HorizontalCoord = 7;
+            game.checkersSet[5].VerticalCoord = 0;
 
             game.CheckerBecomesQueen(game.checkersSet[5]);
 
-            bool expected = game.checkersSet[5].isQueen;
+            bool expected = game.checkersSet[5].IsQueen;
 
             Assert.IsTrue(expected);
         }
@@ -74,14 +66,40 @@ namespace Checkers.Test
             Game game = new Game();
             game.CreateCheckers("blacks");
 
-            game.checkersSet[7].horizontalCoord = 0;
-            game.checkersSet[7].verticalCoord = 1;
+            game.checkersSet[7].HorizontalCoord = 0;
+            game.checkersSet[7].VerticalCoord = 1;
 
             game.CheckerBecomesQueen(game.checkersSet[7]);
 
-            bool expected = game.checkersSet[7].isQueen;
+            bool expected = game.checkersSet[7].IsQueen;
 
             Assert.IsTrue(expected);
+        }
+
+        [TestMethod]
+        public void WhiteCheckerChangesItsSymbolUponBecomingQueen()
+        {
+            Game game = new Game();
+            game.CreateCheckers();
+
+            game.checkersSet[5].HorizontalCoord = 7;
+            game.checkersSet[5].VerticalCoord = 0;
+
+            game.CheckerBecomesQueen(game.checkersSet[5]);
+            Assert.IsTrue(game.checkersSet[5].Draw() == 'K');
+        }
+
+        [TestMethod]
+        public void BlackCheckerChangesItsSymbolUponBecomingQueen()
+        {
+            Game game = new Game();
+            game.CreateCheckers("blacks");
+
+            game.checkersSet[7].HorizontalCoord = 0;
+            game.checkersSet[7].VerticalCoord = 1;
+
+            game.CheckerBecomesQueen(game.checkersSet[7]);
+            Assert.IsTrue(game.checkersSet[7].Draw() == 'K');
         }
     }
 }

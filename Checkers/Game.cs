@@ -57,13 +57,14 @@ namespace Checkers
             Console.Write("Целевая клетка (например, С5): ");
             foreach (var checker in checkersSet)
             {
-                if (selectedRowOld == checker.horizontalCoord && selectedColOld == checker.verticalCoord)
+                if (selectedRowOld == checker.HorizontalCoord && selectedColOld == checker.VerticalCoord)
                 {
                     int[] adressNew = SelectCell();
                     if (CanMove(adressNew))
                     {
-                        checker.horizontalCoord = adressNew[0];
-                        checker.verticalCoord = adressNew[1];
+                        checker.HorizontalCoord = adressNew[0];
+                        checker.VerticalCoord = adressNew[1];
+                        CheckerBecomesQueen(checker);
                     }
                     else
                     {
@@ -89,9 +90,9 @@ namespace Checkers
             }
         }
 
-        private bool CanMove(int[] adressNew)
+        public bool CanMove(int[] adressNew)
         {
-            return (board.IsEmpty(adressNew[0], adressNew[1])); // || board.IsUsable(adressNew[0], adressNew[1]));
+            return (board.IsEmpty(adressNew[0], adressNew[1]) && board.IsUsable(adressNew[0], adressNew[1]));
         }
 
         public int[] SelectCell()
@@ -125,9 +126,10 @@ namespace Checkers
 
         public void CheckerBecomesQueen(Checker checker)
         {
-            if ((checker.isWhite && checker.horizontalCoord == 7) || (!checker.isWhite && checker.horizontalCoord == 0))
+            if ((checker.IsWhite && checker.HorizontalCoord == 7) || (!checker.IsWhite && checker.HorizontalCoord == 0))
             {
-                checker.isQueen = true;
+                checker.IsQueen = true;
+                checker.ChageSymbol();
             }
         }
     }

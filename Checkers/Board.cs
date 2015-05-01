@@ -31,7 +31,7 @@ namespace Checkers
 
                         foreach (var checker in checkersSet)
                         {
-                            if (row == checker.horizontalCoord && column == checker.verticalCoord)
+                            if (row == checker.HorizontalCoord && column == checker.VerticalCoord)
                             {
                                 board[row, column].Draw(checker);
                                 board[row, column].IsEmpty = false;
@@ -47,6 +47,7 @@ namespace Checkers
                     {
                         Console.BackgroundColor = ConsoleColor.Gray;
                         Console.Write("     ");
+                        board[row, column].IsUsable = false;
                     }
                     counter++;
                     Console.BackgroundColor = ConsoleColor.Black;
@@ -99,42 +100,57 @@ namespace Checkers
             return (board[row, col].IsEmpty);
         }
 
-        public override string ToString()
+        public bool IsUsable(int row, int col)
         {
-            string result = string.Empty;
+            return (board[row, col].IsUsable);
+        }
 
-            result += "\r\n     ";
-            for (int column = 0; column < board.GetLength(1); column++)
-                result += "  " + Convert.ToChar(column + 65) + "  ";
-            result += Environment.NewLine;
+        //public override string ToString()
+        //{
+        //    string result = string.Empty;
+        //
+        //    result += "\r\n     ";
+        //    for (int column = 0; column < board.GetLength(1); column++)
+        //        result += "  " + Convert.ToChar(column + 65) + "  ";
+        //    result += Environment.NewLine;
+        //
+        //    for (int row = 0; row < board.GetLength(0); row++)
+        //    {
+        //        result += "\r\n     ";
+        //        for (int column = 0; column < board.GetLength(1); column++)
+        //            result += "     ";
+        //
+        //        result += "\r\n  ";
+        //        result += " " + (board.GetLength(0) - row) + " ";
+        //
+        //        for (int column = 0; column < board.GetLength(1); column++)
+        //        {
+        //                    board[row, column] = new Cell();
+        //                    result += "  " + Convert.ToString(board[row, column].GetSymbol()) + "  ";
+        //        }
+        //        result += " " + (board.GetLength(0) - row) + " ";
+        //        result += "\r\n     ";
+        //        for (int column = 0; column < board.GetLength(1); column++)
+        //            result += "     ";
+        //    }
+        //    result += Environment.NewLine;
+        //    result += Environment.NewLine;
+        //    result += "     ";
+        //    for (int column = 0; column < board.GetLength(1); column++)
+        //        result += "  " + Convert.ToChar(column + 65) + "  ";
+        //    result += Environment.NewLine;
+        //
+        //    return result;
+        //}
 
-            for (int row = 0; row < board.GetLength(0); row++)
-            {
-                result += "\r\n     ";
-                for (int column = 0; column < board.GetLength(1); column++)
-                    result += "     ";
+        public override int GetHashCode()
+        {
+            return String.Format("({0})",board).GetHashCode();
+        }
 
-                result += "\r\n  ";
-                result += " " + (board.GetLength(0) - row) + " ";
-
-                for (int column = 0; column < board.GetLength(1); column++)
-                {
-                            board[row, column] = new Cell();
-                            result += "  " + Convert.ToString(board[row, column].GetSymbol()) + "  ";
-                }
-                result += " " + (board.GetLength(0) - row) + " ";
-                result += "\r\n     ";
-                for (int column = 0; column < board.GetLength(1); column++)
-                    result += "     ";
-            }
-            result += Environment.NewLine;
-            result += Environment.NewLine;
-            result += "     ";
-            for (int column = 0; column < board.GetLength(1); column++)
-                result += "  " + Convert.ToChar(column + 65) + "  ";
-            result += Environment.NewLine;
-
-            return result;
+        public override bool Equals(object other)
+        {
+            return this.GetHashCode() == other.GetHashCode();
         }
     }
 }
