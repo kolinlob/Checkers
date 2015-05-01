@@ -31,7 +31,7 @@ namespace Checkers
         public Cell()
         {
             IsEmpty = true;
-            IsUsable = false;
+            IsUsable = true;
         }
 
         protected void SetColor()

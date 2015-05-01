@@ -1,7 +1,7 @@
 ﻿== GAME
 * can create game
 * game can be initialised with checkers in start positions
-game checks, if a checker can move to that field
+* game checks, if a checker can move to that field
 checker can beat the opponent's checker
 switches player after each move
 checks for winner
@@ -11,6 +11,7 @@ checks for winner
 
 == BOARD
 * can create board
+can display board
 * board can display checker at its initial coordinates
 * board checks, if cell is occupied
 

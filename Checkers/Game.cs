@@ -13,14 +13,14 @@ namespace Checkers
 
         public void Start()
         {
-            board = new Board();
+            this.board = new Board();
 
             CreateCheckers("whites");
             CreateCheckers("blacks");
             board.Draw(checkersSet);
 
-            while (true)
-                MakeMove(board);
+            //while (true)
+            //    MakeMove(board);
         }
 
         public void CreateCheckers(string color = "whites")
