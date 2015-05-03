@@ -6,7 +6,7 @@ namespace Checkers.Test
     public class CheckerTests
     {
         [TestMethod]
-        public void CanCreateChecker()
+        public void _001_CanCreateChecker()
         {
             var checker = new Checker(true, false, 0, 1);
 
@@ -14,7 +14,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void CheckerCanBeMovedToSpecifiedCoordinates()
+        public void _002_CheckerCanBeMovedToSpecifiedCoordinates()
         {
             var checker = new Checker(true, false, 0,1);
             
@@ -28,7 +28,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void CheckerProperties()
+        public void _003_CheckerProperties()
         {
             var game = new Game();
             game.CreateCheckers(true);
@@ -41,7 +41,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void WhiteCheckerCanBecomeQueen()
+        public void _004_WhiteCheckerCanBecomeQueen()
         {
             Game game = new Game();
             game.CreateCheckers(true);
@@ -58,7 +58,7 @@ namespace Checkers.Test
 
 
         [TestMethod]
-        public void BlackCheckerCanBecomeQueen()
+        public void _005_BlackCheckerCanBecomeQueen()
         {
             Game game = new Game();
             game.CreateCheckers(false);
@@ -74,7 +74,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void WhiteCheckerChangesItsSymbolUponBecomingQueen()
+        public void _006_WhiteCheckerChangesItsSymbolUponBecomingQueen()
         {
             Game game = new Game();
             game.CreateCheckers(true);
@@ -87,7 +87,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void BlackCheckerChangesItsSymbolUponBecomingQueen()
+        public void _007_BlackCheckerChangesItsSymbolUponBecomingQueen()
         {
             Game game = new Game();
             game.CreateCheckers(false);

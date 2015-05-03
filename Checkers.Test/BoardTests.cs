@@ -11,7 +11,7 @@ namespace Checkers.Test
     public class BoardTests
     {
         [TestMethod]
-        public void CanCreateBoard()
+        public void _001_CanCreateBoard()
         {
             var board = new Board();
 
@@ -19,7 +19,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void CanDisplayBoard()
+        public void _002_CanDisplayBoard()
         {
             var board = new Board();
             var expected = board;

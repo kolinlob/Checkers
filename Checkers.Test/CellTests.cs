@@ -8,7 +8,7 @@ namespace Checkers.Test
     public class CellTests
     {
         [TestMethod]
-        public void _01_CanCreateCell()
+        public void _001_CanCreateCell()
         {
             var expected = new Cell();
             
@@ -16,7 +16,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void _02_IsCellEmpty()
+        public void _002_IsCellEmpty()
         {
             var board = new Board();
             List<Checker> checkersSet = new List<Checker>();
@@ -28,7 +28,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void _03_IsCellUsable()
+        public void _003_IsCellUsable()
         {
             var board = new Board();
             List<Checker> checkersSet = new List<Checker>();

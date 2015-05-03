@@ -7,7 +7,7 @@ namespace Checkers.Test
     public class GameTests
     {
         [TestMethod]
-        public void CanCreateGame()
+        public void _001_CanCreateGame()
         {
             var game = new Game();
 
@@ -15,7 +15,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void WhiteCheckersAreInStartPosition()
+        public void _002_WhiteCheckersAreInStartPosition()
         {
             Game game = new Game();
             game.CreateCheckers(true);
@@ -38,7 +38,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void BlackCheckersAreInStartPosition()
+        public void _002_BlackCheckersAreInStartPosition()
         {
             Game game = new Game();
             game.CreateCheckers(false);
@@ -61,7 +61,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void CannotMoveToWhiteCell()
+        public void _003_CannotMoveToWhiteCell()
         {
             var game = new Game();
             game.Start();
@@ -73,7 +73,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void CannotMoveToOccupiedBlackCell()
+        public void _004_CannotMoveToOccupiedBlackCell()
         {
             var game = new Game();
             game.Start();
@@ -85,7 +85,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void GameIsOver_When_No_Black_CheckersRemained()
+        public void _005_GameIsOver_When_No_Black_CheckersRemained()
         {
             var game = new Game();
             game.Start();
@@ -95,7 +95,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void GameIsOver_When_No_White_CheckersRemained()
+        public void _006_GameIsOver_When_No_White_CheckersRemained()
         {
             var game = new Game();
             game.Start();
