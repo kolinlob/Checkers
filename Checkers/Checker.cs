@@ -12,10 +12,10 @@ namespace Checkers
 
         public Checker(bool isWhite, bool isQueen, int horizontalCoord, int verticalCoord)
         {
-            this.IsWhite = isWhite;
-            this.IsQueen = isQueen;
-            this.HorizontalCoord = horizontalCoord;
-            this.VerticalCoord = verticalCoord;
+            IsWhite = isWhite;
+            IsQueen = isQueen;
+            HorizontalCoord = horizontalCoord;
+            VerticalCoord = verticalCoord;
         }
 
         public override int GetHashCode()
@@ -25,7 +25,7 @@ namespace Checkers
 
         public override bool Equals(object other)
         {
-            return this.GetHashCode() == other.GetHashCode();
+            return GetHashCode() == other.GetHashCode();
         }
 
         public void ChageSymbol()

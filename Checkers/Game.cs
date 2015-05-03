@@ -7,49 +7,48 @@ namespace Checkers
 {
     public class Game
     {
-        public List<Checker> checkersSet = new List<Checker>();
+        public List<Checker> CheckersSet = new List<Checker>();
         private Board board;
-        private Move move;
-        private Player player;
-
-
+        //private Move move;
+        private Player player1;
+        private Player player2;
+        public Player CurrentPlayer { get; set; }
 
         public void Start()
         {
-            this.board = new Board();
-            this.move = new Move();
-            this.player = new Player();
+            board = new Board();
+            //move = new Move();
+            player1 = new Player(true);
+            player2 = new Player(false);
+            CurrentPlayer = player1;
 
-            CreateCheckers("whites");
-            CreateCheckers("blacks");
-            board.Draw(checkersSet);
+            CreateCheckers(true);
+            CreateCheckers(false);
+            board.Draw(CheckersSet);
         }
 
-        public void CreateCheckers(string color = "whites")
+        public void CreateCheckers(bool isWhite)
         {
-            int start = 0;
-            int end = 3;
-            bool isWhite = true;
+            var start = 0;
+            var end = 3;
 
-            if (color == "blacks")
+            if (!isWhite)
             {
                 start = 5;
                 end = 8;
-                isWhite = false;
             }
 
-            for (int i = start; i < end; i++)
+            for (var i = start; i < end; i++)
             {
-                for (int j = 0; j < 8; j++)
+                for (var j = 0; j < 8; j++)
                 {
                     if ((i % 2 == 0 && j % 2 != 0) || (i % 2 != 0 && j % 2 == 0))
-                        checkersSet.Add(new Checker(isWhite, false, i, j));
+                        CheckersSet.Add(new Checker(isWhite, false, i, j));
                 }
             }
         }
 
-
-        public bool CanMove(int[] adressNew)
+        public bool CanMoveThere(int[] adressNew)
         {
             return (board.IsEmpty(adressNew[0], adressNew[1]) && board.IsUsable(adressNew[0], adressNew[1]));
         }
@@ -66,52 +65,110 @@ namespace Checkers
         public void MakeMove()
         {
             const int delayNpcMoveMiliseconds = 500;
-            Console.SetCursorPosition(0, 29);
-            Console.Write("\r\nВыберите шашку (например, B6): ");
+            
+            Console.SetCursorPosition(0, 30);
+            Console.Write("Ходят {0}!", CurrentPlayer.IsWhite ? "белые" : "черные");
 
-            int[] adressOld = player.SelectCell();
-            int selectedRowOld = adressOld[0];
-            int selectedColOld = adressOld[1];
+            Thread.Sleep(2 * delayNpcMoveMiliseconds);
+            
 
-            Console.Write("Целевая клетка (например, С5): ");
-            foreach (var checker in checkersSet)
+            const string selectCheckerToMoveMessage = "Выберите шашку (например, B6): ";
+            const string selectDestination = "Целевая клетка (например, С5): ";
+            const string cantSelectError = "Нельзя ходить чужой шашкой!";
+            const string cantMoveHereMessage = "Нельзя ходить в выбранную клетку!";
+            const string whiteLine = "                                           ";
+
+            Console.SetCursorPosition(0, 30);
+            int currentCheckerId = SelectCheckerToMove(selectCheckerToMoveMessage, whiteLine);
+
+            while (!CanSelectChecker(currentCheckerId))
             {
-                if (selectedRowOld == checker.HorizontalCoord && selectedColOld == checker.VerticalCoord)
-                {
-                    int[] adressNew = player.SelectCell();
-                    if (CanMove(adressNew))
-                    {
-                        checker.HorizontalCoord = adressNew[0];
-                        checker.VerticalCoord = adressNew[1];
-                        CheckerBecomesQueen(checker);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Нельзя ходить в выбранную клетку!");
-                        Thread.Sleep(delayNpcMoveMiliseconds);
-                    }
-                }
+                Console.SetCursorPosition(0, 30);
+                Console.Write(whiteLine);
+                Console.SetCursorPosition(0, 30);
+                Console.Write(cantSelectError);
+
+                Thread.Sleep(2 * delayNpcMoveMiliseconds);
+
+                Console.SetCursorPosition(0, 0);
+                board.Draw(CheckersSet);
+
+                currentCheckerId = SelectCheckerToMove(selectCheckerToMoveMessage, whiteLine);
+            }
+
+            Console.Write(selectDestination);
+
+            int[] adressNew = CurrentPlayer.SelectCell();
+
+            if (CanMoveThere(adressNew))
+            {
+                CheckersSet[currentCheckerId].HorizontalCoord = adressNew[0];
+                CheckersSet[currentCheckerId].VerticalCoord = adressNew[1];
+                CheckerBecomesQueen(CheckersSet[currentCheckerId]);
+            }
+            else
+            {
+                Console.WriteLine(cantMoveHereMessage);
+                Thread.Sleep(2 * delayNpcMoveMiliseconds);
+                Console.SetCursorPosition(0, 0);
+                board.Draw(CheckersSet);
             }
 
             Thread.Sleep(delayNpcMoveMiliseconds);
             Console.SetCursorPosition(0, 0);
-            board.Draw(checkersSet);
+            board.Draw(CheckersSet);
 
-            Console.SetCursorPosition(0, 29);
-            for (int i = 0; i < 5; i++)
+            Console.SetCursorPosition(0, 30);
+            for (int i = 0; i < 3; i++)
             {
-                for (int j = 0; j < 45; j++)
-                {
-                    Console.Write(" ");
-                }
-                Console.WriteLine();
+                Console.WriteLine(whiteLine);
             }
+
+            CurrentPlayer = SelectCurrentPlayer();
+        }
+
+        public Player SelectCurrentPlayer()
+        {
+            return CurrentPlayer == player1 ? player2 : player1;
+        }
+
+        public int SelectCheckerToMove(string message, string whiteLine)
+        {
+            int[] adressOld;
+            do
+            {
+                Console.SetCursorPosition(0,30);
+                Console.Write(whiteLine);
+                Console.SetCursorPosition(0,30);
+                Console.Write(message);
+                
+                adressOld = CurrentPlayer.SelectCell();
+            } while (adressOld[0] < 0 || adressOld[1] < 0 || adressOld[0] > 7 || adressOld[1] > 7);
+
+            return (from checker in CheckersSet
+                        where adressOld[0] == checker.HorizontalCoord && adressOld[1] == checker.VerticalCoord
+                             select CheckersSet.IndexOf(checker)).FirstOrDefault();
+
+            //foreach (var checker in checkersSet)
+            //{
+            //    if (adressOld[0] == checker.HorizontalCoord && adressOld[1] == checker.VerticalCoord)
+            //    {
+            //        currentCheckerId = checkersSet.IndexOf(checker);
+            //        break;
+            //    }
+            //}
+            //return currentCheckerId;
+        }
+
+        public bool CanSelectChecker(int currentCheckerId)
+        {
+            return ((CurrentPlayer == player1 && CheckersSet[currentCheckerId].IsWhite) || (CurrentPlayer == player2 && !CheckersSet[currentCheckerId].IsWhite));
         }
 
         public bool GameIsOver()
         {
-            bool noWhites = checkersSet.Count(checker => checker.IsWhite) == 0;
-            bool noBlacks = checkersSet.Count(checker => checker.IsWhite == false) == 0;
+            bool noWhites = CheckersSet.Count(checker => checker.IsWhite) == 0;
+            bool noBlacks = CheckersSet.Count(checker => checker.IsWhite == false) == 0;
 
             return (noWhites || noBlacks);
         }

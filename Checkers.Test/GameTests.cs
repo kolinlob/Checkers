@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Checkers.Test
@@ -19,7 +18,7 @@ namespace Checkers.Test
         public void WhiteCheckersAreInStartPosition()
         {
             Game game = new Game();
-            game.CreateCheckers();
+            game.CreateCheckers(true);
 
             List<Checker> expected = new List<Checker>();
             expected.Add(new Checker(true, false, 0, 1));
@@ -35,14 +34,14 @@ namespace Checkers.Test
             expected.Add(new Checker(true, false, 2, 5));
             expected.Add(new Checker(true, false, 2, 7));
 
-            CollectionAssert.AreEqual(expected, game.checkersSet);
+            CollectionAssert.AreEqual(expected, game.CheckersSet);
         }
 
         [TestMethod]
         public void BlackCheckersAreInStartPosition()
         {
             Game game = new Game();
-            game.CreateCheckers("blacks");
+            game.CreateCheckers(false);
 
             List<Checker> expected = new List<Checker>();
             expected.Add(new Checker(false, false, 5, 0));
@@ -58,7 +57,7 @@ namespace Checkers.Test
             expected.Add(new Checker(false, false, 7, 4));
             expected.Add(new Checker(false, false, 7, 6));
 
-            CollectionAssert.AreEqual(expected, game.checkersSet);
+            CollectionAssert.AreEqual(expected, game.CheckersSet);
         }
 
         [TestMethod]
@@ -68,7 +67,7 @@ namespace Checkers.Test
             game.Start();
 
             int[] adress = { 2, 2 };
-            bool expected = game.CanMove(adress);
+            bool expected = game.CanMoveThere(adress);
 
             Assert.IsFalse(expected);
         }
@@ -80,7 +79,7 @@ namespace Checkers.Test
             game.Start();
 
             int[] adress = { 2, 1 };
-            bool expected = game.CanMove(adress);
+            bool expected = game.CanMoveThere(adress);
 
             Assert.IsFalse(expected);
         }
@@ -90,7 +89,7 @@ namespace Checkers.Test
         {
             var game = new Game();
             game.Start();
-            game.checkersSet.RemoveAll(checker => checker.IsWhite == false);
+            game.CheckersSet.RemoveAll(checker => checker.IsWhite == false);
 
             Assert.IsTrue(game.GameIsOver());
         }
@@ -100,7 +99,7 @@ namespace Checkers.Test
         {
             var game = new Game();
             game.Start();
-            game.checkersSet.RemoveAll(checker => checker.IsWhite);
+            game.CheckersSet.RemoveAll(checker => checker.IsWhite);
 
             Assert.IsTrue(game.GameIsOver());
         }

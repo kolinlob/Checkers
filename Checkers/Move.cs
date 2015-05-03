@@ -1,8 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Threading;
-
-namespace Checkers
+﻿namespace Checkers
 {
     public class Move
     {

@@ -5,7 +5,7 @@ namespace Checkers
 {
     public class Board
     {
-        private Cell[,] board = new Cell[8, 8];
+        private readonly Cell[,] board = new Cell[8, 8];
 
         public void Draw(List<Checker> checkersSet)
         {
@@ -149,7 +149,7 @@ namespace Checkers
 
         public override bool Equals(object other)
         {
-            return this.GetHashCode() == other.GetHashCode();
+            return GetHashCode() == other.GetHashCode();
         }
     }
 }
