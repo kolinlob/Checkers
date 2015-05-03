@@ -12,10 +12,10 @@ namespace Checkers
 
         public bool IsWhite { get; set; }
 
-        public int[] SelectCell()
+        public int[] InputCheckerAdress()
         {
             var ascii = Encoding.ASCII;
-            var input = InputCoordinate();
+            var input = RawInput();
 
             Byte[] encodedBytes = ascii.GetBytes(input.ToUpper());
 
@@ -26,14 +26,13 @@ namespace Checkers
             return adress;
         }
 
-        private static string InputCoordinate()
+        private static string RawInput()
         {
             var input = Console.ReadLine();
             while (input == null || input.Length != 2)
             {
                 const string incorrectInputError = "Неверный ввод. Повторите: ";
                 const string whiteLine = "                                           ";
-
                 Console.SetCursorPosition(0, 30);
                 Console.Write(whiteLine);
                 
@@ -46,7 +45,7 @@ namespace Checkers
         }
 
 
-        public int[] SelectCell(string input)
+        public int[] RawInput(string input)
         {
             Encoding ascii = Encoding.ASCII;
             Byte[] encodedBytes = ascii.GetBytes(input.ToUpper());

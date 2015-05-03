@@ -111,8 +111,7 @@ namespace Checkers
             {
                 DrawWhiteLine();
                 Console.Write(message);
-
-                adress = CurrentPlayer.SelectCell();
+                adress = CurrentPlayer.InputCheckerAdress();
 
             } while (adress[0] < 0 || adress[1] < 0 || adress[0] > 7 || adress[1] > 7);
 
