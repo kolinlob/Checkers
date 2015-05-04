@@ -21,7 +21,7 @@ namespace Checkers
             player1 = new Player(true);
             player2 = new Player(false);
             CurrentPlayer = player1;
-
+            
             CreateCheckers(true);
             CreateCheckers(false);
             board.Draw(CheckersSet);
@@ -57,7 +57,7 @@ namespace Checkers
             const string cantMoveHereMessage =          "Нельзя ходить в выбранную клетку!";
 
             DrawWhiteLine();
-            Console.Write("Ходят {0}!", CurrentPlayer.IsWhite ? "белые" : "черные");
+            Console.Write("Ходят {0}!", CurrentPlayer.PlaysWhites ? "белые" : "черные");
 
             Thread.Sleep(4 * delayNpcMoveMiliseconds);
             Console.SetCursorPosition(0, 30);
@@ -145,7 +145,7 @@ namespace Checkers
             if ((checker.IsWhite && checker.HorizontalCoord == 7) || (!checker.IsWhite && checker.HorizontalCoord == 0))
             {
                 checker.IsQueen = true;
-                checker.ChageSymbol();
+                checker.ChangeSymbol();
             }
         }
 

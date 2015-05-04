@@ -2,6 +2,7 @@
 * can create game
 * game can be initialised with checkers in start positions
 * game checks, if a checker can move to that field
+
 checker can beat the opponent's checker
 switches player after each move
 *(50%) checks for winner (as of now only checks if no whites/blacks remained on the board)
@@ -27,12 +28,7 @@ can display board
 
 == PLAYER
 * player can select checker
-player can select one checker of own ones
-player can set coordinates for a checker to move
-player can make a move
+* player can select only his own checker
+? player can set cell coordinates for a checker to move
+
 player can surrender =)
-
-== MOVE
-
-
-

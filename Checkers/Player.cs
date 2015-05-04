@@ -5,12 +5,12 @@ namespace Checkers
 {
     public class Player
     {
-        public Player(bool isWhite)
+        public Player(bool playsWhites)
         {
-            IsWhite = isWhite;
+            PlaysWhites = playsWhites;
         }
 
-        public bool IsWhite { get; set; }
+        public bool PlaysWhites { get; set; }
 
         public int[] InputCheckerAdress()
         {

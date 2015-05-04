@@ -28,7 +28,7 @@ namespace Checkers
             return GetHashCode() == other.GetHashCode();
         }
 
-        public void ChageSymbol()
+        public void ChangeSymbol()
         {
             symbol = 'K';          
         }
