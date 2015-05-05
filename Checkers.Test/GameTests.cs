@@ -17,22 +17,24 @@ namespace Checkers.Test
         [TestMethod]
         public void _002_WhiteCheckersAreInStartPosition()
         {
-            Game game = new Game();
+            var game = new Game();
             game.CreateCheckers(true);
 
-            List<Checker> expected = new List<Checker>();
-            expected.Add(new Checker(true, false, 0, 1));
-            expected.Add(new Checker(true, false, 0, 3));
-            expected.Add(new Checker(true, false, 0, 5));
-            expected.Add(new Checker(true, false, 0, 7));
-            expected.Add(new Checker(true, false, 1, 0));
-            expected.Add(new Checker(true, false, 1, 2));
-            expected.Add(new Checker(true, false, 1, 4));
-            expected.Add(new Checker(true, false, 1, 6));
-            expected.Add(new Checker(true, false, 2, 1));
-            expected.Add(new Checker(true, false, 2, 3));
-            expected.Add(new Checker(true, false, 2, 5));
-            expected.Add(new Checker(true, false, 2, 7));
+            var expected = new List<Checker>
+            {
+                new Checker(true, false, 0, 1),
+                new Checker(true, false, 0, 3),
+                new Checker(true, false, 0, 5),
+                new Checker(true, false, 0, 7),
+                new Checker(true, false, 1, 0),
+                new Checker(true, false, 1, 2),
+                new Checker(true, false, 1, 4),
+                new Checker(true, false, 1, 6),
+                new Checker(true, false, 2, 1),
+                new Checker(true, false, 2, 3),
+                new Checker(true, false, 2, 5),
+                new Checker(true, false, 2, 7)
+            };
 
             CollectionAssert.AreEqual(expected, game.CheckersSet);
         }
@@ -40,22 +42,24 @@ namespace Checkers.Test
         [TestMethod]
         public void _002_BlackCheckersAreInStartPosition()
         {
-            Game game = new Game();
+            var game = new Game();
             game.CreateCheckers(false);
 
-            List<Checker> expected = new List<Checker>();
-            expected.Add(new Checker(false, false, 5, 0));
-            expected.Add(new Checker(false, false, 5, 2));
-            expected.Add(new Checker(false, false, 5, 4));
-            expected.Add(new Checker(false, false, 5, 6));
-            expected.Add(new Checker(false, false, 6, 1));
-            expected.Add(new Checker(false, false, 6, 3));
-            expected.Add(new Checker(false, false, 6, 5));
-            expected.Add(new Checker(false, false, 6, 7));
-            expected.Add(new Checker(false, false, 7, 0));
-            expected.Add(new Checker(false, false, 7, 2));
-            expected.Add(new Checker(false, false, 7, 4));
-            expected.Add(new Checker(false, false, 7, 6));
+            var expected = new List<Checker>
+            {
+                new Checker(false, false, 5, 0),
+                new Checker(false, false, 5, 2),
+                new Checker(false, false, 5, 4),
+                new Checker(false, false, 5, 6),
+                new Checker(false, false, 6, 1),
+                new Checker(false, false, 6, 3),
+                new Checker(false, false, 6, 5),
+                new Checker(false, false, 6, 7),
+                new Checker(false, false, 7, 0),
+                new Checker(false, false, 7, 2),
+                new Checker(false, false, 7, 4),
+                new Checker(false, false, 7, 6)
+            };
 
             CollectionAssert.AreEqual(expected, game.CheckersSet);
         }
@@ -67,7 +71,7 @@ namespace Checkers.Test
             game.Start();
 
             int[] adress = { 2, 2 };
-            bool expected = game.CanMoveThere(adress);
+            var expected = game.CanMoveThere(adress);
 
             Assert.IsFalse(expected);
         }
@@ -79,7 +83,7 @@ namespace Checkers.Test
             game.Start();
 
             int[] adress = { 2, 1 };
-            bool expected = game.CanMoveThere(adress);
+            var expected = game.CanMoveThere(adress);
 
             Assert.IsFalse(expected);
         }

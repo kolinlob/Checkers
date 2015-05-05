@@ -31,4 +31,4 @@ can display board
 * player can select only his own checker
 ? player can set cell coordinates for a checker to move
 
-player can surrender =)
+player can surrender

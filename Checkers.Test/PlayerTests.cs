@@ -8,55 +8,54 @@ namespace Checkers.Test
         [TestMethod]
         public void _001_PlayerCanSelectChecker()
         {
-            //9th checker, number 8 in a collection
-            string input = "B6"; 
-            int expectedCheckerID = 8;
+            const string input = "B6";
+            const int expectedCheckerId = 8;
             
-            Game game = new Game();
-            Player player = new Player(true);
+            var game = new Game();
+            var player = new Player(true);
 
             game.CreateCheckers(true);
 
-            int[] address = player.RawInput(input);
-            int actualCheckerID = game.SelectedCheckerId(address);
+            var address = player.RawInput(input);
+            var actualCheckerId = game.SelectedCheckerId(address);
 
-            Assert.AreEqual(actualCheckerID, expectedCheckerID);
+            Assert.AreEqual(actualCheckerId, expectedCheckerId);
         }
 
         [TestMethod]
         public void _002_WhitePlayerCanSelectOnlyWhiteChecker()
         {
-            Game game = new Game();
-            Player player_white = new Player(true); 
+            var game = new Game();
+            var playerWhite = new Player(true); 
             
             game.CreateCheckers(true);
             game.CreateCheckers(false);
 
-            int blackCheckerID = 23;
+            const int blackCheckerId = 23;
 
-            game.CurrentPlayer = player_white;
+            game.CurrentPlayer = playerWhite;
             
-            bool CanSelectBlackChecker = game.CanSelectChecker(blackCheckerID);
+            var canSelectBlackChecker = game.CanSelectChecker(blackCheckerId);
 
-            Assert.IsFalse(CanSelectBlackChecker);
+            Assert.IsFalse(canSelectBlackChecker);
         }
 
         [TestMethod]
         public void _003_BlackPlayerCanSelectOnlyBlackChecker()
         {
-            Game game = new Game();
-            Player player_black = new Player(false);
+            var game = new Game();
+            var playerBlack = new Player(false);
 
             game.CreateCheckers(true);
             game.CreateCheckers(false);
 
-            int whiteCheckerID = 8;
+            const int whiteCheckerId = 8;
             
-            game.CurrentPlayer = player_black;
+            game.CurrentPlayer = playerBlack;
 
-            bool CanSelectWhiteChecker = game.CanSelectChecker(whiteCheckerID);
+            var canSelectWhiteChecker = game.CanSelectChecker(whiteCheckerId);
 
-            Assert.IsFalse(CanSelectWhiteChecker);
+            Assert.IsFalse(canSelectWhiteChecker);
         }
 
 

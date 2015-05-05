@@ -16,7 +16,7 @@ namespace Checkers.Test
         [TestMethod]
         public void _002_CheckerCanBeMovedToSpecifiedCoordinates()
         {
-            var checker = new Checker(true, false, 0,1);
+            var checker = new Checker(true, false, 0, 1);
             
             checker.HorizontalCoord = 3;
             checker.VerticalCoord = 0;
@@ -33,9 +33,8 @@ namespace Checkers.Test
             var game = new Game();
             game.CreateCheckers(true);
 
-            Checker actualChecker = game.CheckersSet[0];
-
-            Checker expectedChecker = new Checker(true, false, 0, 1);
+            var actualChecker = game.CheckersSet[0];
+            var expectedChecker = new Checker(true, false, 0, 1);
 
             Assert.AreEqual(expectedChecker, actualChecker);
         }
@@ -43,15 +42,14 @@ namespace Checkers.Test
         [TestMethod]
         public void _004_WhiteCheckerCanBecomeQueen()
         {
-            Game game = new Game();
+            var game = new Game();
             game.CreateCheckers(true);
 
             game.CheckersSet[5].HorizontalCoord = 7;
             game.CheckersSet[5].VerticalCoord = 0;
-
             game.CheckerBecomesQueen(game.CheckersSet[5]);
 
-            bool expected = game.CheckersSet[5].IsQueen;
+            var expected = game.CheckersSet[5].IsQueen;
 
             Assert.IsTrue(expected);
         }
@@ -60,7 +58,7 @@ namespace Checkers.Test
         [TestMethod]
         public void _005_BlackCheckerCanBecomeQueen()
         {
-            Game game = new Game();
+            var game = new Game();
             game.CreateCheckers(false);
 
             game.CheckersSet[7].HorizontalCoord = 0;
@@ -68,7 +66,7 @@ namespace Checkers.Test
 
             game.CheckerBecomesQueen(game.CheckersSet[7]);
 
-            bool expected = game.CheckersSet[7].IsQueen;
+            var expected = game.CheckersSet[7].IsQueen;
 
             Assert.IsTrue(expected);
         }
@@ -76,26 +74,28 @@ namespace Checkers.Test
         [TestMethod]
         public void _006_WhiteCheckerChangesItsSymbolUponBecomingQueen()
         {
-            Game game = new Game();
+            var game = new Game();
             game.CreateCheckers(true);
 
             game.CheckersSet[5].HorizontalCoord = 7;
             game.CheckersSet[5].VerticalCoord = 0;
 
             game.CheckerBecomesQueen(game.CheckersSet[5]);
+
             Assert.IsTrue(game.CheckersSet[5].Draw() == 'K');
         }
 
         [TestMethod]
         public void _007_BlackCheckerChangesItsSymbolUponBecomingQueen()
         {
-            Game game = new Game();
+            var game = new Game();
             game.CreateCheckers(false);
 
             game.CheckersSet[7].HorizontalCoord = 0;
             game.CheckersSet[7].VerticalCoord = 1;
 
             game.CheckerBecomesQueen(game.CheckersSet[7]);
+
             Assert.IsTrue(game.CheckersSet[7].Draw() == 'K');
         }
     }
