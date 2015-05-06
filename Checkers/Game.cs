@@ -62,9 +62,8 @@ namespace Checkers
             Thread.Sleep(4 * delayNpcMoveMiliseconds);
             Console.SetCursorPosition(0, 30);
             
-            int[] adressOld = SelectCell(selectCheckerToMoveMessage);
-            
-            int currentCheckerId = SelectedCheckerId(adressOld);
+            var adressOld = GetCellAddress(selectCheckerToMoveMessage);
+            var currentCheckerId = GetCheckerId(adressOld);
 
             while (!CanSelectChecker(currentCheckerId))
             {
@@ -73,17 +72,17 @@ namespace Checkers
                 Thread.Sleep(2 * delayNpcMoveMiliseconds);
                 DrawWhiteLine();
 
-                adressOld = SelectCell(selectCheckerToMoveMessage);
-                currentCheckerId = SelectedCheckerId(adressOld);
+                adressOld = GetCellAddress(selectCheckerToMoveMessage);
+                currentCheckerId = GetCheckerId(adressOld);
             }
 
-            int[] adressNew = SelectCell(selectDestination);
+            int[] adressNew = GetCellAddress(selectDestination);
 
             while (!CanMoveThere(adressNew))
             {
                 DrawWhiteLine();
                 Console.Write(cantMoveHereMessage);
-                adressNew = SelectCell(selectDestination); 
+                adressNew = GetCellAddress(selectDestination); 
             }
 
                 CheckersSet[currentCheckerId].HorizontalCoord = adressNew[0];
@@ -104,25 +103,26 @@ namespace Checkers
             Console.SetCursorPosition(0, 30);
         }
 
-        public int[] SelectCell(string message)
+        public int[] GetCellAddress(string message)
         {
-            int[] adress;
+            int[] cellAdress;
             do
             {
-                DrawWhiteLine();
-                Console.Write(message);
-                adress = CurrentPlayer.InputCheckerAdress();
+                DrawWhiteLine(); Console.Write(message);
 
-            } while (adress[0] < 0 || adress[1] < 0 || adress[0] > 7 || adress[1] > 7);
+                var validInput = CurrentPlayer.ValidateUserInput();
+                    cellAdress = CurrentPlayer.ConvertInputToCoordinates(validInput);
 
-            return adress;
+            } while (cellAdress[0] < 0 || cellAdress[1] < 0 || cellAdress[0] > 7 || cellAdress[1] > 7);
+
+            return cellAdress;
         }
 
-        public int SelectedCheckerId(int[] adress)
+        public int GetCheckerId(int[] adress)
         {
             return (from checker in CheckersSet
-                where adress[0] == checker.HorizontalCoord && adress[1] == checker.VerticalCoord
-                select CheckersSet.IndexOf(checker)).FirstOrDefault();
+                        where adress[0] == checker.HorizontalCoord && adress[1] == checker.VerticalCoord
+                            select CheckersSet.IndexOf(checker)).FirstOrDefault();
         }
 
         public bool CanSelectChecker(int currentCheckerId)
@@ -130,9 +130,9 @@ namespace Checkers
             return ((CurrentPlayer == player1 && CheckersSet[currentCheckerId].IsWhite) || (CurrentPlayer == player2 && !CheckersSet[currentCheckerId].IsWhite));
         }
 
-        public bool CanMoveThere(int[] adressNew)
+        public bool CanMoveThere(int[] adress)
         {
-            return (board.IsEmpty(adressNew[0], adressNew[1]) && board.IsUsable(adressNew[0], adressNew[1]));
+            return (board.CellIsEmpty(adress[0], adress[1]) && board.CellIsUsable(adress[0], adress[1]));
         }
 
         public Player SelectCurrentPlayer()

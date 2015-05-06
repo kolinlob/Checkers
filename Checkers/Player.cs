@@ -12,49 +12,44 @@ namespace Checkers
 
         public bool PlaysWhites { get; set; }
 
-        public int[] InputCheckerAdress()
+
+        public int[] ConvertInputToCoordinates(string validInput)
         {
             var ascii = Encoding.ASCII;
-            var input = RawInput();
+            var bytes = ascii.GetBytes(validInput.ToUpper());
 
-            Byte[] encodedBytes = ascii.GetBytes(input.ToUpper());
-
-            int selectedCellCol = Convert.ToInt32(encodedBytes[0]) - 65;
-            int selectedCellRow = 56 - Convert.ToInt32(encodedBytes[1]);
-
-            int[] adress = { selectedCellRow, selectedCellCol };
-            return adress;
+            var row = 56 - Convert.ToInt32(bytes[1]);
+            var col = Convert.ToInt32(bytes[0]) - 65;
+            
+            return new[] { row, col };
         }
 
-        private static string RawInput()
+        public string ValidateUserInput()
         {
-            var input = Console.ReadLine();
-            while (input == null || input.Length != 2)
+            var rawInput = ReadUserInput();
+
+            while (rawInput == null || rawInput.Length != 2)
             {
                 const string incorrectInputError = "Неверный ввод. Повторите: ";
                 const string whiteLine = "                                           ";
+                
                 Console.SetCursorPosition(0, 30);
                 Console.Write(whiteLine);
                 
                 Console.SetCursorPosition(0, 30);
                 Console.Write(incorrectInputError);
 
-                input = Console.ReadLine();
+                rawInput = ReadUserInput();
             }
-            return input;
+
+            var validInput = rawInput;
+
+            return validInput;
         }
 
-
-        public int[] RawInput(string input)
+        private static string ReadUserInput()
         {
-            Encoding ascii = Encoding.ASCII;
-            Byte[] encodedBytes = ascii.GetBytes(input.ToUpper());
-
-            int selectedCellCol = Convert.ToInt32(encodedBytes[0]) - 65;
-            int selectedCellRow = 56 - Convert.ToInt32(encodedBytes[1]);
-
-            int[] adress = { selectedCellRow, selectedCellCol };
-            return adress;
+            return Console.ReadLine();
         }
     }
 }

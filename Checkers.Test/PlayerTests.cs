@@ -8,7 +8,7 @@ namespace Checkers.Test
         [TestMethod]
         public void _001_PlayerCanSelectChecker()
         {
-            const string input = "B6";
+            const string validInput = "B6";
             const int expectedCheckerId = 8;
             
             var game = new Game();
@@ -16,8 +16,8 @@ namespace Checkers.Test
 
             game.CreateCheckers(true);
 
-            var address = player.RawInput(input);
-            var actualCheckerId = game.SelectedCheckerId(address);
+            var address = player.ConvertInputToCoordinates(validInput);
+            var actualCheckerId = game.GetCheckerId(address);
 
             Assert.AreEqual(actualCheckerId, expectedCheckerId);
         }

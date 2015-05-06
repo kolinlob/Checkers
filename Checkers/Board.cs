@@ -94,12 +94,12 @@ namespace Checkers
             }
         }
 
-        public bool IsEmpty(int row, int col)
+        public bool CellIsEmpty(int row, int col)
         {
             return (board[row, col].IsEmpty);
         }
 
-        public bool IsUsable(int row, int col)
+        public bool CellIsUsable(int row, int col)
         {
             return (board[row, col].IsUsable);
         }
