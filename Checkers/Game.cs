@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 
 namespace Checkers
@@ -85,14 +86,20 @@ namespace Checkers
                 adressNew = GetCellAddress(selectDestination); 
             }
 
-                CheckersSet[currentCheckerId].HorizontalCoord = adressNew[0];
-                CheckersSet[currentCheckerId].VerticalCoord = adressNew[1];
-                CheckerBecomesQueen(CheckersSet[currentCheckerId]);
+              UpdateCoordinates(currentCheckerId, adressNew);
+
+            CheckerBecomesQueen(CheckersSet[currentCheckerId]);
             
             Thread.Sleep(delayNpcMoveMiliseconds);
             Console.SetCursorPosition(0, 0);
             board.Draw(CheckersSet);
             CurrentPlayer = SelectCurrentPlayer();
+        }
+
+        public void UpdateCoordinates(int currentCheckerId, int[] adressNew)
+        {
+            CheckersSet[currentCheckerId].HorizontalCoord = adressNew[0];
+            CheckersSet[currentCheckerId].VerticalCoord = adressNew[1];
         }
 
         private void DrawWhiteLine()
@@ -110,8 +117,8 @@ namespace Checkers
             {
                 DrawWhiteLine(); Console.Write(message);
 
-                var validInput = CurrentPlayer.ValidateUserInput();
-                    cellAdress = CurrentPlayer.ConvertInputToCoordinates(validInput);
+                var validInput = ValidateUserInput();
+                    cellAdress = ConvertInputToCoordinates(validInput);
 
             } while (cellAdress[0] < 0 || cellAdress[1] < 0 || cellAdress[0] > 7 || cellAdress[1] > 7);
 
@@ -156,5 +163,49 @@ namespace Checkers
 
             return (noWhites || noBlacks);
         }
+
+        public int[] ConvertInputToCoordinates(string validInput)
+        {
+            var ascii = Encoding.ASCII;
+            var bytes = ascii.GetBytes(validInput.ToUpper());
+
+            var row = 56 - Convert.ToInt32(bytes[1]);
+            var col = Convert.ToInt32(bytes[0]) - 65;
+
+            return new[] { row, col };
+        }
+
+        public string ValidateUserInput()
+        {
+            var rawInput = ReadUserInput();
+
+            while (rawInput == null || rawInput.Length != 2)
+            {
+                const string incorrectInputError = "Неверный ввод. Повторите: ";
+                const string whiteLine = "                                           ";
+
+                Console.SetCursorPosition(0, 30);
+                Console.Write(whiteLine);
+
+                Console.SetCursorPosition(0, 30);
+                Console.Write(incorrectInputError);
+
+                rawInput = ReadUserInput();
+            }
+
+            var validInput = rawInput;
+
+            return validInput;
+        }
+
+        private static string ReadUserInput()
+        {
+            return Console.ReadLine();
+        }
+
+
+
+
+
     }
 }
