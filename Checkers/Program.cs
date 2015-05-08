@@ -13,7 +13,7 @@ namespace Checkers
             while (!game.GameIsOver())
             {
                 game.SetCoordinatesForMove();
-                game.MakeMove();
+                game.MoveChecker();
             }
 
             Console.WriteLine("Game Over");

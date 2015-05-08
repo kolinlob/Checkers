@@ -71,43 +71,32 @@ namespace Checkers
             {
                 int[] adressNew = GetCellAddress(selectDestination);
                 move.moveCoordinates.Add(adressNew);
-            }
+            }     
+        }      
 
-            
-        }
-
-        //
-        
-            //MakeMove(move.moveCoordinates[1]);
-            //
-            //CheckerBecomesQueen(CheckersSet[currentCheckerId]);
-            //
-            //Thread.Sleep(delayNpcMoveMiliseconds);
-            //Console.SetCursorPosition(0, 0);
-            //board.Draw(CheckersSet);
-        
-
-        public void MakeMove()
+        public void MoveChecker()
         {
             int currentCheckerId = GetCheckerId(move.moveCoordinates[0]);
 
-            int[] addressOld;
-            int[] addressNew = move.moveCoordinates[1];
-            int[] addressTemp;
+            var iterations = move.moveCoordinates.Count;
 
-            for (int i = 0; i < move.moveCoordinates.Count; i++)
+            for (var i = 1; i < iterations; i++)
             {
+                var addressNew = move.moveCoordinates[1];
+
                 CheckersSet[currentCheckerId].HorizontalCoord = addressNew[0];
-                CheckersSet[currentCheckerId].VerticalCoord = addressNew[1];
+                CheckersSet[currentCheckerId].VerticalCoord   = addressNew[1];
+                
+                CheckerBecomesQueen(CheckersSet[currentCheckerId]);
+
                 move.moveCoordinates.RemoveAt(0);
 
                 Thread.Sleep(500);
                 Console.SetCursorPosition(0, 0);
 
-                board.Draw(CheckersSet);
+                board.Draw(CheckersSet); 
             }
-
-            
+            CurrentPlayer = SwitchPlayer();
         }
 
         private void DrawWhiteLine()
@@ -150,7 +139,7 @@ namespace Checkers
             return (board.CellIsEmpty(adress[0], adress[1]) && board.CellIsUsable(adress[0], adress[1]));
         }
 
-        public HumanPlayer SelectCurrentPlayer()
+        public HumanPlayer SwitchPlayer()
         {
             return CurrentPlayer == player1 ? player2 : player1;
         }
@@ -200,11 +189,9 @@ namespace Checkers
 
                 rawInput = CurrentPlayer.InputCoordinates();
             }
-
             var validInput = rawInput;
 
             return validInput;
         }
-
     }
 }

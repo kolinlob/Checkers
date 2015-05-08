@@ -54,7 +54,6 @@ namespace Checkers.Test
             Assert.IsTrue(expected);
         }
 
-
         [TestMethod]
         public void _005_BlackCheckerCanBecomeQueen()
         {

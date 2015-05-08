@@ -3,9 +3,11 @@
 * game can be initialised with checkers in start positions
 * game checks, if a checker can move to that field
 
+
 checker can beat the opponent's checker
 switches player after each move
-*(50%) checks for winner (as of now only checks if no whites/blacks remained on the board)
+
+(50%) checks for winner (as of now only checks if no whites/blacks remained on the board)
 
 == CELL
 * can create cell
@@ -14,7 +16,7 @@ switches player after each move
 
 == BOARD
 * can create board
-can display board
+!!! can display board
 * board can display checker at its initial coordinates
 * board checks, if cell is occupied
 
@@ -34,4 +36,5 @@ can display board
 player can surrender
 
 == MOVE
-can create move
+* can create move
+can move ckecker
