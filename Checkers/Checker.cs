@@ -33,7 +33,7 @@ namespace Checkers
             symbol = 'K';          
         }
 
-        public char Draw()
+        public char DrawChecker()
         {
             SetColor(IsWhite ? ConsoleColor.Yellow : ConsoleColor.Red);
             return symbol;

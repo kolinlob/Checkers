@@ -9,14 +9,14 @@ namespace Checkers
         public bool IsEmpty { get; set; }
         public bool IsUsable { get; set; }
 
-        public void Draw()
+        public void DrawCell()
         {
             Console.Write(' ');
         }
 
-        public void Draw(Checker checker)
+        public void DrawCell(Checker checker)
         {
-            Console.Write(checker.Draw());
+            Console.Write(checker.DrawChecker());
         }
 
         public Cell(ConsoleColor color)

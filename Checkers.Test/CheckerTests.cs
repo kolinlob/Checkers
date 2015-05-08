@@ -81,7 +81,7 @@ namespace Checkers.Test
 
             game.CheckerBecomesQueen(game.CheckersSet[5]);
 
-            Assert.IsTrue(game.CheckersSet[5].Draw() == 'K');
+            Assert.IsTrue(game.CheckersSet[5].DrawChecker() == 'K');
         }
 
         [TestMethod]
@@ -95,7 +95,7 @@ namespace Checkers.Test
 
             game.CheckerBecomesQueen(game.CheckersSet[7]);
 
-            Assert.IsTrue(game.CheckersSet[7].Draw() == 'K');
+            Assert.IsTrue(game.CheckersSet[7].DrawChecker() == 'K');
         }
     }
 }

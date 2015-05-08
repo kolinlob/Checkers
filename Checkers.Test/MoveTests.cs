@@ -26,11 +26,11 @@ namespace Checkers.Test
             //string PlayerChooseChecker = "B6";
             //string Destination = "D4";
             //
-            //var adress = game.ConvertInputToCoordinates(PlayerChooseChecker);
+            //var adress = game.ConvertIntoCoordinates(PlayerChooseChecker);
             //
             //var SelectedCheckerID = game.GetCheckerId(adress);
             //
-            //var AdressNew = game.ConvertInputToCoordinates(Destination);
+            //var AdressNew = game.ConvertIntoCoordinates(Destination);
             //
             // game.UpdateCoordinates(SelectedCheckerID, AdressNew);
             //

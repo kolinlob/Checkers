@@ -22,7 +22,7 @@ namespace Checkers.Test
             var checkersSet = new List<Checker>();
             
             board.Draw(checkersSet);
-            var expected = board.CellIsEmpty(2, 1);
+            var expected = board.IsCellEmpty(2, 1);
 
             Assert.IsTrue(expected);
         }
@@ -34,7 +34,7 @@ namespace Checkers.Test
             var checkersSet = new List<Checker>();
             
             board.Draw(checkersSet);
-            var expected = board.CellIsUsable(3, 0);
+            var expected = board.IsCellUsable(3, 0);
 
             Assert.IsTrue(expected);
         }  

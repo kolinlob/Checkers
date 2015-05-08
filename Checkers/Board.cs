@@ -9,13 +9,13 @@ namespace Checkers
 
         public void Draw(List<Checker> checkersSet)
         {
-            ColumnHeader();
+            DrawColumnHeader();
 
             int counter = 0;
             for (int row = 0; row < board.GetLength(0); row++)
             {
-                Margin(row); Console.Write("\r\n  ");
-                RowNum(row);
+                DrawMargin(row); Console.Write("\r\n  ");
+                DrawRowNum(row);
 
                 for (int column = 0; column < board.GetLength(1); column++)
                 {
@@ -32,12 +32,12 @@ namespace Checkers
                         {
                             if (row == checker.HorizontalCoord && column == checker.VerticalCoord)
                             {
-                                board[row, column].Draw(checker);
+                                board[row, column].DrawCell(checker);
                                 board[row, column].IsEmpty = false;
                             }
                         }
                         if (board[row, column].IsEmpty)
-                            board[row, column].Draw();
+                            board[row, column].DrawCell();
 
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.Write("  ");
@@ -54,14 +54,14 @@ namespace Checkers
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.White;
 
-                RowNum(row);
-                Margin(row);
+                DrawRowNum(row);
+                DrawMargin(row);
             }
             Console.WriteLine();
-            ColumnHeader();
+            DrawColumnHeader();
         }
 
-        private void ColumnHeader()
+        private void DrawColumnHeader()
         {
             Console.WriteLine();
             Console.Write("     ");
@@ -70,12 +70,12 @@ namespace Checkers
             Console.WriteLine();
         }
 
-        private void RowNum(int row)
+        private void DrawRowNum(int row)
         {
             Console.Write(" " + (board.GetLength(0) - row) + " ");
         }
 
-        private void Margin(int row)
+        private void DrawMargin(int row)
         {
             Console.Write("\r\n     ");
 
@@ -94,12 +94,12 @@ namespace Checkers
             }
         }
 
-        public bool CellIsEmpty(int row, int col)
+        public bool IsCellEmpty(int row, int col)
         {
             return (board[row, col].IsEmpty);
         }
 
-        public bool CellIsUsable(int row, int col)
+        public bool IsCellUsable(int row, int col)
         {
             return (board[row, col].IsUsable);
         }

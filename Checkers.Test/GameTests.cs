@@ -95,7 +95,7 @@ namespace Checkers.Test
             game.Start();
             game.CheckersSet.RemoveAll(checker => checker.IsWhite == false);
 
-            Assert.IsTrue(game.GameIsOver());
+            Assert.IsTrue(game.IsGameOver());
         }
 
         [TestMethod]
@@ -105,7 +105,7 @@ namespace Checkers.Test
             game.Start();
             game.CheckersSet.RemoveAll(checker => checker.IsWhite);
 
-            Assert.IsTrue(game.GameIsOver());
+            Assert.IsTrue(game.IsGameOver());
         }
     }
 }

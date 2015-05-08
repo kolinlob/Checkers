@@ -48,57 +48,6 @@ namespace Checkers
             }
         }
 
-        public void SetCoordinatesForMove()
-        {
-            const int delayNpcMoveMiliseconds = 500;
-            const string selectCheckerToMoveMessage = "Выберите шашку (например, B6): ";
-            const string selectDestination = "Целевая клетка (например, С5): ";
-            const string cantSelectError = "Нельзя ходить чужой шашкой!";
-            const string cantMoveHereMessage = "Нельзя ходить в выбранную клетку!";
-
-            move = new Move();
-
-            DrawWhiteLine();
-            Console.Write("Ходят {0}!", CurrentPlayer.PlaysWhites ? "белые" : "черные");
-
-            Thread.Sleep(4*delayNpcMoveMiliseconds);
-            Console.SetCursorPosition(0, 30);
-
-            var adressOld = GetCellAddress(selectCheckerToMoveMessage);
-            move.moveCoordinates.Add(adressOld);
-
-            for (int i = 0; i < 3; i++)
-            {
-                int[] adressNew = GetCellAddress(selectDestination);
-                move.moveCoordinates.Add(adressNew);
-            }     
-        }      
-
-        public void MoveChecker()
-        {
-            int currentCheckerId = GetCheckerId(move.moveCoordinates[0]);
-
-            var iterations = move.moveCoordinates.Count;
-
-            for (var i = 1; i < iterations; i++)
-            {
-                var addressNew = move.moveCoordinates[1];
-
-                CheckersSet[currentCheckerId].HorizontalCoord = addressNew[0];
-                CheckersSet[currentCheckerId].VerticalCoord   = addressNew[1];
-                
-                CheckerBecomesQueen(CheckersSet[currentCheckerId]);
-
-                move.moveCoordinates.RemoveAt(0);
-
-                Thread.Sleep(500);
-                Console.SetCursorPosition(0, 0);
-
-                board.Draw(CheckersSet); 
-            }
-            CurrentPlayer = SwitchPlayer();
-        }
-
         private void DrawWhiteLine()
         {
             const string whiteLine = "                                           ";
@@ -114,8 +63,8 @@ namespace Checkers
             {
                 DrawWhiteLine(); Console.Write(message);
 
-                var validInput = ValidateUserInput();
-                    cellAdress = ConvertInputToCoordinates(validInput);
+                var validInput = ValidateInput();
+                    cellAdress = ConvertIntoCoordinates(validInput);
 
             } while (cellAdress[0] < 0 || cellAdress[1] < 0 || cellAdress[0] > 7 || cellAdress[1] > 7);
 
@@ -136,7 +85,7 @@ namespace Checkers
 
         public bool CanMoveThere(int[] adress)
         {
-            return (board.CellIsEmpty(adress[0], adress[1]) && board.CellIsUsable(adress[0], adress[1]));
+            return (board.IsCellEmpty(adress[0], adress[1]) && board.IsCellUsable(adress[0], adress[1]));
         }
 
         public HumanPlayer SwitchPlayer()
@@ -153,7 +102,7 @@ namespace Checkers
             }
         }
 
-        public bool GameIsOver()
+        public bool IsGameOver()
         {
             var noWhites = CheckersSet.Count(checker => checker.IsWhite) == 0;
             var noBlacks = CheckersSet.Count(checker => checker.IsWhite == false) == 0;
@@ -161,7 +110,7 @@ namespace Checkers
             return (noWhites || noBlacks);
         }
 
-        public int[] ConvertInputToCoordinates(string validInput)
+        public int[] ConvertIntoCoordinates(string validInput)
         {
             var ascii = Encoding.ASCII;
             var bytes = ascii.GetBytes(validInput.ToUpper());
@@ -172,7 +121,7 @@ namespace Checkers
             return new[] { row, col };
         }
 
-        public string ValidateUserInput()
+        public string ValidateInput()
         {
             var rawInput = CurrentPlayer.InputCoordinates();
 
@@ -192,6 +141,57 @@ namespace Checkers
             var validInput = rawInput;
 
             return validInput;
+        }
+
+        public void SetCoordinatesForMove()
+        {
+            const int delayNpcMoveMiliseconds = 500;
+            const string selectCheckerToMoveMessage = "Выберите шашку (например, B6): ";
+            const string selectDestination = "Целевая клетка (например, С5): ";
+            //const string cantSelectError = "Нельзя ходить чужой шашкой!";
+            //const string cantMoveHereMessage = "Нельзя ходить в выбранную клетку!";
+
+            move = new Move();
+
+            DrawWhiteLine();
+            Console.Write("Ходят {0}!", CurrentPlayer.PlaysWhites ? "белые" : "черные");
+
+            Thread.Sleep(4*delayNpcMoveMiliseconds);
+            Console.SetCursorPosition(0, 30);
+
+            var adressOld = GetCellAddress(selectCheckerToMoveMessage);
+            move.MoveCoordinates.Add(adressOld);
+
+            for (int i = 0; i < 3; i++)
+            {
+                int[] adressNew = GetCellAddress(selectDestination);
+                move.MoveCoordinates.Add(adressNew);
+            }     
+        }      
+
+        public void MoveChecker()
+        {
+            int currentCheckerId = GetCheckerId(move.MoveCoordinates[0]);
+
+            var iterations = move.MoveCoordinates.Count;
+
+            for (var i = 1; i < iterations; i++)
+            {
+                var addressNew = move.MoveCoordinates[1];
+
+                CheckersSet[currentCheckerId].HorizontalCoord = addressNew[0];
+                CheckersSet[currentCheckerId].VerticalCoord   = addressNew[1];
+                
+                CheckerBecomesQueen(CheckersSet[currentCheckerId]);
+
+                move.MoveCoordinates.RemoveAt(0);
+
+                Thread.Sleep(500);
+                Console.SetCursorPosition(0, 0);
+
+                board.Draw(CheckersSet); 
+            }
+            CurrentPlayer = SwitchPlayer();
         }
     }
 }
