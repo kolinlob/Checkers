@@ -10,17 +10,16 @@ namespace Checkers
     {
         public List<Checker> CheckersSet = new List<Checker>();
         private Board board;
-        //private Move move;
-        private Player player1;
-        private Player player2;
-        public Player CurrentPlayer { get; set; }
+        private Move move;
+        private HumanPlayer player1;
+        private HumanPlayer player2;
+        public HumanPlayer CurrentPlayer { get; set; }
 
         public void Start()
         {
             board = new Board();
-            //move = new Move();
-            player1 = new Player(true);
-            player2 = new Player(false);
+            player1 = new HumanPlayer(true);
+            player2 = new HumanPlayer(false);
             CurrentPlayer = player1;
             
             CreateCheckers(true);
@@ -49,57 +48,66 @@ namespace Checkers
             }
         }
 
-        public void MakeMove()
+        public void SetCoordinatesForMove()
         {
             const int delayNpcMoveMiliseconds = 500;
-            const string selectCheckerToMoveMessage =   "Выберите шашку (например, B6): ";
-            const string selectDestination =            "Целевая клетка (например, С5): ";
-            const string cantSelectError =              "Нельзя ходить чужой шашкой!";
-            const string cantMoveHereMessage =          "Нельзя ходить в выбранную клетку!";
+            const string selectCheckerToMoveMessage = "Выберите шашку (например, B6): ";
+            const string selectDestination = "Целевая клетка (например, С5): ";
+            const string cantSelectError = "Нельзя ходить чужой шашкой!";
+            const string cantMoveHereMessage = "Нельзя ходить в выбранную клетку!";
+
+            move = new Move();
 
             DrawWhiteLine();
             Console.Write("Ходят {0}!", CurrentPlayer.PlaysWhites ? "белые" : "черные");
 
-            Thread.Sleep(4 * delayNpcMoveMiliseconds);
+            Thread.Sleep(4*delayNpcMoveMiliseconds);
             Console.SetCursorPosition(0, 30);
-            
+
             var adressOld = GetCellAddress(selectCheckerToMoveMessage);
-            var currentCheckerId = GetCheckerId(adressOld);
+            move.moveCoordinates.Add(adressOld);
 
-            while (!CanSelectChecker(currentCheckerId))
+            for (int i = 0; i < 3; i++)
             {
-                DrawWhiteLine();
-                Console.Write(cantSelectError);
-                Thread.Sleep(2 * delayNpcMoveMiliseconds);
-                DrawWhiteLine();
-
-                adressOld = GetCellAddress(selectCheckerToMoveMessage);
-                currentCheckerId = GetCheckerId(adressOld);
+                int[] adressNew = GetCellAddress(selectDestination);
+                move.moveCoordinates.Add(adressNew);
             }
 
-            int[] adressNew = GetCellAddress(selectDestination);
-
-            while (!CanMoveThere(adressNew))
-            {
-                DrawWhiteLine();
-                Console.Write(cantMoveHereMessage);
-                adressNew = GetCellAddress(selectDestination); 
-            }
-
-              UpdateCoordinates(currentCheckerId, adressNew);
-
-            CheckerBecomesQueen(CheckersSet[currentCheckerId]);
             
-            Thread.Sleep(delayNpcMoveMiliseconds);
-            Console.SetCursorPosition(0, 0);
-            board.Draw(CheckersSet);
-            CurrentPlayer = SelectCurrentPlayer();
         }
 
-        public void UpdateCoordinates(int currentCheckerId, int[] adressNew)
+        //
+        
+            //MakeMove(move.moveCoordinates[1]);
+            //
+            //CheckerBecomesQueen(CheckersSet[currentCheckerId]);
+            //
+            //Thread.Sleep(delayNpcMoveMiliseconds);
+            //Console.SetCursorPosition(0, 0);
+            //board.Draw(CheckersSet);
+        
+
+        public void MakeMove()
         {
-            CheckersSet[currentCheckerId].HorizontalCoord = adressNew[0];
-            CheckersSet[currentCheckerId].VerticalCoord = adressNew[1];
+            int currentCheckerId = GetCheckerId(move.moveCoordinates[0]);
+
+            int[] addressOld;
+            int[] addressNew = move.moveCoordinates[1];
+            int[] addressTemp;
+
+            for (int i = 0; i < move.moveCoordinates.Count; i++)
+            {
+                CheckersSet[currentCheckerId].HorizontalCoord = addressNew[0];
+                CheckersSet[currentCheckerId].VerticalCoord = addressNew[1];
+                move.moveCoordinates.RemoveAt(0);
+
+                Thread.Sleep(500);
+                Console.SetCursorPosition(0, 0);
+
+                board.Draw(CheckersSet);
+            }
+
+            
         }
 
         private void DrawWhiteLine()
@@ -142,7 +150,7 @@ namespace Checkers
             return (board.CellIsEmpty(adress[0], adress[1]) && board.CellIsUsable(adress[0], adress[1]));
         }
 
-        public Player SelectCurrentPlayer()
+        public HumanPlayer SelectCurrentPlayer()
         {
             return CurrentPlayer == player1 ? player2 : player1;
         }
@@ -177,7 +185,7 @@ namespace Checkers
 
         public string ValidateUserInput()
         {
-            var rawInput = ReadUserInput();
+            var rawInput = CurrentPlayer.InputCoordinates();
 
             while (rawInput == null || rawInput.Length != 2)
             {
@@ -190,22 +198,13 @@ namespace Checkers
                 Console.SetCursorPosition(0, 30);
                 Console.Write(incorrectInputError);
 
-                rawInput = ReadUserInput();
+                rawInput = CurrentPlayer.InputCoordinates();
             }
 
             var validInput = rawInput;
 
             return validInput;
         }
-
-        private static string ReadUserInput()
-        {
-            return Console.ReadLine();
-        }
-
-
-
-
 
     }
 }

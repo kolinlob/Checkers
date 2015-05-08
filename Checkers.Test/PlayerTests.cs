@@ -12,7 +12,7 @@ namespace Checkers.Test
             const int expectedCheckerId = 8;
             
             var game = new Game();
-            var player = new Player(true);
+            var player = new HumanPlayer(true);
 
             game.CreateCheckers(true);
 
@@ -26,7 +26,7 @@ namespace Checkers.Test
         public void _002_WhitePlayerCanSelectOnlyWhiteChecker()
         {
             var game = new Game();
-            var playerWhite = new Player(true); 
+            var playerWhite = new HumanPlayer(true); 
             
             game.CreateCheckers(true);
             game.CreateCheckers(false);
@@ -44,7 +44,7 @@ namespace Checkers.Test
         public void _003_BlackPlayerCanSelectOnlyBlackChecker()
         {
             var game = new Game();
-            var playerBlack = new Player(false);
+            var playerBlack = new HumanPlayer(false);
 
             game.CreateCheckers(true);
             game.CreateCheckers(false);

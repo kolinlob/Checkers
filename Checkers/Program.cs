@@ -11,7 +11,10 @@ namespace Checkers
             game.Start();
 
             while (!game.GameIsOver())
+            {
+                game.SetCoordinatesForMove();
                 game.MakeMove();
+            }
 
             Console.WriteLine("Game Over");
             Console.ReadLine();

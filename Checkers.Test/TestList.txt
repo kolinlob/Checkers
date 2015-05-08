@@ -33,4 +33,5 @@ can display board
 
 player can surrender
 
-
+== MOVE
+can create move
