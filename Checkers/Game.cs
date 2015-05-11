@@ -83,9 +83,23 @@ namespace Checkers
             return ((CurrentPlayer == player1 && CheckersSet[currentCheckerId].IsWhite) || (CurrentPlayer == player2 && !CheckersSet[currentCheckerId].IsWhite));
         }
 
-        public bool CanMoveThere(int[] adress)
+        public bool CanMoveThere(int[] adressNew, int[] adressOld, bool isQueen)
         {
-            return (board.IsCellEmpty(adress[0], adress[1]) && board.IsCellUsable(adress[0], adress[1]));
+            if (isQueen)
+            {
+                return (board.IsCellEmpty(adressNew[0], adressNew[1]) && board.IsCellUsable(adressNew[0], adressNew[1]));
+            }
+
+            else
+            {
+                bool isOneCellMove = false;
+                if (adressNew[0] - adressOld[0] == 1)
+                {
+                    isOneCellMove = true;
+                }
+                
+                return (board.IsCellEmpty(adressNew[0], adressNew[1]) && board.IsCellUsable(adressNew[0], adressNew[1]) && isOneCellMove);
+            }
         }
 
         public HumanPlayer SwitchPlayer()
@@ -162,11 +176,11 @@ namespace Checkers
             var adressOld = GetCellAddress(selectCheckerToMoveMessage);
             move.MoveCoordinates.Add(adressOld);
 
-            for (int i = 0; i < 3; i++)
-            {
+            //for (int i = 0; i < 3; i++)
+            //{
                 int[] adressNew = GetCellAddress(selectDestination);
                 move.MoveCoordinates.Add(adressNew);
-            }     
+          //  }     
         }      
 
         public void MoveChecker()

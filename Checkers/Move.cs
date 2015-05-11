@@ -6,4 +6,6 @@ namespace Checkers
     {
         public List<int[]> MoveCoordinates = new List<int[]>();
     }
+
+    
 }

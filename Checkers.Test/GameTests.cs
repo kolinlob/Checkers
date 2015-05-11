@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Checkers.Test
@@ -107,6 +108,39 @@ namespace Checkers.Test
             game.CheckersSet.RemoveAll(checker => checker.IsWhite);
 
             Assert.IsTrue(game.IsGameOver());
+        }
+
+        [TestMethod]
+        public void _008_NominaleCordinates()
+        {
+            Game game = new Game();
+
+            game.CreateCheckers(false);
+            game.CreateCheckers(true);
+
+            FakeUserInput userInput = new FakeUserInput();
+
+            string Destination = "D4";
+
+            userInput.InputCoordinates();
+
+            var adressNew = game.ConvertIntoCoordinates(Destination);
+
+            game.MoveChecker();
+
+
+            Assert.IsFalse(game.CanMoveThere(adressNew));
+        }
+
+
+    }
+
+    public class FakeUserInput : IUserInput
+    {
+
+        public string InputCoordinates()
+        {
+            return "B6";
         }
     }
 }

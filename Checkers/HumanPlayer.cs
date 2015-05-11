@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Checkers
 {
-    public class HumanPlayer : IPlayer
+    public class HumanPlayer : IUserInput
     {
         public HumanPlayer(bool playsWhites)
         {
@@ -17,5 +17,6 @@ namespace Checkers
             return Console.ReadLine();
         }
 
+        
     }
 }
