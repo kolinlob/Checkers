@@ -12,9 +12,9 @@ namespace Checkers.Test
             const int expectedCheckerId = 8;
             
             var game = new Game();
-            var player = new HumanPlayer(true);
+            //var player = new HumanPlayer(true);
 
-            game.CreateCheckers(true);
+            game.CreateCheckers(false);
 
             var address = game.ConvertIntoCoordinates(validInput);
             var actualCheckerId = game.GetCheckerId(address);

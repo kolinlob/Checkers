@@ -31,19 +31,19 @@ namespace Checkers.Test
         public void _003_CheckerProperties()
         {
             var game = new Game();
-            game.CreateCheckers(true);
+            game.CreateCheckers(false);
 
             var actualChecker = game.CheckersSet[0];
-            var expectedChecker = new Checker(true, false, 0, 1);
+            var expectedChecker = new Checker(false, false, 0, 1);
 
             Assert.AreEqual(expectedChecker, actualChecker);
         }
 
         [TestMethod]
-        public void _004_WhiteCheckerCanBecomeQueen()
+        public void _004_BlackCheckerCanBecomeQueen()
         {
             var game = new Game();
-            game.CreateCheckers(true);
+            game.CreateCheckers(false);
 
             game.CheckersSet[5].HorizontalCoord = 7;
             game.CheckersSet[5].VerticalCoord = 0;
@@ -55,10 +55,10 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void _005_BlackCheckerCanBecomeQueen()
+        public void _005_WhiteCheckerCanBecomeQueen()
         {
             var game = new Game();
-            game.CreateCheckers(false);
+            game.CreateCheckers(true);
 
             game.CheckersSet[7].HorizontalCoord = 0;
             game.CheckersSet[7].VerticalCoord = 1;
@@ -74,28 +74,28 @@ namespace Checkers.Test
         public void _006_WhiteCheckerChangesItsSymbolUponBecomingQueen()
         {
             var game = new Game();
-            game.CreateCheckers(true);
+            game.CreateCheckers(false);
 
             game.CheckersSet[5].HorizontalCoord = 7;
             game.CheckersSet[5].VerticalCoord = 0;
 
             game.CheckerBecomesQueen(game.CheckersSet[5]);
 
-            Assert.IsTrue(game.CheckersSet[5].DrawChecker() == 'K');
+            Assert.IsTrue(game.CheckersSet[5].DrawChecker() == '☼');
         }
 
         [TestMethod]
         public void _007_BlackCheckerChangesItsSymbolUponBecomingQueen()
         {
             var game = new Game();
-            game.CreateCheckers(false);
+            game.CreateCheckers(true);
 
             game.CheckersSet[7].HorizontalCoord = 0;
             game.CheckersSet[7].VerticalCoord = 1;
 
             game.CheckerBecomesQueen(game.CheckersSet[7]);
 
-            Assert.IsTrue(game.CheckersSet[7].DrawChecker() == 'K');
+            Assert.IsTrue(game.CheckersSet[7].DrawChecker() == '☼');
         }
     }
 }

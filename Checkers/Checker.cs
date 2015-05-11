@@ -4,7 +4,7 @@ namespace Checkers
 {
     public class Checker
     {
-        char symbol = '☼';
+        char symbol = '█';
         public bool IsWhite { get; set; }
         public bool IsQueen { get; set; }
         public int VerticalCoord { get; set; }
@@ -30,12 +30,12 @@ namespace Checkers
 
         public void ChangeSymbol()
         {
-            symbol = 'K';          
+            symbol = '☼';          
         }
 
         public char DrawChecker()
         {
-            SetColor(IsWhite ? ConsoleColor.Yellow : ConsoleColor.Red);
+            SetColor(IsWhite ? ConsoleColor.White : ConsoleColor.Red);
             return symbol;
         }
 

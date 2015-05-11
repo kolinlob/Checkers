@@ -22,8 +22,8 @@ namespace Checkers
             player2 = new HumanPlayer(false);
             CurrentPlayer = player1;
             
-            CreateCheckers(true);
             CreateCheckers(false);
+            CreateCheckers(true);
             board.Draw(CheckersSet);
         }
 
@@ -32,7 +32,7 @@ namespace Checkers
             var start = 0;
             var end = 3;
 
-            if (!isWhite)
+            if (isWhite)
             {
                 start = 5;
                 end = 8;
@@ -95,7 +95,7 @@ namespace Checkers
 
         public void CheckerBecomesQueen(Checker checker)
         {
-            if ((checker.IsWhite && checker.HorizontalCoord == 7) || (!checker.IsWhite && checker.HorizontalCoord == 0))
+            if ((!checker.IsWhite && checker.HorizontalCoord == 7) || (checker.IsWhite && checker.HorizontalCoord == 0))
             {
                 checker.IsQueen = true;
                 checker.ChangeSymbol();
