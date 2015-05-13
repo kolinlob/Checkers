@@ -53,6 +53,7 @@
     <Compile Include="BoardTests.cs" />
     <Compile Include="CellTests.cs" />
     <Compile Include="CheckerTests.cs" />
+    <Compile Include="FakePlayer.cs" />
     <Compile Include="GameTests.cs" />
     <Compile Include="MoveTests.cs" />
     <Compile Include="PlayerTests.cs" />

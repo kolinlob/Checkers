@@ -1,55 +1,51 @@
 ﻿== GAME
-* can create game
-* game can be initialised with checkers in start positions
-* game checks, if a checker can move to that field
-switches player after each move
-
-=== GAME RULES
-* ordinary checker cannot move backwards
-* ordinary checker moves on one cell 
-queen can move forwards and backwards
-queen move only by diagonale 
-* queen can move on more than one cell at once 
-first move - from first row only
-checker can take the opponent's checker
-take - over one cell
-take - opponent's checker is taken away from field
-take - backwards is allowed
-take - queen cab land in any cell after the beaten checker
-take is mandatory
-cannot move other checkers, if take is possible
-
-
- Game Over:
-(50%) checks for winner (as of now only checks if no whites/blacks remained on the board)
-checks for winner - when no moves left for opponent
+* 001 - can create game
+* 002, 003 - game can be initialised with checkers in start positions
+* 004 - game checks, if a checker can move to white cell
+* 005 - game checks, if a checker can move to occupied cell
+* 006 - game is over when no black checkers remained
+* 007 - game is over when no white checkers remained
+* 008 - ordinary checker moves on one cell
+* 009 - queen can move on more than one cell at once 
+* 010 - ordinary checker cannot move backwards
+        queen can move forwards and backwards
+		queen move only by diagonale 
+		first move - from first row only
+		checker can take the opponent's checker
+		take - over one cell
+		take - opponent's checker is taken away from field
+		take - backwards is allowed
+		take - queen cab land in any cell after the beaten checker
+		take is mandatory
+		cannot move other checkers, if take is possible
+		checks for winner - when no moves left for opponent
+		switches player after each move
 
 == CELL
-* can create cell
-* check if cell is usable
-* check if cell is empty
+* 001 - can create cell
+* 002 - check if cell is usable
+* 003 - check if cell is empty
 
 == BOARD
-* can create board
-!!! can display board
-* board can display checker at its initial coordinates
-* board checks, if cell is occupied
+* 001 - can create board
+! 002 - can display board
+		board can display checker at its initial coordinates
+		board checks, if cell is occupied
 
 == CHECKER
-* can create a checker
-* checker property is corect
-* checker can be moved according to the new coordinates
-* checker can become queen
-* checker changes its appearance, when becomes queen
+* 001 - Can create a checker
+* 002 - Checker Can Be Moved To Specified Coordinates
+* 003 - Checker Properties are correct
+* 004, 005 - Checker can become Queen
+* 006, 007 - Checker changes its appearance, upon becoming Queen
 
 
 == PLAYER
-* player can select checker
-* player can select only his own checker
-? player can set cell coordinates for a checker to move
-
-player can surrender
+* 001 - Player Can Select Checker
+* 002, 003 - Player can select only own checker
+		player can set cell coordinates for a checker to move
+		player can surrender
 
 == MOVE
-* can create move
-can move ckecker
+* 001 - Can create move
+		can move ckecker

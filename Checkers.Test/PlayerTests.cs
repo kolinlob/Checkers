@@ -6,13 +6,12 @@ namespace Checkers.Test
     public class PlayerTests
     {
         [TestMethod]
-        public void _001_PlayerCanSelectChecker()
+        public void _001_Player_Can_Select_Checker()
         {
-            const string validInput = "B6";
-            const int expectedCheckerId = 8;
-            
             var game = new Game();
-            //var player = new HumanPlayer(true);
+            var validInput = new FakePlayer(true).InputCoordinates();
+
+            const int expectedCheckerId = 8;
 
             game.CreateCheckers(false);
 
@@ -23,41 +22,29 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void _002_WhitePlayerCanSelectOnlyWhiteChecker()
+        public void _002_First_Player_Can_Select_Only_White_Checkers()
         {
             var game = new Game();
-            var playerWhite = new HumanPlayer(true); 
-            
-            game.CreateCheckers(true);
-            game.CreateCheckers(false);
+            game.Start();
 
-            const int blackCheckerId = 23;
-
-            game.CurrentPlayer = playerWhite;
-            
+            const int blackCheckerId = 5;
             var canSelectBlackChecker = game.CanSelectChecker(blackCheckerId);
 
             Assert.IsFalse(canSelectBlackChecker);
         }
 
         [TestMethod]
-        public void _003_BlackPlayerCanSelectOnlyBlackChecker()
+        public void _003_Second_Player_Can_Select_Only_Black_Checkers()
         {
             var game = new Game();
-            var playerBlack = new HumanPlayer(false);
-
-            game.CreateCheckers(true);
-            game.CreateCheckers(false);
-
-            const int whiteCheckerId = 8;
+            game.Start();
             
-            game.CurrentPlayer = playerBlack;
+            game.CurrentPlayer.PlaysWhites = false;
 
+            const int whiteCheckerId = 15;
             var canSelectWhiteChecker = game.CanSelectChecker(whiteCheckerId);
 
             Assert.IsFalse(canSelectWhiteChecker);
         }
-
-
     }
 }

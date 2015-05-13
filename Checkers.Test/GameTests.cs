@@ -8,7 +8,7 @@ namespace Checkers.Test
     public class GameTests
     {
         [TestMethod]
-        public void _001_CanCreateGame()
+        public void _001_Can_Create_Game()
         {
             var game = new Game();
 
@@ -16,7 +16,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void _002_BlackCheckersAreInStartPosition()
+        public void _002_Black_Checkers_Are_In_Start_Position()
         {
             var game = new Game();
             game.CreateCheckers(false);
@@ -34,15 +34,14 @@ namespace Checkers.Test
                 new Checker(false, false, 2, 1),
                 new Checker(false, false, 2, 3),
                 new Checker(false, false, 2, 5),
-                new Checker(false, false, 2, 7)
-                
+                new Checker(false, false, 2, 7)           
             };
 
             CollectionAssert.AreEqual(expected, game.CheckersSet);
         }
 
         [TestMethod]
-        public void _003_WhiteCheckersAreInStartPosition()
+        public void _003_White_Checkers_Are_In_Start_Position()
         {
             var game = new Game();
             game.CreateCheckers(true);
@@ -67,12 +66,12 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void _004_CannotMoveToWhiteCell()
+        public void _004_Cannot_Move_To_White_Cell()
         {
             var game = new Game();
             game.Start();
 
-            int[] adressOld = { 1, 1 };
+            int[] adressOld = { 0, 1 };
             int[] adressNew = { 2, 2 };
             var expected = game.CanMoveThere(adressOld, adressNew, false);
 
@@ -80,12 +79,12 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void _005_CannotMoveToOccupiedBlackCell()
+        public void _005_Cannot_Move_To_Occupied_Black_Cell()
         {
             var game = new Game();
             game.Start();
 
-            int[] adressOld = { 1, 1 };
+            int[] adressOld = { 0, 1 };
             int[] adressNew = { 2, 1 };
             var expected = game.CanMoveThere(adressOld, adressNew, false);
 
@@ -93,7 +92,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void _006_GameIsOver_When_No_Black_CheckersRemained()
+        public void _006_Game_Is_Over_When_No_Black_Checkers_Remained()
         {
             var game = new Game();
             game.Start();
@@ -103,7 +102,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void _007_GameIsOver_When_No_White_CheckersRemained()
+        public void _007_Game_Is_Over_When_No_White_Checkers_Remained()
         {
             var game = new Game();
             game.Start();
@@ -117,7 +116,6 @@ namespace Checkers.Test
         {
             Game game = new Game();
             game.Start();
-
             
             game.CurrentPlayer = new FakePlayer(true);
 
@@ -129,19 +127,16 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void _009_Quuine_Moves_At_More_Cell()
+        public void _009_Queen_Moves_At_More_than_1_Cell()
         {
             Game game = new Game();
             game.Start();
-
-          
+        
             game.CurrentPlayer = new FakePlayer(true);
-
 
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
             var adressNew = game.ConvertIntoCoordinates("D4");
-
-            
+          
             var checkerId = game.GetCheckerId(adressOld);
             game.CheckersSet[checkerId].IsQueen = true;
 
@@ -154,35 +149,14 @@ namespace Checkers.Test
         {
             Game game = new Game();
             game.Start();
-
             
             game.CurrentPlayer = new FakePlayer(true);
-
 
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
             var adressNew = game.ConvertIntoCoordinates("A7");
 
-
             var expected = game.MoveForward(adressOld, adressNew);
             Assert.IsFalse(expected);
-        }
-
-
-    }
-
-    public class FakePlayer : IUserInput
-    {
-
-        public FakePlayer(bool playsWhites)
-        {
-            PlaysWhites = playsWhites;
-        }
-
-        public bool PlaysWhites { get; set; }
-
-        public string InputCoordinates()
-        {
-            return "B6";
         }
     }
 }

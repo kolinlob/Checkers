@@ -80,7 +80,7 @@ namespace Checkers
 
         public bool CanSelectChecker(int currentCheckerId)
         {
-            return ((CurrentPlayer == player1 && CheckersSet[currentCheckerId].IsWhite) || (CurrentPlayer == player2 && !CheckersSet[currentCheckerId].IsWhite));
+            return ((CurrentPlayer.PlaysWhites && CheckersSet[currentCheckerId].IsWhite) || (!CurrentPlayer.PlaysWhites && !CheckersSet[currentCheckerId].IsWhite));
         }
 
         public bool CanMoveThere(int[] adressOld, int[] adressNew, bool isQueen)
@@ -89,39 +89,17 @@ namespace Checkers
             {
                 return (board.IsCellEmpty(adressNew[0], adressNew[1]) && board.IsCellUsable(adressNew[0], adressNew[1]));
             }
-
             return OneCellMove(adressOld, adressNew) && MoveForward(adressOld, adressNew);
-
         }
 
         public bool MoveForward(int[] adressOld, int[] adressNew)
         {
-
-
-            if ((adressNew[0] - adressOld[0]) == 1 && Math.Abs(adressNew[1] - adressOld[1]) == 1)
-            {
-                return true;
-            }
-
-
-            return false;
-
-
+            return ((adressNew[0] - adressOld[0]) == 1 && Math.Abs(adressNew[1] - adressOld[1]) == 1);
         }
 
         public bool OneCellMove(int[] adressOld, int[] adressNew)
         {
-
-            if (Math.Abs(adressNew[0] - adressOld[0]) == 1 && Math.Abs(adressNew[1] - adressOld[1]) == 1)
-            {
-                return true;
-            }
-
-
-            return false;
-
-
-
+            return (Math.Abs(adressNew[0] - adressOld[0]) == 1 && Math.Abs(adressNew[1] - adressOld[1]) == 1);
         }
 
         public IUserInput SwitchPlayer()
@@ -198,11 +176,10 @@ namespace Checkers
             var adressOld = GetCellAddress(selectCheckerToMoveMessage);
             move.MoveCoordinates.Add(adressOld);
 
-            //for (int i = 0; i < 3; i++)
-            //{
+//вставить проверку на возможность движения в рамках текущего хода
             int[] adressNew = GetCellAddress(selectDestination);
             move.MoveCoordinates.Add(adressNew);
-            //  }     
+    
         }
 
         public void MoveChecker()
