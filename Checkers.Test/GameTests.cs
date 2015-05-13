@@ -116,22 +116,22 @@ namespace Checkers.Test
         public void _008_Ordinary_Checker_Moves_At_One_Cell_Only()
         {
             Game game = new Game();
-            Board board = new Board();
-            FakePlayer player1 = new FakePlayer(true);
-            game.CurrentPlayer = player1;
-
-            game.CreateCheckers(false);
-            game.CreateCheckers(true);
-            //board.Draw(game.CheckersSet);
+            game.Start();
+            FakePlayer fakePlayer = new FakePlayer(true);
+            game.CurrentPlayer = fakePlayer;
 
             string Destination = "D4";
 
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
             var adressNew = game.ConvertIntoCoordinates(Destination);
+            //var adressOld = new[] { game.CheckersSet[20].HorizontalCoord, game.CheckersSet[20].VerticalCoord };
 
-            //game.SetCoordinatesForMove();
-            //game.MoveChecker();
-            
+            game.SetCoordinatesForMove();
+            game.MoveChecker();
+
+            //var adressNew = new[] { game.CheckersSet[20].HorizontalCoord, game.CheckersSet[20].VerticalCoord };
+
+
             Assert.IsFalse(game.CanMoveThere(adressOld, adressNew, false));
         }
 
@@ -147,7 +147,7 @@ namespace Checkers.Test
         }
 
         public bool PlaysWhites { get; set; }
-        
+
         public string InputCoordinates()
         {
             return "B6";

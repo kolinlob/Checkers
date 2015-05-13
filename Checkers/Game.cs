@@ -11,8 +11,8 @@ namespace Checkers
         public List<Checker> CheckersSet = new List<Checker>();
         private Board board;
         private Move move;
-        private HumanPlayer player1;
-        private HumanPlayer player2;
+        private IUserInput player1;
+        private IUserInput player2;
         public IUserInput CurrentPlayer { get; set; }
 
         public void Start()
@@ -106,7 +106,7 @@ namespace Checkers
             
         }
 
-        public HumanPlayer SwitchPlayer()
+        public IUserInput SwitchPlayer()
         {
             return CurrentPlayer == player1 ? player2 : player1;
         }
