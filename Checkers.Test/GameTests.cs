@@ -117,22 +117,15 @@ namespace Checkers.Test
         {
             Game game = new Game();
             game.Start();
+
             FakePlayer fakePlayer = new FakePlayer(true);
             game.CurrentPlayer = fakePlayer;
 
-            string Destination = "D4";
-
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
-            var adressNew = game.ConvertIntoCoordinates(Destination);
-            //var adressOld = new[] { game.CheckersSet[20].HorizontalCoord, game.CheckersSet[20].VerticalCoord };
+            var adressNew = game.ConvertIntoCoordinates("D4");
 
-            game.SetCoordinatesForMove();
-            game.MoveChecker();
-
-            //var adressNew = new[] { game.CheckersSet[20].HorizontalCoord, game.CheckersSet[20].VerticalCoord };
-
-
-            Assert.IsFalse(game.CanMoveThere(adressOld, adressNew, false));
+            var expected = game.CanMoveThere(adressOld, adressNew, false);
+            Assert.IsFalse(expected);
         }
 
 
