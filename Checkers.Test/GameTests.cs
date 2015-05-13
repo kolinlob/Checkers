@@ -124,7 +124,46 @@ namespace Checkers.Test
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
             var adressNew = game.ConvertIntoCoordinates("D4");
 
-            var expected = game.CanMoveThere(adressOld, adressNew, false);
+            var expected = game.OneCellMove(adressOld, adressNew);
+            Assert.IsFalse(expected);
+        }
+
+        [TestMethod]
+        public void _009_Quuine_Moves_At_More_Cell()
+        {
+            Game game = new Game();
+            game.Start();
+
+            FakePlayer fakePlayer = new FakePlayer(true);
+            game.CurrentPlayer = fakePlayer;
+
+
+            var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var adressNew = game.ConvertIntoCoordinates("D4");
+
+            
+            var checkerId = game.GetCheckerId(adressOld);
+            game.CheckersSet[checkerId].IsQueen = true;
+
+            var expected = game.OneCellMove(adressOld, adressNew);
+            Assert.IsFalse(expected);
+        }
+
+        [TestMethod]
+        public void _010_Ordinary_Checkers_Cannot_Move_Backwards()
+        {
+            Game game = new Game();
+            game.Start();
+
+            
+            game.CurrentPlayer = new FakePlayer(true);
+
+
+            var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var adressNew = game.ConvertIntoCoordinates("A7");
+
+
+            var expected = game.MoveForward(adressOld, adressNew);
             Assert.IsFalse(expected);
         }
 

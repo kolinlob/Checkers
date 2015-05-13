@@ -21,7 +21,7 @@ namespace Checkers
             player1 = new HumanPlayer(true);
             player2 = new HumanPlayer(false);
             CurrentPlayer = player1;
-            
+
             CreateCheckers(false);
             CreateCheckers(true);
             board.Draw(CheckersSet);
@@ -64,7 +64,7 @@ namespace Checkers
                 DrawWhiteLine(); Console.Write(message);
 
                 var validInput = ValidateInput();
-                    cellAdress = ConvertIntoCoordinates(validInput);
+                cellAdress = ConvertIntoCoordinates(validInput);
 
             } while (cellAdress[0] < 0 || cellAdress[1] < 0 || cellAdress[0] > 7 || cellAdress[1] > 7);
 
@@ -74,8 +74,8 @@ namespace Checkers
         public int GetCheckerId(int[] adress)
         {
             return (from checker in CheckersSet
-                        where adress[0] == checker.HorizontalCoord && adress[1] == checker.VerticalCoord
-                            select CheckersSet.IndexOf(checker)).FirstOrDefault();
+                    where adress[0] == checker.HorizontalCoord && adress[1] == checker.VerticalCoord
+                    select CheckersSet.IndexOf(checker)).FirstOrDefault();
         }
 
         public bool CanSelectChecker(int currentCheckerId)
@@ -89,21 +89,39 @@ namespace Checkers
             {
                 return (board.IsCellEmpty(adressNew[0], adressNew[1]) && board.IsCellUsable(adressNew[0], adressNew[1]));
             }
-            
-            
-                bool isOneCellMovePossible;
-                if (Math.Abs(adressNew[0] - adressOld[0]) == 1 && Math.Abs(adressNew[1] - adressOld[1]) == 1)
-                {
-                    isOneCellMovePossible = true;
-                }
-                else
-                {
-                    isOneCellMovePossible = false;
-                }
-                
-                
-                return (board.IsCellEmpty(adressNew[0], adressNew[1]) && board.IsCellUsable(adressNew[0], adressNew[1]) && isOneCellMovePossible);
-            
+
+            return OneCellMove(adressOld, adressNew) && MoveForward(adressOld, adressNew);
+
+        }
+
+        public bool MoveForward(int[] adressOld, int[] adressNew)
+        {
+
+
+            if ((adressNew[0] - adressOld[0]) == 1 && Math.Abs(adressNew[1] - adressOld[1]) == 1)
+            {
+                return true;
+            }
+
+
+            return false;
+
+
+        }
+
+        public bool OneCellMove(int[] adressOld, int[] adressNew)
+        {
+
+            if (Math.Abs(adressNew[0] - adressOld[0]) == 1 && Math.Abs(adressNew[1] - adressOld[1]) == 1)
+            {
+                return true;
+            }
+
+
+            return false;
+
+
+
         }
 
         public IUserInput SwitchPlayer()
@@ -174,7 +192,7 @@ namespace Checkers
             DrawWhiteLine();
             Console.Write("Ходят {0}!", CurrentPlayer.PlaysWhites ? "белые" : "черные");
 
-            Thread.Sleep(4*delayNpcMoveMiliseconds);
+            Thread.Sleep(4 * delayNpcMoveMiliseconds);
             Console.SetCursorPosition(0, 30);
 
             var adressOld = GetCellAddress(selectCheckerToMoveMessage);
@@ -182,10 +200,10 @@ namespace Checkers
 
             //for (int i = 0; i < 3; i++)
             //{
-                int[] adressNew = GetCellAddress(selectDestination);
-                move.MoveCoordinates.Add(adressNew);
-          //  }     
-        }      
+            int[] adressNew = GetCellAddress(selectDestination);
+            move.MoveCoordinates.Add(adressNew);
+            //  }     
+        }
 
         public void MoveChecker()
         {
@@ -198,8 +216,8 @@ namespace Checkers
                 var addressNew = move.MoveCoordinates[1];
 
                 CheckersSet[currentCheckerId].HorizontalCoord = addressNew[0];
-                CheckersSet[currentCheckerId].VerticalCoord   = addressNew[1];
-                
+                CheckersSet[currentCheckerId].VerticalCoord = addressNew[1];
+
                 CheckerBecomesQueen(CheckersSet[currentCheckerId]);
 
                 move.MoveCoordinates.RemoveAt(0);
@@ -207,7 +225,7 @@ namespace Checkers
                 Thread.Sleep(500);
                 Console.SetCursorPosition(0, 0);
 
-                board.Draw(CheckersSet); 
+                board.Draw(CheckersSet);
             }
             CurrentPlayer = SwitchPlayer();
         }

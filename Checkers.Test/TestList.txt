@@ -5,10 +5,10 @@
 switches player after each move
 
 === GAME RULES
-ordinary checker cannot move backwards
-ordinary checker moves on one cell 
+* ordinary checker cannot move backwards
+* ordinary checker moves on one cell 
 queen can move forwards and backwards
-queen can move on more than one cell at once 
+* queen can move on more than one cell at once 
 first move - from first row only
 checker can take the opponent's checker
 take - over one cell
