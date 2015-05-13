@@ -118,8 +118,8 @@ namespace Checkers.Test
             Game game = new Game();
             game.Start();
 
-            FakePlayer fakePlayer = new FakePlayer(true);
-            game.CurrentPlayer = fakePlayer;
+            
+            game.CurrentPlayer = new FakePlayer(true);
 
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
             var adressNew = game.ConvertIntoCoordinates("D4");
@@ -134,8 +134,8 @@ namespace Checkers.Test
             Game game = new Game();
             game.Start();
 
-            FakePlayer fakePlayer = new FakePlayer(true);
-            game.CurrentPlayer = fakePlayer;
+          
+            game.CurrentPlayer = new FakePlayer(true);
 
 
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
