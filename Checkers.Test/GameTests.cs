@@ -72,8 +72,9 @@ namespace Checkers.Test
             var game = new Game();
             game.Start();
 
-            int[] adress = { 2, 2 };
-            var expected = game.CanMoveThere(adress);
+            int[] adressOld = { 1, 1 };
+            int[] adressNew = { 2, 2 };
+            var expected = game.CanMoveThere(adressOld, adressNew, false);
 
             Assert.IsFalse(expected);
         }
@@ -84,8 +85,9 @@ namespace Checkers.Test
             var game = new Game();
             game.Start();
 
-            int[] adress = { 2, 1 };
-            var expected = game.CanMoveThere(adress);
+            int[] adressOld = { 1, 1 };
+            int[] adressNew = { 2, 1 };
+            var expected = game.CanMoveThere(adressOld, adressNew, false);
 
             Assert.IsFalse(expected);
         }
@@ -111,33 +113,41 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void _008_NominaleCordinates()
+        public void _008_Ordinary_Checker_Moves_At_One_Cell_Only()
         {
             Game game = new Game();
+            Board board = new Board();
+            FakePlayer player1 = new FakePlayer(true);
+            game.CurrentPlayer = player1;
 
             game.CreateCheckers(false);
             game.CreateCheckers(true);
-
-            FakeUserInput userInput = new FakeUserInput();
+            //board.Draw(game.CheckersSet);
 
             string Destination = "D4";
 
-            userInput.InputCoordinates();
-
+            var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
             var adressNew = game.ConvertIntoCoordinates(Destination);
 
-            game.MoveChecker();
-
-
-            Assert.IsFalse(game.CanMoveThere(adressNew));
+            //game.SetCoordinatesForMove();
+            //game.MoveChecker();
+            
+            Assert.IsFalse(game.CanMoveThere(adressOld, adressNew, false));
         }
 
 
     }
 
-    public class FakeUserInput : IUserInput
+    public class FakePlayer : IUserInput
     {
 
+        public FakePlayer(bool playsWhites)
+        {
+            PlaysWhites = playsWhites;
+        }
+
+        public bool PlaysWhites { get; set; }
+        
         public string InputCoordinates()
         {
             return "B6";

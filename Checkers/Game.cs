@@ -13,7 +13,7 @@ namespace Checkers
         private Move move;
         private HumanPlayer player1;
         private HumanPlayer player2;
-        public HumanPlayer CurrentPlayer { get; set; }
+        public IUserInput CurrentPlayer { get; set; }
 
         public void Start()
         {
@@ -83,23 +83,27 @@ namespace Checkers
             return ((CurrentPlayer == player1 && CheckersSet[currentCheckerId].IsWhite) || (CurrentPlayer == player2 && !CheckersSet[currentCheckerId].IsWhite));
         }
 
-        public bool CanMoveThere(int[] adressNew, int[] adressOld, bool isQueen)
+        public bool CanMoveThere(int[] adressOld, int[] adressNew, bool isQueen)
         {
             if (isQueen)
             {
                 return (board.IsCellEmpty(adressNew[0], adressNew[1]) && board.IsCellUsable(adressNew[0], adressNew[1]));
             }
-
-            else
-            {
-                bool isOneCellMove = false;
-                if (adressNew[0] - adressOld[0] == 1)
+            
+            
+                bool isOneCellMovePossible;
+                if (Math.Abs(adressNew[0] - adressOld[0]) == 1 && Math.Abs(adressNew[1] - adressOld[1]) == 1)
                 {
-                    isOneCellMove = true;
+                    isOneCellMovePossible = true;
+                }
+                else
+                {
+                    isOneCellMovePossible = false;
                 }
                 
-                return (board.IsCellEmpty(adressNew[0], adressNew[1]) && board.IsCellUsable(adressNew[0], adressNew[1]) && isOneCellMove);
-            }
+                
+                return (board.IsCellEmpty(adressNew[0], adressNew[1]) && board.IsCellUsable(adressNew[0], adressNew[1]) && isOneCellMovePossible);
+            
         }
 
         public HumanPlayer SwitchPlayer()
