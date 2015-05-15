@@ -108,11 +108,35 @@ namespace Checkers
 
         }
 
-        public bool IsFoeAround(int[] adress, bool IsWhite)
+        public bool IsFoeAround(int[] adress, bool playerColor)
         {
+            return CellExist(new[] {adress[0] - 1, adress[1] - 1})
+                   &&
+                   CheckersSet.Any(
+                       foe =>
+                           foe.HorizontalCoord == adress[0] - 1 && foe.VerticalCoord == adress[1] - 1 &&
+                           foe.IsWhite != playerColor)
 
-            return CellExist(new[] {adress[0] - 1, adress[1] - 1} );
+                   && CellExist(new[] {adress[0] - 1, adress[1] + 1})
+                   &&
+                   CheckersSet.Any(
+                       foe =>
+                           foe.HorizontalCoord == adress[0] - 1 && foe.VerticalCoord == adress[1] + 1 &&
+                           foe.IsWhite != playerColor)
 
+                           && CellExist(new[] {adress[0] + 1, adress[1] + 1})
+                           &&
+                           CheckersSet.Any(
+                               foe =>
+                                   foe.HorizontalCoord == adress[0] + 1 && foe.VerticalCoord == adress[1] + 1 &&
+                                   foe.IsWhite != playerColor)
+
+                                   && CellExist(new[] {adress[0] + 1, adress[1] - 1})
+                                   &&
+                                   CheckersSet.Any(
+                                       foe =>
+                                           foe.HorizontalCoord == adress[0] + 1 && foe.VerticalCoord == adress[1] - 1 &&
+                                           foe.IsWhite != playerColor);
         }
 
 
