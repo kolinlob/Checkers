@@ -158,5 +158,33 @@ namespace Checkers.Test
             var expected = game.MoveForward(adressOld, adressNew);
             Assert.IsFalse(expected);
         }
+
+        [TestMethod]
+        public void _011_Queen_Move_Only_Diagonale()
+        {
+            Game game = new Game();
+            game.Start();
+
+            game.CurrentPlayer = new FakePlayer(true);
+
+
+            var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var adressNew = game.ConvertIntoCoordinates("B4");
+
+            var expected = game.QueenMove(adressOld, adressNew);
+            Assert.IsFalse(expected);
+        }
+
+        [TestMethod]
+        public void _012_Checker_Can_Take_opponents_checkers()
+        {
+            Game game =new Game();
+            game.Start();
+
+
+
+            Assert.IsTrue(expected);
+        }
+
     }
 }

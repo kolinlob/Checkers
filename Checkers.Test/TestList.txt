@@ -8,9 +8,7 @@
 * 008 - ordinary checker moves on one cell
 * 009 - queen can move on more than one cell at once 
 * 010 - ordinary checker cannot move backwards
-        queen can move forwards and backwards
-		queen move only by diagonale 
-		first move - from first row only
+* 011 - queen move only by diagonale 
 		checker can take the opponent's checker
 		take - over one cell
 		take - opponent's checker is taken away from field

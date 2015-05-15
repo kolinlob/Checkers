@@ -102,6 +102,21 @@ namespace Checkers
             return (Math.Abs(adressNew[0] - adressOld[0]) == 1 && Math.Abs(adressNew[1] - adressOld[1]) == 1);
         }
 
+        public bool CellExist(int[] adress)
+        {
+            return adress[0] < 0 || adress[0] > 7 || adress[1] < 0 || adress[1] > 7;
+
+        }
+
+        public bool IsFoeAround(int[] adress, bool IsWhite)
+        {
+
+            return CellExist(new[] {adress[0] - 1, adress[1] - 1} );
+
+        }
+
+
+
         public IUserInput SwitchPlayer()
         {
             return CurrentPlayer == player1 ? player2 : player1;
@@ -115,6 +130,15 @@ namespace Checkers
                 checker.ChangeSymbol();
             }
         }
+
+
+        public bool QueenMove(int[] adressOld, int[] adressNew)
+        {
+            return (Math.Abs(adressNew[0] - adressOld[0]) == Math.Abs(adressNew[1] - adressOld[1]));
+
+        }
+
+
 
         public bool IsGameOver()
         {
@@ -176,10 +200,10 @@ namespace Checkers
             var adressOld = GetCellAddress(selectCheckerToMoveMessage);
             move.MoveCoordinates.Add(adressOld);
 
-//вставить проверку на возможность движения в рамках текущего хода
+            //вставить проверку на возможность движения в рамках текущего хода
             int[] adressNew = GetCellAddress(selectDestination);
             move.MoveCoordinates.Add(adressNew);
-    
+
         }
 
         public void MoveChecker()
