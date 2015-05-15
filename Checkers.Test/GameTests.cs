@@ -176,7 +176,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void _012_Checker_Can_Take_opponents_checkers()
+        public void _012_Checker_Can_Take_Opponents_Checkers()
         {
             Game game =new Game();
             game.Start();

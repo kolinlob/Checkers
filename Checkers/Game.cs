@@ -108,38 +108,19 @@ namespace Checkers
 
         }
 
-        public bool IsFoeAround(int[] adress, bool playerColor)
+        public bool IsFoeAround(int[] playerCheckerAdress, bool playerColor)
         {
-            return CellExist(new[] {adress[0] - 1, adress[1] - 1})
-                   &&
-                   CheckersSet.Any(
-                       foe =>
-                           foe.HorizontalCoord == adress[0] - 1 && foe.VerticalCoord == adress[1] - 1 &&
-                           foe.IsWhite != playerColor)
+            int[][] moveOptions = new int[4][];
+            moveOptions[0] = new[] {playerCheckerAdress[0] - 1, playerCheckerAdress[1] - 1};
+            moveOptions[1] = new[] {playerCheckerAdress[0] - 1, playerCheckerAdress[1] + 1};
+            moveOptions[2] = new[] {playerCheckerAdress[0] + 1, playerCheckerAdress[1] + 1};
+            moveOptions[3] = new[] {playerCheckerAdress[0] + 1, playerCheckerAdress[1] - 1};
 
-                   && CellExist(new[] {adress[0] - 1, adress[1] + 1})
-                   &&
-                   CheckersSet.Any(
-                       foe =>
-                           foe.HorizontalCoord == adress[0] - 1 && foe.VerticalCoord == adress[1] + 1 &&
-                           foe.IsWhite != playerColor)
-
-                           && CellExist(new[] {adress[0] + 1, adress[1] + 1})
-                           &&
-                           CheckersSet.Any(
-                               foe =>
-                                   foe.HorizontalCoord == adress[0] + 1 && foe.VerticalCoord == adress[1] + 1 &&
-                                   foe.IsWhite != playerColor)
-
-                                   && CellExist(new[] {adress[0] + 1, adress[1] - 1})
-                                   &&
-                                   CheckersSet.Any(
-                                       foe =>
-                                           foe.HorizontalCoord == adress[0] + 1 && foe.VerticalCoord == adress[1] - 1 &&
-                                           foe.IsWhite != playerColor);
+            return moveOptions.Any(option => CellExist(option) &&
+                CheckersSet.Any(foe => foe.HorizontalCoord == option[0] 
+                    && foe.VerticalCoord == option[1] 
+                    && foe.IsWhite != playerColor));
         }
-
-
 
         public IUserInput SwitchPlayer()
         {
