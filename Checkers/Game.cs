@@ -10,20 +10,21 @@ namespace Checkers
     {
         public List<Checker> CheckersSet = new List<Checker>();
         private Board board;
-        private Move move;
+        public Move Move { get; set; }
         private IUserInput player1;
         private IUserInput player2;
         public IUserInput CurrentPlayer { get; set; }
 
         public void Start()
         {
-            board = new Board();
             player1 = new HumanPlayer(true);
             player2 = new HumanPlayer(false);
             CurrentPlayer = player1;
 
             CreateCheckers(false);
             CreateCheckers(true);
+            board = new Board();
+
             board.Draw(CheckersSet);
         }
 
@@ -111,15 +112,15 @@ namespace Checkers
         public bool IsFoeAround(int[] playerCheckerAdress, bool playerColor)
         {
             int[][] moveOptions = new int[4][];
-            moveOptions[0] = new[] {playerCheckerAdress[0] - 1, playerCheckerAdress[1] - 1};
-            moveOptions[1] = new[] {playerCheckerAdress[0] - 1, playerCheckerAdress[1] + 1};
-            moveOptions[2] = new[] {playerCheckerAdress[0] + 1, playerCheckerAdress[1] + 1};
-            moveOptions[3] = new[] {playerCheckerAdress[0] + 1, playerCheckerAdress[1] - 1};
+            moveOptions[0] = new[] { playerCheckerAdress[0] - 1, playerCheckerAdress[1] - 1 };
+            moveOptions[1] = new[] { playerCheckerAdress[0] - 1, playerCheckerAdress[1] + 1 };
+            moveOptions[2] = new[] { playerCheckerAdress[0] + 1, playerCheckerAdress[1] + 1 };
+            moveOptions[3] = new[] { playerCheckerAdress[0] + 1, playerCheckerAdress[1] - 1 };
 
             return moveOptions.Any(option => CellExist(option) &&
-                CheckersSet.Any(foe => foe.HorizontalCoord == option[0] 
-                    && foe.VerticalCoord == option[1] 
-                    && foe.IsWhite != playerColor));
+                                             CheckersSet.Any(foe => foe.HorizontalCoord == option[0] &&
+                                                             foe.VerticalCoord == option[1] &&
+                                                             foe.IsWhite != playerColor));
         }
 
         public IUserInput SwitchPlayer()
@@ -136,14 +137,11 @@ namespace Checkers
             }
         }
 
-
         public bool QueenMove(int[] adressOld, int[] adressNew)
         {
             return (Math.Abs(adressNew[0] - adressOld[0]) == Math.Abs(adressNew[1] - adressOld[1]));
 
         }
-
-
 
         public bool IsGameOver()
         {
@@ -194,7 +192,7 @@ namespace Checkers
             //const string cantSelectError = "Нельзя ходить чужой шашкой!";
             //const string cantMoveHereMessage = "Нельзя ходить в выбранную клетку!";
 
-            move = new Move();
+            Move = new Move();
 
             DrawWhiteLine();
             Console.Write("Ходят {0}!", CurrentPlayer.PlaysWhites ? "белые" : "черные");
@@ -203,32 +201,35 @@ namespace Checkers
             Console.SetCursorPosition(0, 30);
 
             var adressOld = GetCellAddress(selectCheckerToMoveMessage);
-            move.MoveCoordinates.Add(adressOld);
+            Move.MoveCoordinates.Add(adressOld);
 
             //вставить проверку на возможность движения в рамках текущего хода
             int[] adressNew = GetCellAddress(selectDestination);
-            move.MoveCoordinates.Add(adressNew);
-
+            Move.MoveCoordinates.Add(adressNew);
         }
 
         public void MoveChecker()
         {
-            int currentCheckerId = GetCheckerId(move.MoveCoordinates[0]);
+            int currentCheckerId = GetCheckerId(Move.MoveCoordinates[0]);
 
-            var iterations = move.MoveCoordinates.Count;
+            var moves = Move.MoveCoordinates.Count;
 
-            for (var i = 1; i < iterations; i++)
+            for (var i = 1; i < moves; i++)
             {
-                var addressNew = move.MoveCoordinates[1];
+                var addressOld = Move.MoveCoordinates[0];
+                var addressNew = Move.MoveCoordinates[1];
 
                 CheckersSet[currentCheckerId].HorizontalCoord = addressNew[0];
                 CheckersSet[currentCheckerId].VerticalCoord = addressNew[1];
 
+                var cell = board.GetCell(addressOld[0], addressOld[1]);
+                cell.IsEmpty = true;
+
                 CheckerBecomesQueen(CheckersSet[currentCheckerId]);
 
-                move.MoveCoordinates.RemoveAt(0);
+                Move.MoveCoordinates.RemoveAt(0);
 
-                Thread.Sleep(500);
+                //Thread.Sleep(500);
                 Console.SetCursorPosition(0, 0);
 
                 board.Draw(CheckersSet);

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Checkers.Test
 {
@@ -22,7 +17,15 @@ namespace Checkers.Test
         public void _002_CanDisplayBoard()
         {
             var board = new Board();
-            var expected = board;
+            const string expected = "_Y_Y_Y_Y\r\n" +
+                                    "Y_Y_Y_Y_\r\n" +
+                                    "_Y_Y_Y_Y\r\n" +
+                                    "Y_Y_Y_Y_\r\n" +
+                                    "_Y_Y_Y_Y\r\n" +
+                                    "Y_Y_Y_Y_\r\n" +
+                                    "_Y_Y_Y_Y\r\n" +
+                                    "Y_Y_Y_Y_\r\n";
+            //const string expected =
             //"\r\n       A    B    C    D    E    F    G    H  \r\n" +
             //"\r\n"                                                   +
             //"                                             \r\n"      +
@@ -52,7 +55,7 @@ namespace Checkers.Test
             //"\r\n"                                                   +
             //"       A    B    C    D    E    F    G    H  \r\n";
 
-            Assert.AreEqual(expected, board);
+            Assert.AreEqual(expected, board.ToString());
         }
     }
 }

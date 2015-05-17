@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices.ComTypes;
+﻿using System;
+using System.Runtime.InteropServices.ComTypes;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
@@ -19,25 +21,25 @@ namespace Checkers.Test
         [TestMethod]
         public void _002_CanMakeMove()
         {
-            //var game = new Game();
-            //game.CreateCheckers(true);
-            //game.CreateCheckers(false);
-            //
-            //string PlayerChooseChecker = "B6";
-            //string Destination = "D4";
-            //
-            //var adress = game.ConvertIntoCoordinates(PlayerChooseChecker);
-            //
-            //var SelectedCheckerID = game.GetCheckerId(adress);
-            //
-            //var AdressNew = game.ConvertIntoCoordinates(Destination);
-            //
-            // game.UpdateCoordinates(SelectedCheckerID, AdressNew);
-            //
-            //
-            //var actual = game.CheckersSet[SelectedCheckerID];
-            //var expected = new Checker(true, false, 4, 3);
-            //Assert.AreEqual(expected, actual);
+            var game = new Game();
+            game.Start();
+            game.CurrentPlayer = new FakePlayer(true);
+
+            game.Move = new Move();
+
+            var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            game.Move.MoveCoordinates.Add(adressOld);
+
+            var adressNew = game.ConvertIntoCoordinates("c5");
+            game.Move.MoveCoordinates.Add(adressNew);
+
+            game.MoveChecker();
+
+            var id = game.GetCheckerId(adressNew);
+            var actual = game.CheckersSet[id];
+            var expected = new Checker(false, false, 3, 2);
+
+            Assert.AreEqual(expected, actual);
         }
     }
 }

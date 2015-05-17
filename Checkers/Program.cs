@@ -8,7 +8,7 @@ namespace Checkers
         {
             var game = new Game();
             game.Start();
-
+            
             while (!game.IsGameOver())
             {
                 game.SetCoordinatesForMove();
