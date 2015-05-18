@@ -6,7 +6,7 @@ namespace Checkers.Test
     public class BoardTests
     {
         [TestMethod]
-        public void _001_CanCreateBoard()
+        public void _001_Can_Create_Board()
         {
             var board = new Board();
 
@@ -14,7 +14,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void _002_CanDisplayBoard()
+        public void _002_Can_Display_Board()
         {
             var board = new Board();
             const string expected = "_Y_Y_Y_Y\r\n" +
@@ -57,5 +57,14 @@ namespace Checkers.Test
 
             Assert.AreEqual(expected, board.ToString());
         }
+
+        [TestMethod]
+        public void _003_Does_Particular_Cell_Exist()
+        {
+            var board = new Board();
+            var expected = board.CellExists(new[] { 3, 4 });
+
+            Assert.IsTrue(expected);
+        }  
     }
 }

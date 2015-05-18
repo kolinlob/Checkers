@@ -9,7 +9,8 @@
 * 009 - queen can move on more than one cell at once 
 * 010 - ordinary checker cannot move backwards
 * 011 - queen move only on diagonals
-		checker can take the opponent's checker
+012 - checker can take the opponent's checker
+013 - Can Define Enemy Coordinates
 		take - over one cell
 		take - opponent's checker is taken away from field
 		take - backwards is allowed
@@ -27,6 +28,7 @@
 == BOARD
 * 001 - can create board
 * 002 - can display board
+* 003 - does particular cell exist?
 		board can display checker at its initial coordinates
 		board checks, if cell is occupied
 

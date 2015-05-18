@@ -9,23 +9,33 @@ namespace Checkers
     public class Game
     {
         public List<Checker> CheckersSet = new List<Checker>();
-        private Board board;
+        public Board Board { get; set; }
         public Move Move { get; set; }
-        private IUserInput player1;
-        private IUserInput player2;
+        public IUserInput Player1;
+        public IUserInput Player2;
         public IUserInput CurrentPlayer { get; set; }
 
         public void Start()
         {
-            player1 = new HumanPlayer(true);
-            player2 = new HumanPlayer(false);
-            CurrentPlayer = player1;
+            Player1 = new HumanPlayer(true);
+            Player2 = new HumanPlayer(false);
+            CurrentPlayer = Player1;
 
             CreateCheckers(false);
             CreateCheckers(true);
-            board = new Board();
+            
+            
+            //CheckersSet.Add(new Checker(true, false, 3, 4));
+            //CheckersSet.Add(new Checker(false, false, 4, 5));
+            
+            //CheckersSet.Add(new Checker(true, false, 2, 1));
+            //CheckersSet.Add(new Checker(true, false, 4, 3));
+            //CheckersSet.Add(new Checker(false, false, 2, 3));
+            //CheckersSet.Add(new Checker(false, false, 2, 5));
+            
+            Board = new Board();
 
-            board.Draw(CheckersSet);
+            Board.Draw(CheckersSet);
         }
 
         public void CreateCheckers(bool isWhite)
@@ -88,7 +98,7 @@ namespace Checkers
         {
             if (isQueen)
             {
-                return (board.IsCellEmpty(adressNew[0], adressNew[1]) && board.IsCellUsable(adressNew[0], adressNew[1]));
+                return (Board.IsCellEmpty(adressNew[0], adressNew[1]) && Board.IsCellUsable(adressNew[0], adressNew[1]));
             }
             return OneCellMove(adressOld, adressNew) && MoveForward(adressOld, adressNew);
         }
@@ -103,46 +113,15 @@ namespace Checkers
             return (Math.Abs(adressNew[0] - adressOld[0]) == 1 && Math.Abs(adressNew[1] - adressOld[1]) == 1);
         }
 
-        public bool CellExist(int[] adress)
-        {
-            return adress[0] < 0 || adress[0] > 7 || adress[1] < 0 || adress[1] > 7;
 
-        }
-
-        public Move SetEnemyCoordinates(int[] playerCheckerAdress, bool playerColor, bool Queen)
+        public Move SetEnemyCoordinates(int[] currentCheckerAdress)
         {
-            //            int end = 1;
-            //            if (Queen)
-            //            {
-            //                end = 7;
-            //            }
-            //
-            //            int[][] moveOptions = new int[4][];
-            //
-            //            int[][] direction =
-            //            {
-            //                new [] {-1, -1},
-            //                new [] {-1,  1},
-            //                new [] {1,  -1},
-            //                new [] {1,   1}
-            //            };
-            //
-            //            Move Enemy = new Move();
-            //
-            //
-            //
-            //            for (int j = 0; j < 4; j++)
-            //            {
-            //               
-            //
-            //
             //            for (int i = 1; i <= end; i++)
             //            {
-            //
-            //                moveOptions[0] = new[] {playerCheckerAdress[0] - i, playerCheckerAdress[1] - i};
-            //                moveOptions[1] = new[] {playerCheckerAdress[0] - i, playerCheckerAdress[1] + i};
-            //                moveOptions[2] = new[] {playerCheckerAdress[0] + i, playerCheckerAdress[1] + i};
-            //                moveOptions[3] = new[] {playerCheckerAdress[0] + i, playerCheckerAdress[1] - i};
+            //                moveOptions[0] = new[] {currentCheckerAdress[0] - i, currentCheckerAdress[1] - i};
+            //                moveOptions[1] = new[] {currentCheckerAdress[0] - i, currentCheckerAdress[1] + i};
+            //                moveOptions[2] = new[] {currentCheckerAdress[0] + i, currentCheckerAdress[1] + i};
+            //                moveOptions[3] = new[] {currentCheckerAdress[0] + i, currentCheckerAdress[1] - i};
             //                foreach (var checker in CheckersSet)
             //                {
             //                    if (moveOptions[0][0] == checker.HorizontalCoord &&
@@ -155,13 +134,13 @@ namespace Checkers
             //            }
             //        }
             //
-            //    return moveOptions.Any(option => CellExist(option) &&
+            //    return moveOptions.Any(option => CellExists(option) &&
             //                                             CheckersSet.Any(foe => foe.HorizontalCoord == option[0] &&
             //                                                             foe.VerticalCoord == option[1] &&
             //                                                             foe.IsWhite != playerColor));
             //
-            Move Enemy = new Move();
-            int end = 1;
+            
+            var end = 1;
             int[][] direction =
             {
                 new [] {-1, -1},
@@ -170,39 +149,42 @@ namespace Checkers
                 new [] {1,   1}
             };
 
-            int[][] moveOptions = new int[4][];
+            int[][] moveDirection = new int[4][];
 
-            if (Queen)
+            int id = GetCheckerId(currentCheckerAdress);
+
+            var enemy = new Move();
+
+            if (CheckersSet[id].IsQueen)
             {
                 end = 7;
             }
-            for (int i = 0; i <= 3; i++)
-            {
-                for (int j = 1; j <= end; j++)
-                {
 
-                    moveOptions[i] = new[] { playerCheckerAdress[0] + j * direction[i][0], playerCheckerAdress[1] + j * direction[i][0] };
+            for (var i = 0; i < 4; i++)
+            {
+                for (var j = 1; j <= end; j++)
+                {
+                    moveDirection[i] = new[] { currentCheckerAdress[0] + j * direction[i][0], currentCheckerAdress[1] + j * direction[i][1] };
 
                     foreach (var checker in CheckersSet)
                     {
-                        if (CellExist(moveOptions[i]) && moveOptions[i][0] == checker.HorizontalCoord &&
-                            moveOptions[i][1] == checker.VerticalCoord && checker.IsWhite != playerColor)
+                        if (Board.CellExists(moveDirection[i]) &&
+                            moveDirection[i][0] == checker.HorizontalCoord &&
+                            moveDirection[i][1] == checker.VerticalCoord &&
+                            CurrentPlayer.PlaysWhites != checker.IsWhite)
                         {
-                            Enemy.Coordinates.Add(moveOptions[i]);
+                            enemy.Coordinates.Add(moveDirection[i]);
                         }
                     }
-
                 }
-
-
             }
-            return Enemy;
+            return enemy;
         }
 
 
         public IUserInput SwitchPlayer()
         {
-            return CurrentPlayer == player1 ? player2 : player1;
+            return CurrentPlayer == Player1 ? Player2 : Player1;
         }
 
         public void CheckerBecomesQueen(Checker checker)
@@ -299,7 +281,7 @@ namespace Checkers
                 CheckersSet[currentCheckerId].HorizontalCoord = addressNew[0];
                 CheckersSet[currentCheckerId].VerticalCoord = addressNew[1];
 
-                var cell = board.GetCell(addressOld[0], addressOld[1]);
+                var cell = Board.GetCell(addressOld[0], addressOld[1]);
                 cell.IsEmpty = true;
 
                 CheckerBecomesQueen(CheckersSet[currentCheckerId]);
@@ -309,7 +291,7 @@ namespace Checkers
                 //Thread.Sleep(500);
                 Console.SetCursorPosition(0, 0);
 
-                board.Draw(CheckersSet);
+                Board.Draw(CheckersSet);
             }
             CurrentPlayer = SwitchPlayer();
         }

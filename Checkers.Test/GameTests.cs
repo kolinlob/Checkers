@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Checkers.Test
@@ -116,7 +118,7 @@ namespace Checkers.Test
         {
             var game = new Game();
             game.Start();
-            
+
             game.CurrentPlayer = new FakePlayer(true);
 
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
@@ -129,14 +131,14 @@ namespace Checkers.Test
         [TestMethod]
         public void _009_Queen_Moves_At_More_than_1_Cell()
         {
-            Game game = new Game();
+            var game = new Game();
             game.Start();
-        
+
             game.CurrentPlayer = new FakePlayer(true);
 
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
             var adressNew = game.ConvertIntoCoordinates("D4");
-          
+
             var checkerId = game.GetCheckerId(adressOld);
             game.CheckersSet[checkerId].IsQueen = true;
 
@@ -147,9 +149,9 @@ namespace Checkers.Test
         [TestMethod]
         public void _010_Ordinary_Checkers_Cannot_Move_Backwards()
         {
-            Game game = new Game();
+            var game = new Game();
             game.Start();
-            
+
             game.CurrentPlayer = new FakePlayer(true);
 
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
@@ -162,7 +164,7 @@ namespace Checkers.Test
         [TestMethod]
         public void _011_Queen_Move_Only_on_Diagonals()
         {
-            Game game = new Game();
+            var game = new Game();
             game.Start();
 
             game.CurrentPlayer = new FakePlayer(true);
@@ -178,26 +180,37 @@ namespace Checkers.Test
         [TestMethod]
         public void _012_Checker_Can_Take_Opponents_Checkers()
         {
-            Game game =new Game();
+            var game = new Game();
             game.Start();
 
-
-
-            //Assert.IsTrue(expected);
+            var expected = false;
+            Assert.IsTrue(expected);
         }
 
 
         [TestMethod]
-        public void _013_Check_Enemy_Coordinates()
+        public void _013_Can_Define_Enemy_Coordinates()
         {
-            Game game = new Game();
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>
+                {
+                    new Checker(true, false, 3, 4),
+                    new Checker(false, false, 4, 5)                   
+                }
+            };
+
+            game.CurrentPlayer = game.Player1;
             
+            var actual = game.SetEnemyCoordinates(new[] { 3, 4 });
 
-            var expected = game.;
-
-            CollectionAssert.AreEqual(expected, game.SetEnemyCoordinates);
+            var expected = new Move();
+            expected.Coordinates.Add(new[] { 4, 5 });
+            
+            CollectionAssert.AreEqual(expected.Coordinates, actual.Coordinates);
         }
-
-
     }
 }

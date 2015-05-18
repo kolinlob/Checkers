@@ -30,6 +30,6 @@ namespace Checkers.Test
             var expected = board.IsCellUsable(3, 0);
 
             Assert.IsTrue(expected);
-        }  
+        }
     }
 }
