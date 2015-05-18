@@ -186,5 +186,18 @@ namespace Checkers.Test
             //Assert.IsTrue(expected);
         }
 
+
+        [TestMethod]
+        public void _013_Check_Enemy_Coordinates()
+        {
+            Game game = new Game();
+            
+
+            var expected = game.;
+
+            CollectionAssert.AreEqual(expected, game.SetEnemyCoordinates);
+        }
+
+
     }
 }

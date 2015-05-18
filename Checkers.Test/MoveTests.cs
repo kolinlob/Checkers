@@ -28,10 +28,10 @@ namespace Checkers.Test
             game.Move = new Move();
 
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
-            game.Move.MoveCoordinates.Add(adressOld);
+            game.Move.Coordinates.Add(adressOld);
 
             var adressNew = game.ConvertIntoCoordinates("c5");
-            game.Move.MoveCoordinates.Add(adressNew);
+            game.Move.Coordinates.Add(adressNew);
 
             game.MoveChecker();
 

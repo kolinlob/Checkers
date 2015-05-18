@@ -76,7 +76,7 @@ namespace Checkers
         {
             return (from checker in CheckersSet
                     where adress[0] == checker.HorizontalCoord && adress[1] == checker.VerticalCoord
-                    select CheckersSet.IndexOf(checker)).FirstOrDefault();
+                    select CheckersSet.IndexOf(checker)).First();
         }
 
         public bool CanSelectChecker(int currentCheckerId)
@@ -109,19 +109,96 @@ namespace Checkers
 
         }
 
-        public bool IsFoeAround(int[] playerCheckerAdress, bool playerColor)
+        public Move SetEnemyCoordinates(int[] playerCheckerAdress, bool playerColor, bool Queen)
         {
-            int[][] moveOptions = new int[4][];
-            moveOptions[0] = new[] { playerCheckerAdress[0] - 1, playerCheckerAdress[1] - 1 };
-            moveOptions[1] = new[] { playerCheckerAdress[0] - 1, playerCheckerAdress[1] + 1 };
-            moveOptions[2] = new[] { playerCheckerAdress[0] + 1, playerCheckerAdress[1] + 1 };
-            moveOptions[3] = new[] { playerCheckerAdress[0] + 1, playerCheckerAdress[1] - 1 };
+            //            int end = 1;
+            //            if (Queen)
+            //            {
+            //                end = 7;
+            //            }
+            //
+            //            int[][] moveOptions = new int[4][];
+            //
+            //            int[][] direction =
+            //            {
+            //                new [] {-1, -1},
+            //                new [] {-1,  1},
+            //                new [] {1,  -1},
+            //                new [] {1,   1}
+            //            };
+            //
+            //            Move Enemy = new Move();
+            //
+            //
+            //
+            //            for (int j = 0; j < 4; j++)
+            //            {
+            //               
+            //
+            //
+            //            for (int i = 1; i <= end; i++)
+            //            {
+            //
+            //                moveOptions[0] = new[] {playerCheckerAdress[0] - i, playerCheckerAdress[1] - i};
+            //                moveOptions[1] = new[] {playerCheckerAdress[0] - i, playerCheckerAdress[1] + i};
+            //                moveOptions[2] = new[] {playerCheckerAdress[0] + i, playerCheckerAdress[1] + i};
+            //                moveOptions[3] = new[] {playerCheckerAdress[0] + i, playerCheckerAdress[1] - i};
+            //                foreach (var checker in CheckersSet)
+            //                {
+            //                    if (moveOptions[0][0] == checker.HorizontalCoord &&
+            //                        moveOptions[0][1] == checker.VerticalCoord && checker.IsWhite != playerColor)
+            //                    {
+            //                        Enemy.Coordinates.Add(moveOptions[0]);
+            //                    }
+            //                }
+            //
+            //            }
+            //        }
+            //
+            //    return moveOptions.Any(option => CellExist(option) &&
+            //                                             CheckersSet.Any(foe => foe.HorizontalCoord == option[0] &&
+            //                                                             foe.VerticalCoord == option[1] &&
+            //                                                             foe.IsWhite != playerColor));
+            //
+            Move Enemy = new Move();
+            int end = 1;
+            int[][] direction =
+            {
+                new [] {-1, -1},
+                new [] {-1,  1},
+                new [] {1,  -1},
+                new [] {1,   1}
+            };
 
-            return moveOptions.Any(option => CellExist(option) &&
-                                             CheckersSet.Any(foe => foe.HorizontalCoord == option[0] &&
-                                                             foe.VerticalCoord == option[1] &&
-                                                             foe.IsWhite != playerColor));
+            int[][] moveOptions = new int[4][];
+
+            if (Queen)
+            {
+                end = 7;
+            }
+            for (int i = 0; i <= 3; i++)
+            {
+                for (int j = 1; j <= end; j++)
+                {
+
+                    moveOptions[i] = new[] { playerCheckerAdress[0] + j * direction[i][0], playerCheckerAdress[1] + j * direction[i][0] };
+
+                    foreach (var checker in CheckersSet)
+                    {
+                        if (CellExist(moveOptions[i]) && moveOptions[i][0] == checker.HorizontalCoord &&
+                            moveOptions[i][1] == checker.VerticalCoord && checker.IsWhite != playerColor)
+                        {
+                            Enemy.Coordinates.Add(moveOptions[i]);
+                        }
+                    }
+
+                }
+
+
+            }
+            return Enemy;
         }
+
 
         public IUserInput SwitchPlayer()
         {
@@ -201,23 +278,23 @@ namespace Checkers
             Console.SetCursorPosition(0, 30);
 
             var adressOld = GetCellAddress(selectCheckerToMoveMessage);
-            Move.MoveCoordinates.Add(adressOld);
+            Move.Coordinates.Add(adressOld);
 
             //вставить проверку на возможность движения в рамках текущего хода
             int[] adressNew = GetCellAddress(selectDestination);
-            Move.MoveCoordinates.Add(adressNew);
+            Move.Coordinates.Add(adressNew);
         }
 
         public void MoveChecker()
         {
-            int currentCheckerId = GetCheckerId(Move.MoveCoordinates[0]);
+            int currentCheckerId = GetCheckerId(Move.Coordinates[0]);
 
-            var moves = Move.MoveCoordinates.Count;
+            var moves = Move.Coordinates.Count;
 
             for (var i = 1; i < moves; i++)
             {
-                var addressOld = Move.MoveCoordinates[0];
-                var addressNew = Move.MoveCoordinates[1];
+                var addressOld = Move.Coordinates[0];
+                var addressNew = Move.Coordinates[1];
 
                 CheckersSet[currentCheckerId].HorizontalCoord = addressNew[0];
                 CheckersSet[currentCheckerId].VerticalCoord = addressNew[1];
@@ -227,7 +304,7 @@ namespace Checkers
 
                 CheckerBecomesQueen(CheckersSet[currentCheckerId]);
 
-                Move.MoveCoordinates.RemoveAt(0);
+                Move.Coordinates.RemoveAt(0);
 
                 //Thread.Sleep(500);
                 Console.SetCursorPosition(0, 0);

@@ -4,6 +4,6 @@ namespace Checkers
 {
     public class Move
     {
-        public List<int[]> MoveCoordinates = new List<int[]>();
+        public List<int[]> Coordinates = new List<int[]>();
     }
 }
