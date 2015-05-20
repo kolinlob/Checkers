@@ -21,12 +21,11 @@ namespace Checkers
             Player2 = new HumanPlayer(false);
             CurrentPlayer = Player1;
 
-            CreateCheckers(false);
-            CreateCheckers(true);
+            //CreateCheckers(false);
+            //CreateCheckers(true);
             
-            
-            //CheckersSet.Add(new Checker(true, false, 3, 4));
-            //CheckersSet.Add(new Checker(false, false, 4, 5));
+            CheckersSet.Add(new Checker(true, false, 3, 4));
+            CheckersSet.Add(new Checker(false, false, 4, 5));
             
             //CheckersSet.Add(new Checker(true, false, 2, 1));
             //CheckersSet.Add(new Checker(true, false, 4, 3));
@@ -116,30 +115,6 @@ namespace Checkers
 
         public Move SetEnemyCoordinates(int[] currentCheckerAdress)
         {
-            //            for (int i = 1; i <= end; i++)
-            //            {
-            //                moveOptions[0] = new[] {currentCheckerAdress[0] - i, currentCheckerAdress[1] - i};
-            //                moveOptions[1] = new[] {currentCheckerAdress[0] - i, currentCheckerAdress[1] + i};
-            //                moveOptions[2] = new[] {currentCheckerAdress[0] + i, currentCheckerAdress[1] + i};
-            //                moveOptions[3] = new[] {currentCheckerAdress[0] + i, currentCheckerAdress[1] - i};
-            //                foreach (var checker in CheckersSet)
-            //                {
-            //                    if (moveOptions[0][0] == checker.HorizontalCoord &&
-            //                        moveOptions[0][1] == checker.VerticalCoord && checker.IsWhite != playerColor)
-            //                    {
-            //                        Enemy.Coordinates.Add(moveOptions[0]);
-            //                    }
-            //                }
-            //
-            //            }
-            //        }
-            //
-            //    return moveOptions.Any(option => CellExists(option) &&
-            //                                             CheckersSet.Any(foe => foe.HorizontalCoord == option[0] &&
-            //                                                             foe.VerticalCoord == option[1] &&
-            //                                                             foe.IsWhite != playerColor));
-            //
-            
             var end = 1;
             int[][] direction =
             {
