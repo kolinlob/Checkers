@@ -194,11 +194,11 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, false, 3, 4),
-                    new Checker(true, false, 4, 3),
+                    new Checker(true, true, 3, 4),
+                    new Checker(true, false, 4, 5),
 
                     new Checker(false, false, 2, 3),
-                    new Checker(false, false, 4, 5),
+                    new Checker(false, false, 6, 7),
                     new Checker(false, false, 2, 5)
                 }
             };
@@ -209,12 +209,36 @@ namespace Checkers.Test
             {
                 new Coordinate(2, 3),
                 new Coordinate(2, 5),
-                new Coordinate(4, 5)
             };
 
             var actual = game.GetEnemyCoordinates(new Coordinate(3, 4));
 
             CollectionAssert.AreEqual(expected, actual.Coordinates);
+        }
+
+        [TestMethod]
+        public void _014_Is_There_A_Free_Cell_Behind_The_Enemy_For_A_Take()
+        {
+
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>
+                {
+                    new Checker(true, false, 3, 4), // CHECKER WE TEST
+                    new Checker(true, false, 4, 5),
+
+                    new Checker(false, false, 2, 3),
+                    new Checker(false, false, 6, 7),
+                    new Checker(false, false, 2, 5)
+                }
+            };
+
+            var enemyList = game.GetEnemyCoordinates(new Coordinate(game.CheckersSet[0].CoordHorizontal, game.CheckersSet[0].CoordVertical));
+
+            Assert.IsTrue(game.CanTake());
         }
     }
 }

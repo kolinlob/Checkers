@@ -11,9 +11,11 @@ namespace Checkers
         public List<Checker> CheckersSet = new List<Checker>();
         public Board Board { get; set; }
         public Move Move { get; set; }
+        public Move Enemies { get; set; }
         public IUserInput Player1;
         public IUserInput Player2;
         public IUserInput CurrentPlayer { get; set; }
+        
 
         public void Start()
         {
@@ -84,7 +86,7 @@ namespace Checkers
         public int GetCheckerId(Coordinate coordinate)
         {
             return (from checker in CheckersSet
-                    where coordinate.CellAddress[0] == checker.HorizontalCoord && coordinate.CellAddress[1] == checker.VerticalCoord
+                    where coordinate.CellAddress[0] == checker.CoordHorizontal && coordinate.CellAddress[1] == checker.CoordVertical
                     select CheckersSet.IndexOf(checker)).FirstOrDefault();
         }
 
@@ -113,50 +115,6 @@ namespace Checkers
         }
 
 
-        public Move GetEnemyCoordinates(Coordinate currentCoordinate)
-        {
-            var end = 1;
-            int[][] direction =
-            {
-                new [] {-1, -1},
-                new [] {-1,  1},
-                new [] {1,  -1},
-                new [] {1,   1}
-            };
-
-            var moveDirection = new int[4][];
-
-            int id = GetCheckerId(currentCoordinate);
-
-            var enemy = new Move();
-
-            if (CheckersSet[id].IsQueen)
-            {
-                end = 7;
-            }
-
-            for (var i = 0; i < 4; i++)
-            {
-                for (var j = 1; j <= end; j++)
-                {
-                    moveDirection[i] = new[] { currentCoordinate.CellAddress[0] + j * direction[i][0], currentCoordinate.CellAddress[1] + j * direction[i][1] };
-
-                    foreach (var checker in CheckersSet)
-                    {
-                        if (Board.CellExists(moveDirection[i]) &&
-                            moveDirection[i][0] == checker.HorizontalCoord &&
-                            moveDirection[i][1] == checker.VerticalCoord &&
-                            CurrentPlayer.PlaysWhites != checker.IsWhite)
-                        {
-                            enemy.Coordinates.Add(new Coordinate(moveDirection[i][0], moveDirection[i][1]));
-                        }
-                    }
-                }
-            }
-            return enemy;
-        }
-
-
         public IUserInput SwitchPlayer()
         {
             return CurrentPlayer == Player1 ? Player2 : Player1;
@@ -164,7 +122,7 @@ namespace Checkers
 
         public void CheckerBecomesQueen(Checker checker)
         {
-            if ((!checker.IsWhite && checker.HorizontalCoord == 7) || (checker.IsWhite && checker.HorizontalCoord == 0))
+            if ((!checker.IsWhite && checker.CoordHorizontal == 7) || (checker.IsWhite && checker.CoordHorizontal == 0))
             {
                 checker.IsQueen = true;
                 checker.ChangeSymbol();
@@ -253,8 +211,8 @@ namespace Checkers
                 var coordinateOld = Move.Coordinates[0];
                 var coordinateNew = Move.Coordinates[1];
 
-                CheckersSet[currentCheckerId].HorizontalCoord = coordinateNew.CellAddress[0];
-                CheckersSet[currentCheckerId].VerticalCoord = coordinateNew.CellAddress[1];
+                CheckersSet[currentCheckerId].CoordHorizontal = coordinateNew.CellAddress[0];
+                CheckersSet[currentCheckerId].CoordVertical = coordinateNew.CellAddress[1];
 
                 var cell = Board.GetCell(coordinateOld.CellAddress[0], coordinateOld.CellAddress[1]);
                 cell.IsEmpty = true;
@@ -269,6 +227,59 @@ namespace Checkers
                 Board.Draw(CheckersSet);
             }
             CurrentPlayer = SwitchPlayer();
+        }
+
+        public Move GetEnemyCoordinates(Coordinate currentCoordinate)
+        {
+            var end = 1;
+            int[][] direction =
+            {
+                new [] {-1, -1},
+                new [] {-1,  1},
+                new [] {1,  -1},
+                new [] {1,   1}
+            };
+
+            var moveDirection = new int[4][];
+
+            int id = GetCheckerId(currentCoordinate);
+
+            Enemies = new Move();
+
+            if (CheckersSet[id].IsQueen)
+            {
+                end = 7;
+            }
+
+            for (var i = 0; i < 4; i++)
+            {
+                for (var j = 1; j <= end; j++)
+                {
+                    moveDirection[i] = new[] { currentCoordinate.CellAddress[0] + j * direction[i][0], currentCoordinate.CellAddress[1] + j * direction[i][1] };
+
+                    foreach (var checker in CheckersSet)
+                    {
+                        if (Board.CellExists(moveDirection[i]) &&
+                            moveDirection[i][0] == checker.CoordHorizontal &&
+                            moveDirection[i][1] == checker.CoordVertical)
+                        {
+                            if (CurrentPlayer.PlaysWhites == checker.IsWhite)
+                            {
+                                j = end + 1;
+                                break;
+                            }
+
+                            Enemies.Coordinates.Add(new Coordinate(moveDirection[i][0], moveDirection[i][1]));
+                        }
+                    }
+                }
+            }
+            return Enemies;
+        }
+
+        public bool CanTake()
+        {
+            return true; // checker calls this method. We iterate through its Enemies to find, if there is an empty cell behind the enemy.
         }
     }
 }

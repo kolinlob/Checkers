@@ -7,20 +7,25 @@ namespace Checkers
         char symbol = '█';
         public bool IsWhite { get; set; }
         public bool IsQueen { get; set; }
-        public int VerticalCoord { get; set; }
-        public int HorizontalCoord { get; set; }
+        public int CoordVertical { get; set; }
+        public int CoordHorizontal { get; set; }
 
-        public Checker(bool isWhite, bool isQueen, int horizontalCoord, int verticalCoord)
+        public Checker(bool isWhite, bool isQueen, int coordHorizontal, int coordVertical)
         {
             IsWhite = isWhite;
             IsQueen = isQueen;
-            HorizontalCoord = horizontalCoord;
-            VerticalCoord = verticalCoord;
+            CoordHorizontal = coordHorizontal;
+            CoordVertical = coordVertical;
+
+            if (isQueen)
+            {
+                ChangeSymbol();
+            }
         }
 
         public override int GetHashCode()
         {
-            return String.Format("({0} {1} {2} {3})", IsWhite, IsQueen, HorizontalCoord, VerticalCoord).GetHashCode();
+            return String.Format("({0} {1} {2} {3})", IsWhite, IsQueen, CoordHorizontal, CoordVertical).GetHashCode();
         }
 
         public override bool Equals(object other)

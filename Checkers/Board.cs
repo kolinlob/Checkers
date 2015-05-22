@@ -56,7 +56,7 @@ namespace Checkers
 
                         foreach (var checker in checkersSet)
                         {
-                            if (row == checker.HorizontalCoord && column == checker.VerticalCoord)
+                            if (row == checker.CoordHorizontal && column == checker.CoordVertical)
                             {
                                 board[row, column].DrawCell(checker);
                                 board[row, column].IsEmpty = false;

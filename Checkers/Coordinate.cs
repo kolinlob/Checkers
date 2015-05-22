@@ -10,10 +10,10 @@ namespace Checkers
     {
         public readonly int[] CellAddress = new int[2];
 
-        public Coordinate(int horizontalCoord, int verticalCoord)
+        public Coordinate(int coordHorizontal, int coordVertical)
         {
-            CellAddress[0] = horizontalCoord;
-            CellAddress[1] = verticalCoord;
+            CellAddress[0] = coordHorizontal;
+            CellAddress[1] = coordVertical;
         }
 
 

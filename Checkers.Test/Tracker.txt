@@ -1,6 +1,7 @@
 ﻿POSSIBLE IMPROVEMENTS:
 
-1. Create a Coordinate class - int array
+* 1. Create a Coordinate class - int array
+2. Create a Coordinate field for a checker
 
 KNOWN ISSUES:
 

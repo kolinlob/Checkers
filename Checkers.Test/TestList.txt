@@ -10,11 +10,12 @@
 * 010 - ordinary checker cannot move backwards
 * 011 - queen move only on diagonals
 012 - checker can take the opponent's checker
-013 - Can Define Enemy Coordinates
-		take - over one cell
+* 013 - Can Define Enemy Coordinates
+		take is possible, if there is a free cell behind the enemy
+		take - usual checker can take only over one cell
 		take - opponent's checker is taken away from field
 		take - backwards is allowed
-		take - queen cab land in any cell after the beaten checker
+		take - queen can land in any cell after the beaten checker
 		take is mandatory
 		cannot move other checkers, if take is possible
 		checks for winner - when no moves left for opponent
