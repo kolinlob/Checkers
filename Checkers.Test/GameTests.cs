@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Checkers.Test
@@ -139,7 +136,7 @@ namespace Checkers.Test
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
             var adressNew = game.ConvertIntoCoordinates("D4");
 
-            var checkerId = game.GetCheckerId(adressOld);
+            var checkerId = game.GetCheckerId(new Coordinate(adressOld));
             game.CheckersSet[checkerId].IsQueen = true;
 
             var expected = game.OneCellMove(adressOld, adressNew);
@@ -187,7 +184,6 @@ namespace Checkers.Test
             Assert.IsTrue(expected);
         }
 
-
         [TestMethod]
         public void _013_Can_Define_Enemy_Coordinates()
         {
@@ -199,18 +195,26 @@ namespace Checkers.Test
                 CheckersSet = new List<Checker>
                 {
                     new Checker(true, false, 3, 4),
-                    new Checker(false, false, 4, 5)                   
+                    new Checker(true, false, 4, 3),
+
+                    new Checker(false, false, 2, 3),
+                    new Checker(false, false, 4, 5),
+                    new Checker(false, false, 2, 5)
                 }
             };
 
             game.CurrentPlayer = game.Player1;
-            
-            var actual = game.SetEnemyCoordinates(new[] { 3, 4 });
 
-            var expected = new Move();
-            expected.Coordinates.Add(new[] { 4, 5 });
-            
-            CollectionAssert.AreEqual(expected.Coordinates, actual.Coordinates);
+            var expected = new List<Coordinate>()
+            {
+                new Coordinate(2, 3),
+                new Coordinate(2, 5),
+                new Coordinate(4, 5)
+            };
+
+            var actual = game.GetEnemyCoordinates(new Coordinate(3, 4));
+
+            CollectionAssert.AreEqual(expected, actual.Coordinates);
         }
     }
 }

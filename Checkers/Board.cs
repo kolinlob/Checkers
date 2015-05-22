@@ -11,11 +11,11 @@ namespace Checkers
         {
             board = new Cell[8, 8];
 
-            int counter = 0;
+            var counter = 0;
 
-            for (int row = 0; row < board.GetLength(0); row++)
+            for (var row = 0; row < board.GetLength(0); row++)
             {
-                for (int column = 0; column < board.GetLength(1); column++)
+                for (var column = 0; column < board.GetLength(1); column++)
                 {
                     if (counter % (board.GetLength(0) + 1) == 0)
                     {
@@ -36,13 +36,13 @@ namespace Checkers
         {
             DrawColumnHeader();
 
-            int counter = 0;
-            for (int row = 0; row < board.GetLength(0); row++)
+            var counter = 0;
+            for (var row = 0; row < board.GetLength(0); row++)
             {
                 DrawMargin(row); Console.Write("\r\n  ");
                 DrawRowNum(row);
 
-                for (int column = 0; column < board.GetLength(1); column++)
+                for (var column = 0; column < board.GetLength(1); column++)
                 {
                     if (counter % (board.GetLength(0) + 1) == 0)
                     {
@@ -92,7 +92,7 @@ namespace Checkers
         {
             Console.WriteLine();
             Console.Write("     ");
-            for (int column = 0; column < board.GetLength(1); column++)
+            for (var column = 0; column < board.GetLength(1); column++)
                 Console.Write("  " + Convert.ToChar(column + 65) + "  ");
             Console.WriteLine();
         }
@@ -106,7 +106,7 @@ namespace Checkers
         {
             Console.Write("\r\n     ");
 
-            for (int column = 0; column < board.GetLength(1); column++)
+            for (var column = 0; column < board.GetLength(1); column++)
             {
                 var i = column;
                 if (row % 2 == 0)
@@ -140,12 +140,12 @@ namespace Checkers
 
         public override string ToString()
         {
-            string result = string.Empty;
-            int counter = 0;
+            var result = string.Empty;
+            var counter = 0;
 
-            for (int row = 0; row < board.GetLength(0); row++)
+            for (var row = 0; row < board.GetLength(0); row++)
             {
-                for (int column = 0; column < board.GetLength(1); column++)
+                for (var column = 0; column < board.GetLength(1); column++)
                 {
                     if (counter % (board.GetLength(0) + 1) == 0)
                     {

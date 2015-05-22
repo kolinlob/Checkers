@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Checkers
 {
     public class Move
     {
-        public readonly List<int[]> Coordinates = new List<int[]>();
+        public List<Coordinate> Coordinates = new List<Coordinate>();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 
 namespace Checkers
 {
@@ -16,7 +15,5 @@ namespace Checkers
         {
             return Console.ReadLine();
         }
-
-        
     }
 }

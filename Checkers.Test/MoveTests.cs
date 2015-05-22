@@ -1,7 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices.ComTypes;
-using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
 namespace Checkers.Test
@@ -28,14 +25,14 @@ namespace Checkers.Test
             game.Move = new Move();
 
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
-            game.Move.Coordinates.Add(adressOld);
+            game.Move.Coordinates.Add(new Coordinate(adressOld));
 
             var adressNew = game.ConvertIntoCoordinates("c5");
-            game.Move.Coordinates.Add(adressNew);
+            game.Move.Coordinates.Add(new Coordinate(adressNew));
 
             game.MoveChecker();
 
-            var id = game.GetCheckerId(adressNew);
+            var id = game.GetCheckerId(new Coordinate(adressNew));
             var actual = game.CheckersSet[id];
             var expected = new Checker(false, false, 3, 2);
 
