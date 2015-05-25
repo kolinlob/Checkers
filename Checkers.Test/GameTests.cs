@@ -73,7 +73,7 @@ namespace Checkers.Test
 
             int[] adressOld = { 0, 1 };
             int[] adressNew = { 2, 2 };
-            var expected = game.CanMoveThere(adressOld, adressNew, false);
+            var expected = game.CanMoveThere(adressOld, adressNew); //not a queen
 
             Assert.IsFalse(expected);
         }
@@ -86,7 +86,7 @@ namespace Checkers.Test
 
             int[] adressOld = { 0, 1 };
             int[] adressNew = { 2, 1 };
-            var expected = game.CanMoveThere(adressOld, adressNew, false);
+            var expected = game.CanMoveThere(adressOld, adressNew);
 
             Assert.IsFalse(expected);
         }
@@ -238,11 +238,11 @@ namespace Checkers.Test
 
             var enemyList = game.GetEnemyCoordinates(new Coordinate(game.CheckersSet[0].CoordHorizontal, game.CheckersSet[0].CoordVertical));
 
-            Assert.IsTrue(game.CanTake());
+            //Assert.IsTrue(game.CanTake());
         }
 
         [TestMethod]
-        public void Can_Get_Checker_Id()
+        public void _015_Can_Get_Checker_Id()
         {
             var game = new Game
             {
@@ -266,7 +266,7 @@ namespace Checkers.Test
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void Cant_Get_Checker_Id_When_Empty_Cell_Selected()
+        public void _016_Cant_Get_Checker_Id_When_Empty_Cell_Selected()
         {
             var game = new Game
             {
@@ -287,7 +287,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void Cant_Move_to_Unusable_Cell()
+        public void _017_Cant_Move_to_Unusable_Cell()
         {
             var game = new Game
             {
@@ -303,10 +303,45 @@ namespace Checkers.Test
             game.CurrentPlayer = new FakePlayer(true);
 
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var checkerId = game.GetCheckerId(new Coordinate(adressOld));
+            game.CheckersSet[checkerId].ChangeSymbol();                 // make it queen
+
             var adressNew = game.ConvertIntoCoordinates("C4");
 
-            var canMoveThere = game.CanMoveThere(adressOld, adressNew, true);
+            var canMoveThere = game.CanMoveThere(adressOld, adressNew);
             Assert.IsFalse(canMoveThere);
+        }
+
+        [TestMethod]
+        public void _018_Can_Remove_Enemies_Without_any_Empty_Cell_Behind()
+        {
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>
+                {
+                    new Checker(true, false, 3, 4), // CHECKER WE TEST
+                    new Checker(true, false, 1, 6),
+                    new Checker(false, false, 2, 3),
+                    new Checker(false, false, 6, 7),
+                    new Checker(false, false, 2, 5),
+                    new Checker(true, false, 1, 2)
+                },
+                CurrentPlayer = new FakePlayer(true)
+            };
+
+            game.Board.Draw(game.CheckersSet);
+
+            var enemyList = game.GetEnemyCoordinates(new Coordinate(game.CheckersSet[0].CoordHorizontal, game.CheckersSet[0].CoordVertical));
+            var id = game.GetCheckerId(new Coordinate(game.CheckersSet[0].CoordHorizontal, game.CheckersSet[0].CoordVertical));
+            game.RemoveEnemiesWithoutEmptyCellBehind(id, enemyList);
+
+            var expected = new Move();
+            //expected.Coordinates.Add(new Coordinate(2,3));
+
+            CollectionAssert.AreEqual(enemyList.Coordinates, expected.Coordinates);
         }
     }
 }

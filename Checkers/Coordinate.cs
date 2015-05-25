@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Checkers
 {
@@ -15,7 +11,6 @@ namespace Checkers
             CellAddress[0] = coordHorizontal;
             CellAddress[1] = coordVertical;
         }
-
 
         public Coordinate(int[] cellAddress)
         {
@@ -32,6 +27,4 @@ namespace Checkers
             return GetHashCode() == other.GetHashCode();
         }
     }
-    
-
 }

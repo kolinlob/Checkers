@@ -133,6 +133,11 @@ namespace Checkers
             return board[row, col];
         }
 
+        public Cell GetCell(Coordinate coordinate)
+        {
+            return board[coordinate.CellAddress[0], coordinate.CellAddress[1]];
+        }
+
         public bool CellExists(int[] adress)
         {
             return adress[0] >= 0 && adress[0] < 8 && adress[1] >= 0 && adress[1] < 8;
