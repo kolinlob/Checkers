@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Checkers.Test
@@ -219,7 +220,6 @@ namespace Checkers.Test
         [TestMethod]
         public void _014_Is_There_A_Free_Cell_Behind_The_Enemy_For_A_Take()
         {
-
             var game = new Game
             {
                 Board = new Board(),
@@ -239,6 +239,74 @@ namespace Checkers.Test
             var enemyList = game.GetEnemyCoordinates(new Coordinate(game.CheckersSet[0].CoordHorizontal, game.CheckersSet[0].CoordVertical));
 
             Assert.IsTrue(game.CanTake());
+        }
+
+        [TestMethod]
+        public void Can_Get_Checker_Id()
+        {
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CurrentPlayer = new FakePlayer(true)
+            };
+
+            game.CreateCheckers(false);
+            game.CreateCheckers(true);
+
+            var validAdress = game.CurrentPlayer.InputCoordinates();
+            var adress = game.ConvertIntoCoordinates(validAdress);
+            var coordinate = new Coordinate(adress[0], adress[1]);
+            
+            var actual = game.GetCheckerId(coordinate);
+            
+            Assert.AreEqual(8, actual);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void Cant_Get_Checker_Id_When_Empty_Cell_Selected()
+        {
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CurrentPlayer = new FakePlayer(true)
+            };
+
+            game.CreateCheckers(false);
+            game.CreateCheckers(true);
+
+            const string validAdress = "A8";
+            var adress = game.ConvertIntoCoordinates(validAdress);
+            var coordinate = new Coordinate(adress[0], adress[1]);
+
+            game.GetCheckerId(coordinate);
+        }
+
+        [TestMethod]
+        public void Cant_Move_to_Unusable_Cell()
+        {
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CurrentPlayer = new FakePlayer(true)
+            };
+
+            game.CreateCheckers(false);
+            game.CreateCheckers(true);
+
+            game.CurrentPlayer = new FakePlayer(true);
+
+            var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var adressNew = game.ConvertIntoCoordinates("C4");
+
+            var canMoveThere = game.CanMoveThere(adressOld, adressNew, true);
+            Assert.IsFalse(canMoveThere);
         }
     }
 }

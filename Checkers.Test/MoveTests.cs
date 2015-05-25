@@ -7,7 +7,7 @@ namespace Checkers.Test
     public class MoveTests
     {
         [TestMethod]
-        public void _001_CanCreateMove()
+        public void _001_Can_Create_Move()
         {
             var move = new Move();
 
@@ -16,7 +16,7 @@ namespace Checkers.Test
 
 
         [TestMethod]
-        public void _002_CanMakeMove()
+        public void _002_Can_Make_Move()
         {
             var game = new Game();
             game.Start();

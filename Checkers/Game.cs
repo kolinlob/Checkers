@@ -87,7 +87,7 @@ namespace Checkers
         {
             return (from checker in CheckersSet
                     where coordinate.CellAddress[0] == checker.CoordHorizontal && coordinate.CellAddress[1] == checker.CoordVertical
-                    select CheckersSet.IndexOf(checker)).FirstOrDefault();
+                    select CheckersSet.IndexOf(checker)).Single();
         }
 
         public bool CanSelectChecker(int currentCheckerId)
@@ -99,9 +99,13 @@ namespace Checkers
         {
             if (isQueen)
             {
-                return (Board.IsCellEmpty(adressNew[0], adressNew[1]) && Board.IsCellUsable(adressNew[0], adressNew[1]));
+                return Board.IsCellEmpty(adressNew[0], adressNew[1])
+                    && Board.IsCellUsable(adressNew[0], adressNew[1]);
             }
-            return OneCellMove(adressOld, adressNew) && MoveForward(adressOld, adressNew);
+            return Board.IsCellEmpty(adressNew[0], adressNew[1])
+                && Board.IsCellUsable(adressNew[0], adressNew[1])
+                && OneCellMove(adressOld, adressNew)
+                && MoveForward(adressOld, adressNew);
         }
 
         public bool MoveForward(int[] adressOld, int[] adressNew)

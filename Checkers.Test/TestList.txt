@@ -9,9 +9,15 @@
 * 009 - queen can move on more than one cell at once 
 * 010 - ordinary checker cannot move backwards
 * 011 - queen move only on diagonals
+
 012 - checker can take the opponent's checker
 * 013 - Can Define Enemy Coordinates
-		take is possible, if there is a free cell behind the enemy
+014 -  take is possible, if there is a free cell behind the enemy
+
+* 015 - Can get checker Id
+* 016 - Can't get checker Id whne empty cell selected
+* 017 - No checker can move to unusable cell
+
 		take - usual checker can take only over one cell
 		take - opponent's checker is taken away from field
 		take - backwards is allowed
@@ -49,4 +55,4 @@
 
 == MOVE
 * 001 - Can create move
-		can move ckecker
+* 002 - Сan move ckecker
