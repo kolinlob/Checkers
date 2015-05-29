@@ -5,14 +5,13 @@ namespace Checkers
 {
     public class Board
     {
-        private readonly Cell[,] board;
+        private Cell[,] board;
 
         public Board()
         {
             board = new Cell[8, 8];
 
             var counter = 0;
-
             for (var row = 0; row < board.GetLength(0); row++)
             {
                 for (var column = 0; column < board.GetLength(1); column++)
@@ -21,16 +20,49 @@ namespace Checkers
                     {
                         counter++;
                     }
+
                     board[row, column] = new Cell();
+                    var cell = GetCell(row, column);
 
                     if (counter % 2 != 0)
                     {
-                        board[row, column].IsUsable = false;
+                        cell.IsUsable = false;
                     }
                     counter++;
                 }
             }
         }
+
+        public void PlaceCheckers(List<Checker> checkersSet)
+        {
+            var counter = 0;
+            for (var row = 0; row < board.GetLength(0); row++)
+            {
+                for (var column = 0; column < board.GetLength(1); column++)
+                {
+                    var cell = GetCell(row, column);
+
+                    if (counter % (board.GetLength(0) + 1) == 0)
+                        counter++;
+
+                    if (counter % 2 == 0)
+                    {
+                        foreach (var checker in checkersSet)
+                        {
+                            if (row == checker.CoordHorizontal && column == checker.CoordVertical)
+                            {
+                                cell.DrawCell(checker);
+                                cell.IsEmpty = false;
+                            }
+                        }
+                        if (cell.IsEmpty)
+                            cell.DrawEmptyCell();
+                    }
+                    counter++;
+                }
+            }
+        }
+
 
         public void Draw(List<Checker> checkersSet)
         {
@@ -44,10 +76,10 @@ namespace Checkers
 
                 for (var column = 0; column < board.GetLength(1); column++)
                 {
+                    var cell = GetCell(row, column);
+
                     if (counter % (board.GetLength(0) + 1) == 0)
-                    {
                         counter++;
-                    }
 
                     if (counter % 2 == 0)
                     {
@@ -58,14 +90,13 @@ namespace Checkers
                         {
                             if (row == checker.CoordHorizontal && column == checker.CoordVertical)
                             {
-                                board[row, column].DrawCell(checker);
-                                board[row, column].IsEmpty = false;
+                                cell.DrawCell(checker);
+                                //board[row, column].IsEmpty = false;
+                                cell.IsEmpty = false;
                             }
                         }
-                        if (board[row, column].IsEmpty)
-                        {
-                            board[row, column].DrawCell();
-                        }
+                        if (cell.IsEmpty)
+                            cell.DrawEmptyCell();
 
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.Write("  ");

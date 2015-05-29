@@ -9,7 +9,7 @@ namespace Checkers
         public bool IsEmpty { get; set; }
         public bool IsUsable { get; set; }
 
-        public void DrawCell()
+        public void DrawEmptyCell()
         {
             Console.Write(' ');
         }
