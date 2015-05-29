@@ -22,11 +22,10 @@ namespace Checkers
                     }
 
                     board[row, column] = new Cell();
-                    var cell = GetCell(row, column);
-
+                    
                     if (counter % 2 != 0)
                     {
-                        cell.IsUsable = false;
+                        board[row, column].IsUsable = false;
                     }
                     counter++;
                 }
@@ -40,8 +39,6 @@ namespace Checkers
             {
                 for (var column = 0; column < board.GetLength(1); column++)
                 {
-                    var cell = GetCell(row, column);
-
                     if (counter % (board.GetLength(0) + 1) == 0)
                         counter++;
 
@@ -51,12 +48,12 @@ namespace Checkers
                         {
                             if (row == checker.CoordHorizontal && column == checker.CoordVertical)
                             {
-                                cell.DrawCell(checker);
-                                cell.IsEmpty = false;
+                                board[row, column].DrawCell(checker);
+                                board[row, column].IsEmpty = false;
                             }
                         }
-                        if (cell.IsEmpty)
-                            cell.DrawEmptyCell();
+                        if (board[row, column].IsEmpty)
+                            board[row, column].DrawEmptyCell();
                     }
                     counter++;
                 }
@@ -76,8 +73,6 @@ namespace Checkers
 
                 for (var column = 0; column < board.GetLength(1); column++)
                 {
-                    var cell = GetCell(row, column);
-
                     if (counter % (board.GetLength(0) + 1) == 0)
                         counter++;
 
@@ -90,13 +85,13 @@ namespace Checkers
                         {
                             if (row == checker.CoordHorizontal && column == checker.CoordVertical)
                             {
-                                cell.DrawCell(checker);
-                                //board[row, column].IsEmpty = false;
-                                cell.IsEmpty = false;
+                                board[row, column].DrawCell(checker);
+                                board[row, column].IsEmpty = false;
+                                
                             }
                         }
-                        if (cell.IsEmpty)
-                            cell.DrawEmptyCell();
+                        if (board[row, column].IsEmpty)
+                            board[row, column].DrawEmptyCell();
 
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.Write("  ");

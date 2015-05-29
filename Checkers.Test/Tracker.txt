@@ -2,6 +2,7 @@
 
 * 1. Create a Coordinate class - int array
 2. Create a Coordinate field for a checker
+3. Extend ExcludeNontakableEnemies() for a Queen search
 
 KNOWN ISSUES:
 

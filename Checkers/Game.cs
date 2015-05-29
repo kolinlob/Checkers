@@ -16,6 +16,12 @@ namespace Checkers
         public IUserInput Player2;
         public IUserInput CurrentPlayer { get; set; }
 
+
+        public Dictionary<int, Move> visibleEnemies = new Dictionary<int, Move>();
+
+        public Dictionary<int, Move> takableEnemies = new Dictionary<int, Move>();
+
+        
         public void Start()
         {
             Player1 = new HumanPlayer(true);
@@ -259,7 +265,7 @@ namespace Checkers
             CurrentPlayer = SwitchPlayer();
         }
 
-        public Move GetEnemyCoordinates(Coordinate currentCoordinate)
+        public void GetEnemyCoordinates(Checker currentChecker)
         {
             var end = 1;
             int[][] direction =
@@ -272,6 +278,8 @@ namespace Checkers
 
             var moveDirection = new int[4][];
 
+            var currentCoordinate = new Coordinate(currentChecker.CoordHorizontal, currentChecker.CoordVertical);
+            
             var id = GetCheckerId(currentCoordinate);
 
             Enemies = new Move();
@@ -303,37 +311,41 @@ namespace Checkers
                     }
                 }
             }
-            return Enemies;
+            visibleEnemies.Add(id, Enemies);
         }
 
-        public void RemoveEnemiesWithoutEmptyCellBehind(int checkerId, Move enemies)
+        public void ExcludeNontakableEnemies(Checker currentChecker)
         {
             var direction = new int[2];
-            var adressOld = new[] {CheckersSet[checkerId].CoordHorizontal, CheckersSet[checkerId].CoordVertical};
-            int enemiesCount = Enemies.Coordinates.Count;
+            var adressOld = new[] { currentChecker.CoordHorizontal, currentChecker.CoordVertical };
 
-            for (int i = 0; i < enemiesCount; i++)
+            var id = GetCheckerId(new Coordinate(adressOld));
+
+            Enemies = new Move();
+
+            foreach (var enemy in visibleEnemies[id].Coordinates)
             {
-                var adressNew = Enemies.Coordinates[i].CellAddress;
+                var adressNew = enemy.CellAddress;
                 direction[0] = (adressNew[0] - adressOld[0]) / Math.Abs(adressNew[0] - adressOld[0]);
                 direction[1] = (adressNew[1] - adressOld[1]) / Math.Abs(adressNew[1] - adressOld[1]);
 
                 var nextCell = new Coordinate(adressNew[0] + direction[0], adressNew[1] + direction[1]);
 
-                if (Board.CellExists(new[] {nextCell.CellAddress[0], nextCell.CellAddress[1]}) && !Board.GetCell(nextCell).IsEmpty)
+                if (Board.CellExists(new[] { nextCell.CellAddress[0], nextCell.CellAddress[1] }) && Board.GetCell(nextCell).IsEmpty)
                 {
-                    Enemies.Coordinates.Remove(nextCell); 
-                    
-                    //переименовываем enemies в preliminaryEnemies. Те enemies, что можно побить заносим в finalEnemmies.
+                    Enemies.Coordinates.Add(new Coordinate(enemy.CellAddress));
                 }
             }
+            takableEnemies.Add(id, Enemies);
+
+            // Extend this method also for a Queen search
         }
 
         public bool CanTake(Checker checker)
         {
             //if ()
 
-            return true; // checker calls this method. We iterate through its Enemies to find, if there is an empty cell behind the enemy.
+            return true; // currentChecker calls this method. We iterate through its Enemies to find, if there is an empty cell behind the enemy.
         }
     }
 }

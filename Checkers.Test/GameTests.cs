@@ -212,9 +212,9 @@ namespace Checkers.Test
                 new Coordinate(2, 5),
             };
 
-            var actual = game.GetEnemyCoordinates(new Coordinate(3, 4));
+            var actual = game.visibleEnemies[0].Coordinates;
 
-            CollectionAssert.AreEqual(expected, actual.Coordinates);
+            CollectionAssert.AreEqual(expected, actual);
         }
 
         [TestMethod]
@@ -236,7 +236,7 @@ namespace Checkers.Test
                 }
             };
 
-            var enemyList = game.GetEnemyCoordinates(new Coordinate(game.CheckersSet[0].CoordHorizontal, game.CheckersSet[0].CoordVertical));
+            //var enemyList = game.GetEnemyCoordinates(new Coordinate(game.CheckersSet[0].CoordHorizontal, game.CheckersSet[0].CoordVertical));
 
             //Assert.IsTrue(game.CanTake());
         }
@@ -323,7 +323,7 @@ namespace Checkers.Test
                 CheckersSet = new List<Checker>
                 {
                     new Checker(true, false, 3, 4), // CHECKER WE TEST
-                    new Checker(true, false, 1, 6),
+                    //new Checker(true, false, 1, 6),
                     new Checker(false, false, 2, 3),
                     new Checker(false, false, 6, 7),
                     new Checker(false, false, 2, 5),
@@ -334,14 +334,17 @@ namespace Checkers.Test
 
             game.Board.Draw(game.CheckersSet);
 
-            var enemyList = game.GetEnemyCoordinates(new Coordinate(game.CheckersSet[0].CoordHorizontal, game.CheckersSet[0].CoordVertical));
-            var id = game.GetCheckerId(new Coordinate(game.CheckersSet[0].CoordHorizontal, game.CheckersSet[0].CoordVertical));
-            game.RemoveEnemiesWithoutEmptyCellBehind(id, enemyList);
+            Move newMove = new Move();
+            newMove.Coordinates.Add(new Coordinate(2, 5));
 
-            var expected = new Move();
-            //expected.Coordinates.Add(new Coordinate(2,3));
+            var expected = new Dictionary<int, Move> {{0, newMove}};
 
-            CollectionAssert.AreEqual(enemyList.Coordinates, expected.Coordinates);
+            game.GetEnemyCoordinates(game.CheckersSet[0]);
+            game.ExcludeNontakableEnemies(game.CheckersSet[0]);
+
+            var actual = game.takableEnemies;
+
+            CollectionAssert.AreEqual((System.Collections.ICollection)expected, (System.Collections.ICollection)actual); //references are not equal, hence test fail. However, dictionary is being filled properly, based on debug results
         }
     }
 }
