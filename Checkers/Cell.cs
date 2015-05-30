@@ -6,32 +6,23 @@ namespace Checkers
     {
         private char symbol;
         private ConsoleColor color;
-        public bool IsEmpty { get; set; }
+        public bool IsEmpty  { get; set; }
         public bool IsUsable { get; set; }
-
-        public void DrawEmptyCell()
-        {
-            Console.Write(' ');
-        }
-
-        public void DrawCell(Checker checker)
-        {
-            Console.Write(checker.DrawChecker());
-        }
-
-        public Cell(ConsoleColor color)
-        {
-            this.color = color;
-            IsEmpty = true;
-            IsUsable = true;
-            symbol = ' ';
-            SetColor();
-        }
 
         public Cell()
         {
             IsEmpty = true;
             IsUsable = true;
+            symbol = ' ';
+        }
+
+        public Cell(ConsoleColor color)
+        {
+            IsEmpty = true;
+            IsUsable = true;
+            this.color = color;
+            symbol = ' ';
+            SetColor();
         }
 
         protected void SetColor()
@@ -42,6 +33,16 @@ namespace Checkers
         public string GetSymbol()
         {
             return Convert.ToString(symbol);
+        }
+
+        public void DrawEmptyCell()
+        {
+            Console.Write(' ');
+        }
+
+        public void DrawCell(Checker checker)
+        {
+            Console.Write(checker.DrawChecker());
         }
     }
 }

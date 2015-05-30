@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Checkers
 {
     public class Board
     {
-        private Cell[,] board;
+        private Cell[,] board = new Cell[8, 8];
 
         public Board()
         {
-            board = new Cell[8, 8];
+            //board = new Cell[8, 8];
 
             var counter = 0;
             for (var row = 0; row < board.GetLength(0); row++)
@@ -22,7 +23,7 @@ namespace Checkers
                     }
 
                     board[row, column] = new Cell();
-                    
+
                     if (counter % 2 != 0)
                     {
                         board[row, column].IsUsable = false;
@@ -44,16 +45,11 @@ namespace Checkers
 
                     if (counter % 2 == 0)
                     {
-                        foreach (var checker in checkersSet)
+                        var checkerExists = checkersSet.Exists(checker => checker.CoordHorizontal == row && checker.CoordVertical == column);
+                        if (checkerExists)
                         {
-                            if (row == checker.CoordHorizontal && column == checker.CoordVertical)
-                            {
-                                board[row, column].DrawCell(checker);
-                                board[row, column].IsEmpty = false;
-                            }
+                            board[row, column].IsEmpty = false;
                         }
-                        if (board[row, column].IsEmpty)
-                            board[row, column].DrawEmptyCell();
                     }
                     counter++;
                 }
@@ -64,34 +60,28 @@ namespace Checkers
         public void Draw(List<Checker> checkersSet)
         {
             DrawColumnHeader();
-
-            var counter = 0;
             for (var row = 0; row < board.GetLength(0); row++)
             {
                 DrawMargin(row); Console.Write("\r\n  ");
                 DrawRowNum(row);
-
                 for (var column = 0; column < board.GetLength(1); column++)
                 {
-                    if (counter % (board.GetLength(0) + 1) == 0)
-                        counter++;
-
-                    if (counter % 2 == 0)
+                    if (board[row, column].IsUsable)
                     {
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
                         Console.Write("  ");
 
-                        foreach (var checker in checkersSet)
+                        var checkerExists = checkersSet.Exists(checker => checker.CoordHorizontal == row && checker.CoordVertical == column);
+
+                        if (checkerExists)
                         {
-                            if (row == checker.CoordHorizontal && column == checker.CoordVertical)
-                            {
-                                board[row, column].DrawCell(checker);
-                                board[row, column].IsEmpty = false;
-                                
-                            }
+                            var checker = checkersSet.Find(c => c.CoordHorizontal == row && c.CoordVertical == column);
+                            board[row, column].DrawCell(checker);
                         }
-                        if (board[row, column].IsEmpty)
+                        else
+                        {
                             board[row, column].DrawEmptyCell();
+                        }
 
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.Write("  ");
@@ -101,12 +91,10 @@ namespace Checkers
                         Console.BackgroundColor = ConsoleColor.Gray;
                         Console.Write("     ");
                     }
-                    counter++;
                     Console.BackgroundColor = ConsoleColor.Black;
                 }
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.White;
-
                 DrawRowNum(row);
                 DrawMargin(row);
             }

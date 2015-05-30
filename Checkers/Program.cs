@@ -14,6 +14,7 @@ namespace Checkers
                 game.SetCoordinatesForMove();
                 game.MoveChecker();
             }
+
             Console.WriteLine("Game Over");
             Console.ReadLine();
         }

@@ -49,7 +49,7 @@ namespace Checkers
             //CheckersSet.Add(new Checker(false, false, 2, 5));
 
             Board = new Board();
-
+           // Board.PlaceCheckers(CheckersSet);
             Board.Draw(CheckersSet);
         }
 
@@ -74,23 +74,38 @@ namespace Checkers
             }
         }
 
-        private void DrawWhiteLine()
+        private void ClearMessageBar()
         {
-            const string whiteLine = "                                           ";
-            Console.SetCursorPosition(0, 30);
-            Console.Write(whiteLine);
-            Console.SetCursorPosition(0, 30);
+            Console.SetCursorPosition(50, 3); Console.Write("                              ");
+            Console.SetCursorPosition(50, 3);
+        }
+
+        private void DisplayCurrentPlayerMessage()
+        {
+            Console.SetCursorPosition(50, 1); Console.Write("                     ");
+            Console.SetCursorPosition(50, 1); Console.Write("Ходят {0}!", CurrentPlayer.PlaysWhites ? "белые" : "черные");
+            Console.SetCursorPosition(50, 3);
         }
 
         public int[] GetCellAddress(string message)
         {
             int[] cellAdress;
+            var counter = 0;
             do
             {
-                DrawWhiteLine(); Console.Write(message);
-
+                ClearMessageBar();
+                if (counter != 0)
+                {
+                    ClearMessageBar();
+                    Console.Write("Ошибка! Неверный ввод.");
+                    Thread.Sleep(1000);
+                    ClearMessageBar();
+                }
+                
+                Console.Write(message);
                 var validInput = ValidateInput();
                 cellAdress = ConvertIntoCoordinates(validInput);
+                counter++;
 
             } while (cellAdress[0] < 0 || cellAdress[1] < 0 || cellAdress[0] > 7 || cellAdress[1] > 7);
 
@@ -99,14 +114,31 @@ namespace Checkers
 
         public int GetCheckerId(Coordinate coordinate)
         {
-            return (from checker in CheckersSet
-                    where coordinate.CellAddress[0] == checker.CoordHorizontal && coordinate.CellAddress[1] == checker.CoordVertical
+            try
+            {
+                return (from checker in CheckersSet
+                    where
+                        coordinate.CellAddress[0] == checker.CoordHorizontal &&
+                        coordinate.CellAddress[1] == checker.CoordVertical
                     select CheckersSet.IndexOf(checker)).Single();
+            }
+            catch (InvalidOperationException)
+            {
+                return -1;
+            }
         }
 
-        public bool CanSelectChecker(int currentCheckerId)
+//надо добавить сюда проверку, что у шашки есть куда ходить - она не заблокирована другими шашками или границам поля
+        public bool CanSelectChecker(int id)
         {
-            return ((CurrentPlayer.PlaysWhites && CheckersSet[currentCheckerId].IsWhite) || (!CurrentPlayer.PlaysWhites && !CheckersSet[currentCheckerId].IsWhite));
+            try
+            {
+                return ((CurrentPlayer.PlaysWhites && CheckersSet[id].IsWhite) || (!CurrentPlayer.PlaysWhites && !CheckersSet[id].IsWhite));
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return false;
+            }
         }
 
         public bool CanMoveThere(int[] adressOld, int[] adressNew)
@@ -117,7 +149,8 @@ namespace Checkers
             if (checker.IsQueen)
             {
                 return Board.IsCellEmpty(adressNew[0], adressNew[1])
-                    && Board.IsCellUsable(adressNew[0], adressNew[1]);
+                    && Board.IsCellUsable(adressNew[0], adressNew[1])
+                    && IsDiagonalMove(adressOld, adressNew);
             }
             return OneCellMove(adressOld, adressNew)
                 && MoveForward(adressOld, adressNew);
@@ -125,8 +158,8 @@ namespace Checkers
 
         public bool MoveForward(int[] adressOld, int[] adressNew)
         {
-            var currentCheckerId = GetCheckerId(new Coordinate(adressOld));
-            var currentChecker = CheckersSet[currentCheckerId];
+            var id = GetCheckerId(new Coordinate(adressOld));
+            var currentChecker = CheckersSet[id];
 
             if (currentChecker.IsWhite)
             {
@@ -140,10 +173,9 @@ namespace Checkers
             return (Math.Abs(adressNew[0] - adressOld[0]) == 1 && Math.Abs(adressNew[1] - adressOld[1]) == 1);
         }
 
-
-        public IUserInput SwitchPlayer()
+        public bool IsDiagonalMove(int[] adressOld, int[] adressNew)
         {
-            return CurrentPlayer == Player1 ? Player2 : Player1;
+            return (Math.Abs(adressNew[0] - adressOld[0]) == Math.Abs(adressNew[1] - adressOld[1]));
         }
 
         public void CheckerBecomesQueen(Checker checker)
@@ -152,19 +184,6 @@ namespace Checkers
                 return;
             checker.IsQueen = true;
             checker.ChangeSymbol();
-        }
-
-        public bool QueenMove(int[] adressOld, int[] adressNew)
-        {
-            return (Math.Abs(adressNew[0] - adressOld[0]) == Math.Abs(adressNew[1] - adressOld[1]));
-        }
-
-        public bool IsGameOver()
-        {
-            var noWhites = CheckersSet.Count(checker => checker.IsWhite) == 0;
-            var noBlacks = CheckersSet.Count(checker => checker.IsWhite == false) == 0;
-
-            return (noWhites || noBlacks);
         }
 
         public int[] ConvertIntoCoordinates(string validInput)
@@ -184,15 +203,11 @@ namespace Checkers
 
             while (rawInput == null || rawInput.Length != 2)
             {
-                const string incorrectInputError = "Неверный ввод. Повторите: ";
-                const string whiteLine = "                                           ";
-
-                Console.SetCursorPosition(0, 30);
-                Console.Write(whiteLine);
-
-                Console.SetCursorPosition(0, 30);
-                Console.Write(incorrectInputError);
-
+                ClearMessageBar();
+                Console.Write("Ошибка! Неверный ввод.");
+                Thread.Sleep(1000);
+                ClearMessageBar();
+                Console.Write("Выберите шашку: ");
                 rawInput = CurrentPlayer.InputCoordinates();
             }
             var validInput = rawInput;
@@ -202,25 +217,23 @@ namespace Checkers
 
         public void SetCoordinatesForMove()
         {
-            const string selectCheckerToMoveMessage = "Выберите шашку (например, B6): ";
-            const string selectDestination = "Целевая клетка (например, С5): ";
-            const string cantSelectError = "Нельзя ходить чужой шашкой!";
-            const string cantMoveHereMessage = "Нельзя ходить в выбранную клетку!";
+            const string selectCheckerToMoveMessage = "Выберите шашку: ";
+            const string selectDestination = "Целевая клетка: ";
+            const string cantMoveHereMessage = "Ошибка! Так походить нельзя!";
 
             Move = new Move();
 
-            DrawWhiteLine();
-            Console.Write("Ходят {0}!", CurrentPlayer.PlaysWhites ? "белые" : "черные");
+            ClearMessageBar();
+            DisplayCurrentPlayerMessage();
 
-            Thread.Sleep(1500);
-            Console.SetCursorPosition(0, 30);
+            Thread.Sleep(500);
 
             var adressOld = GetCellAddress(selectCheckerToMoveMessage);
             var id = GetCheckerId(new Coordinate(adressOld));
             while (!CanSelectChecker(id))
             {
-                DrawWhiteLine();
-                Console.Write(cantSelectError);
+                ClearMessageBar();
+                Console.Write("Ошибка! Нельзя выбрать!");
                 Thread.Sleep(1000);
                 adressOld = GetCellAddress(selectCheckerToMoveMessage);
                 id = GetCheckerId(new Coordinate(adressOld));
@@ -230,7 +243,7 @@ namespace Checkers
             var adressNew = GetCellAddress(selectDestination);
             while (!CanMoveThere(adressOld, adressNew))
             {
-                DrawWhiteLine();
+                ClearMessageBar();
                 Console.Write(cantMoveHereMessage);
                 Thread.Sleep(1000);
                 adressNew = GetCellAddress(selectDestination);
@@ -346,6 +359,19 @@ namespace Checkers
             //if ()
 
             return true; // currentChecker calls this method. We iterate through its Enemies to find, if there is an empty cell behind the enemy.
+        }
+
+        public IUserInput SwitchPlayer()
+        {
+            return CurrentPlayer == Player1 ? Player2 : Player1;
+        }
+
+        public bool IsGameOver()
+        {
+            var noWhites = CheckersSet.Count(checker => checker.IsWhite) == 0;
+            var noBlacks = CheckersSet.Count(checker => checker.IsWhite == false) == 0;
+
+            return (noWhites || noBlacks);
         }
     }
 }

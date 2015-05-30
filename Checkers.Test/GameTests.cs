@@ -171,7 +171,7 @@ namespace Checkers.Test
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
             var adressNew = game.ConvertIntoCoordinates("B4");
 
-            var expected = game.QueenMove(adressOld, adressNew);
+            var expected = game.IsDiagonalMove(adressOld, adressNew);
             Assert.IsFalse(expected);
         }
 
@@ -334,7 +334,7 @@ namespace Checkers.Test
 
             game.Board.Draw(game.CheckersSet);
 
-            Move newMove = new Move();
+            var newMove = new Move();
             newMove.Coordinates.Add(new Coordinate(2, 5));
 
             var expected = new Dictionary<int, Move> {{0, newMove}};
