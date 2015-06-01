@@ -6,7 +6,8 @@ namespace Checkers
     {
         private char symbol;
         private ConsoleColor color;
-        public bool IsEmpty  { get; set; }
+
+        public bool IsEmpty { get; set; }
         public bool IsUsable { get; set; }
 
         public Cell()

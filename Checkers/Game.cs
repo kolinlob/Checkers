@@ -34,9 +34,10 @@ namespace Checkers
             CheckersSet.Add(new Checker(true, false, 3, 4)); // CHECKER WE TEST
             CheckersSet.Add(new Checker(true, false, 1, 6));
             CheckersSet.Add(new Checker(false, false, 2, 3));
-            CheckersSet.Add(new Checker(false, false, 6, 7));
+            CheckersSet.Add(new Checker(false, false, 4, 5));
+            //CheckersSet.Add(new Checker(true, false, 5, 6));
             CheckersSet.Add(new Checker(false, false, 2, 5));
-            CheckersSet.Add(new Checker(true, false, 1, 2));
+            //CheckersSet.Add(new Checker(true, false, 1, 2));
 
 
 
@@ -49,7 +50,7 @@ namespace Checkers
             //CheckersSet.Add(new Checker(false, false, 2, 5));
 
             Board = new Board();
-           // Board.PlaceCheckers(CheckersSet);
+            Board.PlaceCheckers(CheckersSet);
             Board.Draw(CheckersSet);
         }
 

@@ -323,11 +323,12 @@ namespace Checkers.Test
                 CheckersSet = new List<Checker>
                 {
                     new Checker(true, false, 3, 4), // CHECKER WE TEST
-                    //new Checker(true, false, 1, 6),
+                    new Checker(true, false, 1, 6),
                     new Checker(false, false, 2, 3),
-                    new Checker(false, false, 6, 7),
+                    new Checker(false, false, 4, 5),
+                    //new Checker(true, false, 5, 6),
                     new Checker(false, false, 2, 5),
-                    new Checker(true, false, 1, 2)
+                    //new Checker(true, false, 1, 2)
                 },
                 CurrentPlayer = new FakePlayer(true)
             };
