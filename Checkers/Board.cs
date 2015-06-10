@@ -6,11 +6,11 @@ namespace Checkers
 {
     public class Board
     {
-        private Cell[,] board = new Cell[8, 8];
+        private Cell[,] board;
 
         public Board()
         {
-            //board = new Cell[8, 8];
+            board = new Cell[8, 8];
 
             var counter = 0;
             for (var row = 0; row < board.GetLength(0); row++)
@@ -31,6 +31,8 @@ namespace Checkers
                     counter++;
                 }
             }
+
+
         }
 
         public void PlaceCheckers(List<Checker> checkersSet)
@@ -48,7 +50,7 @@ namespace Checkers
                         var checkerExists = checkersSet.Exists(checker => checker.CoordHorizontal == row && checker.CoordVertical == column);
                         if (checkerExists)
                         {
-                            board[row, column].IsEmpty = false;
+                             board[row, column].IsEmpty = false;
                         }
                     }
                     counter++;

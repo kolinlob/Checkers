@@ -9,7 +9,7 @@ namespace Checkers
     public class Game
     {
         public List<Checker> CheckersSet = new List<Checker>();
-        public Board Board { get; set; }
+        public Board Board;// { get; set; }
         public Move Move { get; set; }
         public Move Enemies { get; set; }
         public IUserInput Player1;
