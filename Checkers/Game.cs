@@ -17,11 +17,9 @@ namespace Checkers
         public IUserInput CurrentPlayer { get; set; }
 
 
-        public Dictionary<int, Move> visibleEnemies = new Dictionary<int, Move>();
+        public Dictionary<int, Move> TakableEnemies = new Dictionary<int, Move>();
 
-        public Dictionary<int, Move> takableEnemies = new Dictionary<int, Move>();
 
-        
         public void Start()
         {
             Player1 = new HumanPlayer(true);
@@ -102,7 +100,7 @@ namespace Checkers
                     Thread.Sleep(1000);
                     ClearMessageBar();
                 }
-                
+
                 Console.Write(message);
                 var validInput = ValidateInput();
                 cellAdress = ConvertIntoCoordinates(validInput);
@@ -118,10 +116,10 @@ namespace Checkers
             try
             {
                 return (from checker in CheckersSet
-                    where
-                        coordinate.CellAddress[0] == checker.CoordHorizontal &&
-                        coordinate.CellAddress[1] == checker.CoordVertical
-                    select CheckersSet.IndexOf(checker)).Single();
+                        where
+                            coordinate.CellAddress[0] == checker.CoordHorizontal &&
+                            coordinate.CellAddress[1] == checker.CoordVertical
+                        select CheckersSet.IndexOf(checker)).Single();
             }
             catch (InvalidOperationException)
             {
@@ -129,12 +127,12 @@ namespace Checkers
             }
         }
 
-//надо добавить сюда проверку, что у шашки есть куда ходить - она не заблокирована другими шашками или границам поля
-        public bool CanSelectChecker(int id)
+        //надо добавить сюда проверку, что у шашки есть куда ходить - она не заблокирована другими шашками или границам поля
+        public bool CanSelectChecker(Checker checker)
         {
             try
             {
-                return ((CurrentPlayer.PlaysWhites && CheckersSet[id].IsWhite) || (!CurrentPlayer.PlaysWhites && !CheckersSet[id].IsWhite));
+                return ((CurrentPlayer.PlaysWhites && checker.IsWhite) || (!CurrentPlayer.PlaysWhites && !checker.IsWhite));
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -146,10 +144,12 @@ namespace Checkers
         {
             var id = GetCheckerId(new Coordinate(adressOld));
             var checker = CheckersSet[id];
+            var newId = GetCheckerId(new Coordinate(adressNew));
+            var cellIsEmpty = newId == -1;
 
             if (checker.IsQueen)
             {
-                return Board.IsCellEmpty(adressNew[0], adressNew[1])
+                return cellIsEmpty
                     && Board.IsCellUsable(adressNew[0], adressNew[1])
                     && IsDiagonalMove(adressOld, adressNew);
             }
@@ -231,16 +231,20 @@ namespace Checkers
 
             var adressOld = GetCellAddress(selectCheckerToMoveMessage);
             var id = GetCheckerId(new Coordinate(adressOld));
-            while (!CanSelectChecker(id))
+            var selectedChecker = CheckersSet[id];
+
+            while (!CanSelectChecker(selectedChecker))
             {
                 ClearMessageBar();
                 Console.Write("Ошибка! Нельзя выбрать!");
                 Thread.Sleep(1000);
                 adressOld = GetCellAddress(selectCheckerToMoveMessage);
                 id = GetCheckerId(new Coordinate(adressOld));
+
+                selectedChecker = CheckersSet[id];
             }
             Move.Coordinates.Add(new Coordinate(adressOld));
-            
+
             var adressNew = GetCellAddress(selectDestination);
             while (!CanMoveThere(adressOld, adressNew))
             {
@@ -279,7 +283,7 @@ namespace Checkers
             CurrentPlayer = SwitchPlayer();
         }
 
-        public void GetEnemyCoordinates(Checker currentChecker)
+        public void FindPossibleTakes(Checker currentChecker)
         {
             var end = 1;
             int[][] direction =
@@ -293,7 +297,7 @@ namespace Checkers
             var moveDirection = new int[4][];
 
             var currentCoordinate = new Coordinate(currentChecker.CoordHorizontal, currentChecker.CoordVertical);
-            
+
             var id = GetCheckerId(currentCoordinate);
 
             Enemies = new Move();
@@ -309,6 +313,8 @@ namespace Checkers
                 {
                     moveDirection[i] = new[] { currentCoordinate.CellAddress[0] + j * direction[i][0], currentCoordinate.CellAddress[1] + j * direction[i][1] };
 
+
+
                     foreach (var checker in CheckersSet)
                     {
                         if (Board.CellExists(moveDirection[i])
@@ -320,40 +326,24 @@ namespace Checkers
                                 j = end + 1;
                                 break;
                             }
-                            Enemies.Coordinates.Add(new Coordinate(moveDirection[i][0], moveDirection[i][1]));
+
+                            var nextCell = new Coordinate(moveDirection[i][0] + j * direction[i][0], moveDirection[i][1] + j * direction[i][1]);
+
+                            var nextCellId = GetCheckerId(nextCell);
+
+                            if (Board.CellExists(new[] { nextCell.CellAddress[0], nextCell.CellAddress[1] }) && nextCellId == -1)
+                            {
+                                Enemies.Coordinates.Add(new Coordinate(nextCell.CellAddress));
+                            }
+
+
                         }
                     }
                 }
             }
-            visibleEnemies.Add(id, Enemies);
+            TakableEnemies.Add(id, Enemies);
         }
 
-        public void ExcludeNontakableEnemies(Checker currentChecker)
-        {
-            var direction = new int[2];
-            var adressOld = new[] { currentChecker.CoordHorizontal, currentChecker.CoordVertical };
-
-            var id = GetCheckerId(new Coordinate(adressOld));
-
-            Enemies = new Move();
-
-            foreach (var enemy in visibleEnemies[id].Coordinates)
-            {
-                var adressNew = enemy.CellAddress;
-                direction[0] = (adressNew[0] - adressOld[0]) / Math.Abs(adressNew[0] - adressOld[0]);
-                direction[1] = (adressNew[1] - adressOld[1]) / Math.Abs(adressNew[1] - adressOld[1]);
-
-                var nextCell = new Coordinate(adressNew[0] + direction[0], adressNew[1] + direction[1]);
-
-                if (Board.CellExists(new[] { nextCell.CellAddress[0], nextCell.CellAddress[1] }) && Board.GetCell(nextCell).IsEmpty)
-                {
-                    Enemies.Coordinates.Add(new Coordinate(enemy.CellAddress));
-                }
-            }
-            takableEnemies.Add(id, Enemies);
-
-            // Extend this method also for a Queen search
-        }
 
         public bool CanTake(Checker checker)
         {

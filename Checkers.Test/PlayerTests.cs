@@ -27,8 +27,9 @@ namespace Checkers.Test
             var game = new Game();
             game.Start();
 
-            const int blackCheckerId = 5;
-            var canSelectBlackChecker = game.CanSelectChecker(blackCheckerId);
+            const int id = 5;
+            var blackChecker = game.CheckersSet[id];
+            var canSelectBlackChecker = game.CanSelectChecker(blackChecker);
 
             Assert.IsFalse(canSelectBlackChecker);
         }
@@ -41,8 +42,9 @@ namespace Checkers.Test
             
             game.CurrentPlayer.PlaysWhites = false;
 
-            const int whiteCheckerId = 15;
-            var canSelectWhiteChecker = game.CanSelectChecker(whiteCheckerId);
+            const int id = 15;
+            var whiteChecker = game.CheckersSet[id];
+            var canSelectWhiteChecker = game.CanSelectChecker(whiteChecker);
 
             Assert.IsFalse(canSelectWhiteChecker);
         }
