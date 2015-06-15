@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Checkers
 {
@@ -31,33 +30,7 @@ namespace Checkers
                     counter++;
                 }
             }
-
-
         }
-
-        public void PlaceCheckers(List<Checker> checkersSet)
-        {
-            var counter = 0;
-            for (var row = 0; row < board.GetLength(0); row++)
-            {
-                for (var column = 0; column < board.GetLength(1); column++)
-                {
-                    if (counter % (board.GetLength(0) + 1) == 0)
-                        counter++;
-
-                    if (counter % 2 == 0)
-                    {
-                        var checkerExists = checkersSet.Exists(checker => checker.CoordHorizontal == row && checker.CoordVertical == column);
-                        if (checkerExists)
-                        {
-                             board[row, column].IsEmpty = false;
-                        }
-                    }
-                    counter++;
-                }
-            }
-        }
-
 
         public void Draw(List<Checker> checkersSet)
         {
@@ -132,11 +105,6 @@ namespace Checkers
                 Console.Write("     ");
                 Console.BackgroundColor = ConsoleColor.Black;
             }
-        }
-
-        public bool IsCellEmpty(int row, int col)
-        {
-            return (board[row, col].IsEmpty);
         }
 
         public bool IsCellUsable(int row, int col)

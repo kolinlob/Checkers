@@ -16,10 +16,8 @@ namespace Checkers
         public IUserInput Player2;
         public IUserInput CurrentPlayer { get; set; }
 
-
-        public Dictionary<int, Move> TakableEnemies = new Dictionary<int, Move>();
-
-
+        public Dictionary<int, Move> PossibleTakes = new Dictionary<int, Move>();
+        
         public void Start()
         {
             Player1 = new HumanPlayer(true);
@@ -31,7 +29,7 @@ namespace Checkers
 
             CheckersSet.Add(new Checker(true, false, 3, 4)); // CHECKER WE TEST
             CheckersSet.Add(new Checker(true, false, 1, 6));
-            CheckersSet.Add(new Checker(false, false, 2, 3));
+            CheckersSet.Add(new Checker(false, false, 1, 2));
             CheckersSet.Add(new Checker(false, false, 4, 5));
             //CheckersSet.Add(new Checker(true, false, 5, 6));
             CheckersSet.Add(new Checker(false, false, 2, 5));
@@ -48,7 +46,6 @@ namespace Checkers
             //CheckersSet.Add(new Checker(false, false, 2, 5));
 
             Board = new Board();
-            Board.PlaceCheckers(CheckersSet);
             Board.Draw(CheckersSet);
         }
 
@@ -82,7 +79,7 @@ namespace Checkers
         private void DisplayCurrentPlayerMessage()
         {
             Console.SetCursorPosition(50, 1); Console.Write("                     ");
-            Console.SetCursorPosition(50, 1); Console.Write("Ходят {0}!", CurrentPlayer.PlaysWhites ? "белые" : "черные");
+            Console.SetCursorPosition(50, 1); Console.Write("{0} move!", CurrentPlayer.PlaysWhites ? "White" : "Black");
             Console.SetCursorPosition(50, 3);
         }
 
@@ -96,7 +93,7 @@ namespace Checkers
                 if (counter != 0)
                 {
                     ClearMessageBar();
-                    Console.Write("Ошибка! Неверный ввод.");
+                    Console.Write("Error. Incorrect input.");
                     Thread.Sleep(1000);
                     ClearMessageBar();
                 }
@@ -145,16 +142,27 @@ namespace Checkers
             var id = GetCheckerId(new Coordinate(adressOld));
             var checker = CheckersSet[id];
             var newId = GetCheckerId(new Coordinate(adressNew));
-            var cellIsEmpty = newId == -1;
+            var cellIsEmpty = (newId == -1);
 
+            FindPossibleTakes(checker);
+
+            if (PossibleTakes[id].Coordinates.Count > 0) 
+            {
+                if (PossibleTakes[id].Coordinates.Contains(new Coordinate(adressNew)))
+                {
+                    return true;
+                }
+                return false;
+            }
+            
             if (checker.IsQueen)
             {
                 return cellIsEmpty
-                    && Board.IsCellUsable(adressNew[0], adressNew[1])
-                    && IsDiagonalMove(adressOld, adressNew);
+                       && Board.IsCellUsable(adressNew[0], adressNew[1])
+                       && IsDiagonalMove(adressOld, adressNew);
             }
             return OneCellMove(adressOld, adressNew)
-                && MoveForward(adressOld, adressNew);
+                   && MoveForward(adressOld, adressNew);
         }
 
         public bool MoveForward(int[] adressOld, int[] adressNew)
@@ -205,10 +213,10 @@ namespace Checkers
             while (rawInput == null || rawInput.Length != 2)
             {
                 ClearMessageBar();
-                Console.Write("Ошибка! Неверный ввод.");
+                Console.Write("Error! Incorrect input.");
                 Thread.Sleep(1000);
                 ClearMessageBar();
-                Console.Write("Выберите шашку: ");
+                Console.Write("Choose a checker: ");
                 rawInput = CurrentPlayer.InputCoordinates();
             }
             var validInput = rawInput;
@@ -218,9 +226,9 @@ namespace Checkers
 
         public void SetCoordinatesForMove()
         {
-            const string selectCheckerToMoveMessage = "Выберите шашку: ";
-            const string selectDestination = "Целевая клетка: ";
-            const string cantMoveHereMessage = "Ошибка! Так походить нельзя!";
+            const string selectCheckerToMoveMessage = "Choose a checker: ";
+            const string selectDestination = "Target cell: ";
+            const string cantMoveHereMessage = "Error! Wrong move!";
 
             Move = new Move();
 
@@ -236,7 +244,7 @@ namespace Checkers
             while (!CanSelectChecker(selectedChecker))
             {
                 ClearMessageBar();
-                Console.Write("Ошибка! Нельзя выбрать!");
+                Console.Write("Error! Cannot select this checker!");
                 Thread.Sleep(1000);
                 adressOld = GetCellAddress(selectCheckerToMoveMessage);
                 id = GetCheckerId(new Coordinate(adressOld));
@@ -264,14 +272,10 @@ namespace Checkers
 
             for (var i = 1; i < moves; i++)
             {
-                var coordinateOld = Move.Coordinates[0];
                 var coordinateNew = Move.Coordinates[1];
 
                 CheckersSet[id].CoordHorizontal = coordinateNew.CellAddress[0];
                 CheckersSet[id].CoordVertical = coordinateNew.CellAddress[1];
-
-                var cell = Board.GetCell(coordinateOld.CellAddress[0], coordinateOld.CellAddress[1]);
-                cell.IsEmpty = true;
 
                 CheckerBecomesQueen(CheckersSet[id]);
 
@@ -295,26 +299,19 @@ namespace Checkers
             };
 
             var moveDirection = new int[4][];
-
             var currentCoordinate = new Coordinate(currentChecker.CoordHorizontal, currentChecker.CoordVertical);
-
             var id = GetCheckerId(currentCoordinate);
-
             Enemies = new Move();
 
             if (CheckersSet[id].IsQueen)
-            {
                 end = 7;
-            }
-
+            
             for (var i = 0; i < 4; i++)
             {
                 for (var j = 1; j <= end; j++)
                 {
                     moveDirection[i] = new[] { currentCoordinate.CellAddress[0] + j * direction[i][0], currentCoordinate.CellAddress[1] + j * direction[i][1] };
-
-
-
+                    
                     foreach (var checker in CheckersSet)
                     {
                         if (Board.CellExists(moveDirection[i])
@@ -326,29 +323,35 @@ namespace Checkers
                                 j = end + 1;
                                 break;
                             }
-
-                            var nextCell = new Coordinate(moveDirection[i][0] + j * direction[i][0], moveDirection[i][1] + j * direction[i][1]);
-
-                            var nextCellId = GetCheckerId(nextCell);
-
-                            if (Board.CellExists(new[] { nextCell.CellAddress[0], nextCell.CellAddress[1] }) && nextCellId == -1)
+                            
+                            for (int k = 1; k <= end; k++)
                             {
-                                Enemies.Coordinates.Add(new Coordinate(nextCell.CellAddress));
+                                var nextCell = new Coordinate(moveDirection[i][0] + k*direction[i][0],
+                                    moveDirection[i][1] + k*direction[i][1]);
+
+                                var nextCellId = GetCheckerId(nextCell);
+
+                                if (nextCellId != -1 && CurrentPlayer.PlaysWhites == CheckersSet[nextCellId].IsWhite)
+                                {
+                                    break;
+                                }
+
+                                if (Board.CellExists(new[] {nextCell.CellAddress[0], nextCell.CellAddress[1]}) &&
+                                    nextCellId == -1)
+                                {
+                                    Enemies.Coordinates.Add(new Coordinate(nextCell.CellAddress));
+                                }
                             }
-
-
                         }
                     }
                 }
             }
-            TakableEnemies.Add(id, Enemies);
+            PossibleTakes.Add(id, Enemies);
         }
-
-
+        
         public bool CanTake(Checker checker)
         {
             //if ()
-
             return true; // currentChecker calls this method. We iterate through its Enemies to find, if there is an empty cell behind the enemy.
         }
 

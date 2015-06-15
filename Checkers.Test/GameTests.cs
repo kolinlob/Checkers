@@ -324,7 +324,7 @@ namespace Checkers.Test
                 {
                     new Checker(true, false, 3, 4), // CHECKER WE TEST
                     new Checker(true, false, 1, 6),
-                    new Checker(false, false, 2, 3),
+                    new Checker(false, false, 1, 2),
                     new Checker(false, false, 4, 5),
                     //new Checker(true, false, 5, 6),
                     new Checker(false, false, 2, 5),
@@ -343,7 +343,7 @@ namespace Checkers.Test
 
             game.FindPossibleTakes(game.CheckersSet[0]);
 
-            var actual = game.TakableEnemies;
+            var actual = game.PossibleTakes;
 
             CollectionAssert.AreEqual((System.Collections.ICollection)expected, (System.Collections.ICollection)actual); //references are not equal, hence test fail. However, dictionary is being filled properly, based on debug results
         }
