@@ -11,6 +11,7 @@ namespace Checkers
             
             while (!game.IsGameOver())
             {
+                game.FindCheckersWithTakes();
                 game.SetCoordinatesForMove();
                 game.MoveChecker();
             }

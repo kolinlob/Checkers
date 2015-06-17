@@ -9,14 +9,16 @@ namespace Checkers
     public class Game
     {
         public List<Checker> CheckersSet = new List<Checker>();
-        public Board Board;// { get; set; }
+        public Board Board;
         public Move Move { get; set; }
         public Move Enemies { get; set; }
         public IUserInput Player1;
         public IUserInput Player2;
         public IUserInput CurrentPlayer { get; set; }
 
-        public Dictionary<int, Move> PossibleTakes = new Dictionary<int, Move>();
+        public Dictionary<int, Move> PossibleTakes;
+
+        public List<Checker> checkersWithTakes;
         
         public void Start()
         {
@@ -127,13 +129,35 @@ namespace Checkers
         //надо добавить сюда проверку, что у шашки есть куда ходить - она не заблокирована другими шашками или границам поля
         public bool CanSelectChecker(Checker checker)
         {
+            
             try
             {
-                return ((CurrentPlayer.PlaysWhites && checker.IsWhite) || (!CurrentPlayer.PlaysWhites && !checker.IsWhite));
+                bool isOwnChecker = CurrentPlayer.PlaysWhites && checker.IsWhite;
+
+                if (!isOwnChecker) 
+                    return false;
+                if (checkersWithTakes.Count > 0)
+                    return checkersWithTakes.Contains(checker);
+                
+                return true;
             }
             catch (ArgumentOutOfRangeException)
             {
                 return false;
+            }
+        }
+
+        public void FindCheckersWithTakes()
+        {
+            checkersWithTakes = new List<Checker>();
+            foreach (Checker checker in CheckersSet)
+            {
+                FindPossibleTakes(checker);
+                int id = CheckersSet.IndexOf(checker);
+                if (PossibleTakes[id].Coordinates.Count > 0)
+                {
+                    checkersWithTakes.Add(checker);
+                }
             }
         }
 
@@ -144,17 +168,11 @@ namespace Checkers
             var newId = GetCheckerId(new Coordinate(adressNew));
             var cellIsEmpty = (newId == -1);
 
-            FindPossibleTakes(checker);
-
-            if (PossibleTakes[id].Coordinates.Count > 0) 
+            if (PossibleTakes[id].Coordinates.Count > 0)
             {
-                if (PossibleTakes[id].Coordinates.Contains(new Coordinate(adressNew)))
-                {
-                    return true;
-                }
-                return false;
+                return PossibleTakes[id].Coordinates.Contains(new Coordinate(adressNew));
             }
-            
+
             if (checker.IsQueen)
             {
                 return cellIsEmpty
@@ -244,7 +262,7 @@ namespace Checkers
             while (!CanSelectChecker(selectedChecker))
             {
                 ClearMessageBar();
-                Console.Write("Error! Cannot select this checker!");
+                Console.Write("Error! Cannot select!");
                 Thread.Sleep(1000);
                 adressOld = GetCellAddress(selectCheckerToMoveMessage);
                 id = GetCheckerId(new Coordinate(adressOld));
@@ -289,6 +307,8 @@ namespace Checkers
 
         public void FindPossibleTakes(Checker currentChecker)
         {
+            PossibleTakes = new Dictionary<int, Move>();
+            
             var end = 1;
             int[][] direction =
             {

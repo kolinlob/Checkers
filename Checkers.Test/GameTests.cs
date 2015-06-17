@@ -333,7 +333,7 @@ namespace Checkers.Test
                 CurrentPlayer = new FakePlayer(true)
             };
 
-            game.Board.Draw(game.CheckersSet);
+            //game.Board.Draw(game.CheckersSet);
 
             var newMove = new Move();
             newMove.Coordinates.Add(new Coordinate(2, 3));
@@ -348,8 +348,29 @@ namespace Checkers.Test
             CollectionAssert.AreEqual((System.Collections.ICollection)expected, (System.Collections.ICollection)actual); //references are not equal, hence test fail. However, dictionary is being filled properly, based on debug results
         }
 
-
-
-
+        [TestMethod]
+        public void _019_Find_All_Checkers_With_Takes()
+        {
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>
+                {
+                    new Checker(true, false, 1, 6),
+                    new Checker(true, false, 3, 4), // CHECKER WE TEST
+                    
+                    new Checker(false, false, 1, 2),
+                    new Checker(false, false, 2, 5),
+                    new Checker(false, false, 4, 5),
+                    //new Checker(true, false, 5, 6),
+                    //new Checker(true, false, 1, 2)
+                },
+                CurrentPlayer = new FakePlayer(false)
+            };
+            game.FindCheckersWithTakes();
+            Assert.IsTrue(true);
+        }
     }
 }
