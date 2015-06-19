@@ -16,7 +16,7 @@ namespace Checkers
         public IUserInput Player2;
         public IUserInput CurrentPlayer { get; set; }
 
-        public Dictionary<int, Move> PossibleTakes;
+        public Dictionary<int, Move> PossibleTakes = new Dictionary<int, Move>();
 
         public List<Checker> checkersWithTakes;
         
@@ -30,7 +30,7 @@ namespace Checkers
             //CreateCheckers(true);
 
             CheckersSet.Add(new Checker(true, false, 3, 4)); // CHECKER WE TEST
-            CheckersSet.Add(new Checker(true, false, 1, 6));
+            CheckersSet.Add(new Checker(true, true, 0, 7));
             CheckersSet.Add(new Checker(false, false, 1, 2));
             CheckersSet.Add(new Checker(false, false, 4, 5));
             //CheckersSet.Add(new Checker(true, false, 5, 6));
@@ -129,7 +129,6 @@ namespace Checkers
         //надо добавить сюда проверку, что у шашки есть куда ходить - она не заблокирована другими шашками или границам поля
         public bool CanSelectChecker(Checker checker)
         {
-            
             try
             {
                 bool isOwnChecker = CurrentPlayer.PlaysWhites && checker.IsWhite;
@@ -154,7 +153,7 @@ namespace Checkers
             {
                 FindPossibleTakes(checker);
                 int id = CheckersSet.IndexOf(checker);
-                if (PossibleTakes[id].Coordinates.Count > 0)
+                if (PossibleTakes.ContainsKey(id))
                 {
                     checkersWithTakes.Add(checker);
                 }
@@ -307,8 +306,6 @@ namespace Checkers
 
         public void FindPossibleTakes(Checker currentChecker)
         {
-            PossibleTakes = new Dictionary<int, Move>();
-            
             var end = 1;
             int[][] direction =
             {
@@ -361,12 +358,15 @@ namespace Checkers
                                 {
                                     Enemies.Coordinates.Add(new Coordinate(nextCell.CellAddress));
                                 }
-                            }
+                            } 
                         }
                     }
                 }
             }
-            PossibleTakes.Add(id, Enemies);
+            if (Enemies.Coordinates.Count > 0)
+            {
+                PossibleTakes.Add(id, Enemies);
+            }
         }
         
         public bool CanTake(Checker checker)

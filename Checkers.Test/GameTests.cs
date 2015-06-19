@@ -358,7 +358,8 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, false, 1, 6),
+                    //new Checker(true, false, 1, 6),
+                    new Checker(true, true, 0, 7),
                     new Checker(true, false, 3, 4), // CHECKER WE TEST
                     
                     new Checker(false, false, 1, 2),
@@ -367,7 +368,7 @@ namespace Checkers.Test
                     //new Checker(true, false, 5, 6),
                     //new Checker(true, false, 1, 2)
                 },
-                CurrentPlayer = new FakePlayer(false)
+                CurrentPlayer = new FakePlayer(true)
             };
             game.FindCheckersWithTakes();
             Assert.IsTrue(true);
