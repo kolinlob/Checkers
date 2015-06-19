@@ -18,8 +18,8 @@ namespace Checkers
 
         public Dictionary<int, Move> PossibleTakes = new Dictionary<int, Move>();
 
-        public List<Checker> checkersWithTakes;
-        
+        public List<Checker> CheckersWithTakes;
+
         public void Start()
         {
             Player1 = new HumanPlayer(true);
@@ -32,7 +32,7 @@ namespace Checkers
             CheckersSet.Add(new Checker(true, false, 4, 5)); // CHECKER WE TEST
             CheckersSet.Add(new Checker(false, false, 5, 6));
             CheckersSet.Add(new Checker(false, false, 3, 4));
-           
+
 
             Board = new Board();
             Board.Draw(CheckersSet);
@@ -118,13 +118,13 @@ namespace Checkers
         {
             try
             {
-                bool isOwnChecker = CurrentPlayer.PlaysWhites && checker.IsWhite;
+                var isOwnChecker = CurrentPlayer.PlaysWhites && checker.IsWhite;
 
-                if (!isOwnChecker) 
+                if (!isOwnChecker)
                     return false;
-                if (checkersWithTakes.Count > 0)
-                    return checkersWithTakes.Contains(checker);
-                
+                if (CheckersWithTakes.Count > 0)
+                    return CheckersWithTakes.Contains(checker);
+
                 return true;
             }
             catch (ArgumentOutOfRangeException)
@@ -135,14 +135,14 @@ namespace Checkers
 
         public void FindCheckersWithTakes()
         {
-            checkersWithTakes = new List<Checker>();
-            foreach (Checker checker in CheckersSet)
+            CheckersWithTakes = new List<Checker>();
+            foreach (var checker in CheckersSet)
             {
                 FindPossibleTakes(checker);
                 int id = CheckersSet.IndexOf(checker);
                 if (PossibleTakes.ContainsKey(id))
                 {
-                    checkersWithTakes.Add(checker);
+                    CheckersWithTakes.Add(checker);
                 }
             }
         }
@@ -156,7 +156,23 @@ namespace Checkers
 
             if (PossibleTakes.ContainsKey(id))
             {
-                return PossibleTakes[id].Coordinates[0].CellAddress[0] == adressNew[0] && PossibleTakes[id].Coordinates[0].CellAddress[1] == adressNew[1];
+                try
+                {
+                    var coordinate =
+                        PossibleTakes[id].Coordinates.Find(
+                            c => c.CellAddress[0] == adressNew[0]
+                                 && c.CellAddress[1] == adressNew[1]);
+
+                    var x = coordinate.CellAddress[0];
+                    var y = coordinate.CellAddress[1];
+
+                    return x == adressNew[0]
+                           && y == adressNew[1];
+                }
+                catch (NullReferenceException)
+                {
+                    return false;
+                }
             }
 
             if (checker.IsQueen)
@@ -193,7 +209,8 @@ namespace Checkers
 
         public void CheckerBecomesQueen(Checker checker)
         {
-            if ((checker.IsWhite || checker.CoordHorizontal != 7) && (!checker.IsWhite || checker.CoordHorizontal != 0))
+            if ((checker.IsWhite || checker.CoordHorizontal != 7)
+            && (!checker.IsWhite || checker.CoordHorizontal != 0))
                 return;
             checker.IsQueen = true;
             checker.ChangeSymbol();
@@ -243,26 +260,26 @@ namespace Checkers
 
             var adressOld = GetCellAddress(selectCheckerToMoveMessage);
             var id = GetCheckerId(new Coordinate(adressOld));
-            var selectedChecker = CheckersSet[id];
 
-            while (!CanSelectChecker(selectedChecker))
+            while (id < 0 || !CanSelectChecker(CheckersSet[id]))
             {
                 ClearMessageBar();
                 Console.Write("Error! Cannot select!");
                 Thread.Sleep(1000);
+
                 adressOld = GetCellAddress(selectCheckerToMoveMessage);
                 id = GetCheckerId(new Coordinate(adressOld));
-
-                selectedChecker = CheckersSet[id];
             }
             Move.Coordinates.Add(new Coordinate(adressOld));
 
             var adressNew = GetCellAddress(selectDestination);
+
             while (!CanMoveThere(adressOld, adressNew))
             {
                 ClearMessageBar();
                 Console.Write(cantMoveHereMessage);
                 Thread.Sleep(1000);
+
                 adressNew = GetCellAddress(selectDestination);
             }
             Move.Coordinates.Add(new Coordinate(adressNew));
@@ -309,13 +326,13 @@ namespace Checkers
 
             if (CheckersSet[id].IsQueen)
                 end = 7;
-            
+
             for (var i = 0; i < 4; i++)
             {
                 for (var j = 1; j <= end; j++)
                 {
                     moveDirection[i] = new[] { currentCoordinate.CellAddress[0] + j * direction[i][0], currentCoordinate.CellAddress[1] + j * direction[i][1] };
-                    
+
                     foreach (var checker in CheckersSet)
                     {
                         if (Board.CellExists(moveDirection[i])
@@ -327,11 +344,11 @@ namespace Checkers
                                 j = end + 1;
                                 break;
                             }
-                            
-                            for (int k = 1; k <= end; k++)
+
+                            for (var k = 1; k <= end; k++)
                             {
-                                var nextCell = new Coordinate(moveDirection[i][0] + k*direction[i][0],
-                                    moveDirection[i][1] + k*direction[i][1]);
+                                var nextCell = new Coordinate(moveDirection[i][0] + k * direction[i][0],
+                                    moveDirection[i][1] + k * direction[i][1]);
 
                                 var nextCellId = GetCheckerId(nextCell);
 
@@ -340,12 +357,11 @@ namespace Checkers
                                     break;
                                 }
 
-                                if (Board.CellExists(new[] {nextCell.CellAddress[0], nextCell.CellAddress[1]}) &&
-                                    nextCellId == -1)
+                                if (Board.CellExists(new[] { nextCell.CellAddress[0], nextCell.CellAddress[1] }) && nextCellId == -1)
                                 {
                                     Enemies.Coordinates.Add(new Coordinate(nextCell.CellAddress));
                                 }
-                            } 
+                            }
                         }
                     }
                 }
@@ -355,7 +371,7 @@ namespace Checkers
                 PossibleTakes.Add(id, Enemies);
             }
         }
-        
+
         public bool CanTake(Checker checker)
         {
             //if ()
