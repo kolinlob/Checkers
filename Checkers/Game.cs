@@ -29,23 +29,10 @@ namespace Checkers
             //CreateCheckers(false);
             //CreateCheckers(true);
 
-            CheckersSet.Add(new Checker(true, false, 3, 4)); // CHECKER WE TEST
-            CheckersSet.Add(new Checker(true, true, 0, 7));
-            CheckersSet.Add(new Checker(false, false, 1, 2));
-            CheckersSet.Add(new Checker(false, false, 4, 5));
-            //CheckersSet.Add(new Checker(true, false, 5, 6));
-            CheckersSet.Add(new Checker(false, false, 2, 5));
-            //CheckersSet.Add(new Checker(true, false, 1, 2));
-
-
-
-            //CheckersSet.Add(new Checker(true, false, 3, 4));
-            //CheckersSet.Add(new Checker(false, false, 4, 5));
-
-            //CheckersSet.Add(new Checker(true, false, 2, 1));
-            //CheckersSet.Add(new Checker(true, false, 4, 3));
-            //CheckersSet.Add(new Checker(false, false, 2, 3));
-            //CheckersSet.Add(new Checker(false, false, 2, 5));
+            CheckersSet.Add(new Checker(true, false, 4, 5)); // CHECKER WE TEST
+            CheckersSet.Add(new Checker(false, false, 5, 6));
+            CheckersSet.Add(new Checker(false, false, 3, 4));
+           
 
             Board = new Board();
             Board.Draw(CheckersSet);
@@ -167,9 +154,9 @@ namespace Checkers
             var newId = GetCheckerId(new Coordinate(adressNew));
             var cellIsEmpty = (newId == -1);
 
-            if (PossibleTakes[id].Coordinates.Count > 0)
+            if (PossibleTakes.ContainsKey(id))
             {
-                return PossibleTakes[id].Coordinates.Contains(new Coordinate(adressNew));
+                return PossibleTakes[id].Coordinates[0].CellAddress[0] == adressNew[0] && PossibleTakes[id].Coordinates[0].CellAddress[1] == adressNew[1];
             }
 
             if (checker.IsQueen)
