@@ -29,9 +29,9 @@ namespace Checkers
             //CreateCheckers(false);
             //CreateCheckers(true);
 
-            CheckersSet.Add(new Checker(true, false, 4, 5)); // CHECKER WE TEST
+            CheckersSet.Add(new Checker(true, false, 3, 4)); // CHECKER WE TEST
             CheckersSet.Add(new Checker(false, false, 5, 6));
-            CheckersSet.Add(new Checker(false, false, 3, 4));
+            //CheckersSet.Add(new Checker(false, false, 3, 4));
 
 
             Board = new Board();
@@ -118,7 +118,7 @@ namespace Checkers
         {
             try
             {
-                var isOwnChecker = CurrentPlayer.PlaysWhites && checker.IsWhite;
+                var isOwnChecker = CurrentPlayer.PlaysWhites == checker.IsWhite;
 
                 if (!isOwnChecker)
                     return false;
