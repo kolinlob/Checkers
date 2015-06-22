@@ -16,7 +16,7 @@ namespace Checkers
         public IUserInput Player2;
         public IUserInput CurrentPlayer { get; set; }
 
-        public Dictionary<int, Move> PossibleTakes = new Dictionary<int, Move>();
+        public Dictionary<Checker, Move> PossibleTakes = new Dictionary<Checker, Move>();
 
         public List<Checker> CheckersWithTakes;
 
@@ -29,10 +29,11 @@ namespace Checkers
             //CreateCheckers(false);
             //CreateCheckers(true);
 
-            CheckersSet.Add(new Checker(true, false, 3, 4)); // CHECKER WE TEST
+            //CheckersSet.Add(new Checker(true, false, 3, 4)); // CHECKER WE TEST
+            CheckersSet.Add(new Checker(true, false, 4, 5));
+            CheckersSet.Add(new Checker(false, false, 3, 4));
             CheckersSet.Add(new Checker(false, false, 5, 6));
-            //CheckersSet.Add(new Checker(false, false, 3, 4));
-
+            CheckersSet.Add(new Checker(true, false, 7, 0));
 
             Board = new Board();
             Board.Draw(CheckersSet);
@@ -139,8 +140,8 @@ namespace Checkers
             foreach (var checker in CheckersSet)
             {
                 FindPossibleTakes(checker);
-                int id = CheckersSet.IndexOf(checker);
-                if (PossibleTakes.ContainsKey(id))
+              //  int id = CheckersSet.IndexOf(checker);
+                if (PossibleTakes.ContainsKey(checker))
                 {
                     CheckersWithTakes.Add(checker);
                 }
@@ -154,12 +155,12 @@ namespace Checkers
             var newId = GetCheckerId(new Coordinate(adressNew));
             var cellIsEmpty = (newId == -1);
 
-            if (PossibleTakes.ContainsKey(id))
+            if (PossibleTakes.ContainsKey(checker))
             {
                 try
                 {
                     var coordinate =
-                        PossibleTakes[id].Coordinates.Find(
+                        PossibleTakes[checker].Coordinates.Find(
                             c => c.CellAddress[0] == adressNew[0]
                                  && c.CellAddress[1] == adressNew[1]);
 
@@ -321,10 +322,10 @@ namespace Checkers
 
             var moveDirection = new int[4][];
             var currentCoordinate = new Coordinate(currentChecker.CoordHorizontal, currentChecker.CoordVertical);
-            var id = GetCheckerId(currentCoordinate);
+           // var id = GetCheckerId(currentCoordinate);
             Enemies = new Move();
 
-            if (CheckersSet[id].IsQueen)
+            if (currentChecker.IsQueen)
                 end = 7;
 
             for (var i = 0; i < 4; i++)
@@ -368,15 +369,10 @@ namespace Checkers
             }
             if (Enemies.Coordinates.Count > 0)
             {
-                PossibleTakes.Add(id, Enemies);
+                PossibleTakes.Add(currentChecker, Enemies);
             }
         }
 
-        public bool CanTake(Checker checker)
-        {
-            //if ()
-            return true; // currentChecker calls this method. We iterate through its Enemies to find, if there is an empty cell behind the enemy.
-        }
 
         public IUserInput SwitchPlayer()
         {
@@ -390,5 +386,6 @@ namespace Checkers
 
             return (noWhites || noBlacks);
         }
+
     }
 }
