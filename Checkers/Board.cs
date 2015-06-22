@@ -122,9 +122,12 @@ namespace Checkers
             return board[coordinate.CellAddress[0], coordinate.CellAddress[1]];
         }
 
-        public bool CellExists(int[] adress)
+        public bool CellExists(Coordinate coordinate)
         {
-            return adress[0] >= 0 && adress[0] < 8 && adress[1] >= 0 && adress[1] < 8;
+            return coordinate.CellAddress[0] >= 0 
+                && coordinate.CellAddress[0] < 8 
+                && coordinate.CellAddress[1] >= 0 
+                && coordinate.CellAddress[1] < 8;
         }
 
         public override string ToString()

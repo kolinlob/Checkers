@@ -62,7 +62,7 @@ namespace Checkers.Test
         public void _003_Does_Particular_Cell_Exist()
         {
             var board = new Board();
-            var expected = board.CellExists(new[] { 3, 4 });
+            var expected = board.CellExists(new Coordinate(3, 4));
 
             Assert.IsTrue(expected);
         }  

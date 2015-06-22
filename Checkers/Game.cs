@@ -30,8 +30,8 @@ namespace Checkers
             //CreateCheckers(true);
 
             //CheckersSet.Add(new Checker(true, false, 3, 4)); // CHECKER WE TEST
-            CheckersSet.Add(new Checker(true, false, 4, 5));
-            CheckersSet.Add(new Checker(false, false, 3, 4));
+            CheckersSet.Add(new Checker(true, false, 6, 7));
+            CheckersSet.Add(new Checker(false, false, 4, 5));
             CheckersSet.Add(new Checker(false, false, 5, 6));
             CheckersSet.Add(new Checker(true, false, 7, 0));
 
@@ -139,11 +139,13 @@ namespace Checkers
             CheckersWithTakes = new List<Checker>();
             foreach (var checker in CheckersSet)
             {
-                FindPossibleTakes(checker);
-              //  int id = CheckersSet.IndexOf(checker);
-                if (PossibleTakes.ContainsKey(checker))
+                if (CurrentPlayer.PlaysWhites == checker.IsWhite)
                 {
-                    CheckersWithTakes.Add(checker);
+                    FindPossibleTakes(checker);
+                    if (PossibleTakes.ContainsKey(checker))
+                    {
+                        CheckersWithTakes.Add(checker);
+                    }
                 }
             }
         }
@@ -311,7 +313,7 @@ namespace Checkers
 
         public void FindPossibleTakes(Checker currentChecker)
         {
-            var end = 1;
+
             int[][] direction =
             {
                 new [] {-1, -1},
@@ -320,45 +322,53 @@ namespace Checkers
                 new [] {1,   1}
             };
 
-            var moveDirection = new int[4][];
+            var coordinateToCheck = new Coordinate[4];
             var currentCoordinate = new Coordinate(currentChecker.CoordHorizontal, currentChecker.CoordVertical);
-           // var id = GetCheckerId(currentCoordinate);
             Enemies = new Move();
 
+            var end = 1;
             if (currentChecker.IsQueen)
+            {
                 end = 7;
+            }
 
             for (var i = 0; i < 4; i++)
             {
-                for (var j = 1; j <= end; j++)
+                for (var depth = 1; depth <= end; depth++)
                 {
-                    moveDirection[i] = new[] { currentCoordinate.CellAddress[0] + j * direction[i][0], currentCoordinate.CellAddress[1] + j * direction[i][1] };
+                    coordinateToCheck[i] = new Coordinate(
+                        currentCoordinate.CellAddress[0] + depth * direction[i][0], 
+                        currentCoordinate.CellAddress[1] + depth * direction[i][1]);
 
                     foreach (var checker in CheckersSet)
                     {
-                        if (Board.CellExists(moveDirection[i])
-                            && moveDirection[i][0] == checker.CoordHorizontal
-                            && moveDirection[i][1] == checker.CoordVertical)
+                        if (Board.CellExists(coordinateToCheck[i])
+                            && coordinateToCheck[i].CellAddress[0] == checker.CoordHorizontal
+                            && coordinateToCheck[i].CellAddress[1] == checker.CoordVertical)
                         {
-                            if (CurrentPlayer.PlaysWhites == checker.IsWhite)
+                            if (currentChecker.IsWhite == checker.IsWhite)
                             {
-                                j = end + 1;
+                                depth = end + 1;
                                 break;
                             }
 
-                            for (var k = 1; k <= end; k++)
+                            for (var landingDepth = 1; landingDepth <= end; landingDepth++)
                             {
-                                var nextCell = new Coordinate(moveDirection[i][0] + k * direction[i][0],
-                                    moveDirection[i][1] + k * direction[i][1]);
+                                var nextCell = new Coordinate(
+                                    coordinateToCheck[i].CellAddress[0] + landingDepth * direction[i][0],
+                                    coordinateToCheck[i].CellAddress[1] + landingDepth * direction[i][1]);
 
                                 var nextCellId = GetCheckerId(nextCell);
 
-                                if (nextCellId != -1 && CurrentPlayer.PlaysWhites == CheckersSet[nextCellId].IsWhite)
+                                var isNextCellEmpty = (nextCellId == -1);
+                                
+                                if (!isNextCellEmpty)
                                 {
                                     break;
                                 }
 
-                                if (Board.CellExists(new[] { nextCell.CellAddress[0], nextCell.CellAddress[1] }) && nextCellId == -1)
+                                var nextCoordinate = new Coordinate(nextCell.CellAddress[0], nextCell.CellAddress[1]);
+                                if (Board.CellExists(nextCoordinate))
                                 {
                                     Enemies.Coordinates.Add(new Coordinate(nextCell.CellAddress));
                                 }
@@ -372,8 +382,7 @@ namespace Checkers
                 PossibleTakes.Add(currentChecker, Enemies);
             }
         }
-
-
+        
         public IUserInput SwitchPlayer()
         {
             return CurrentPlayer == Player1 ? Player2 : Player1;
