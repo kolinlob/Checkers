@@ -19,6 +19,7 @@ namespace Checkers
         public Dictionary<Checker, Move> PossibleTakes = new Dictionary<Checker, Move>();
 
         public List<Checker> CheckersWithTakes;
+        public List<Checker> BlockedCheckers;
 
         public void Start()
         {
@@ -30,10 +31,11 @@ namespace Checkers
             //CreateCheckers(true);
 
             //CheckersSet.Add(new Checker(true, false, 3, 4)); // CHECKER WE TEST
-            CheckersSet.Add(new Checker(true, true, 6, 7));
+            CheckersSet.Add(new Checker(true, false, 6, 7));
             CheckersSet.Add(new Checker(false, false, 4, 5));
             CheckersSet.Add(new Checker(false, false, 5, 6));
             CheckersSet.Add(new Checker(true, false, 7, 0));
+            CheckersSet.Add(new Checker(false, false, 6, 1));
 
             Board = new Board();
             Board.Draw(CheckersSet);
@@ -118,7 +120,7 @@ namespace Checkers
         {
             try
             {
-                var isOwnChecker = CurrentPlayer.PlaysWhites == checker.IsWhite;
+                var isOwnChecker = (CurrentPlayer.PlaysWhites == checker.IsWhite);
 
                 if (!isOwnChecker)
                     return false;
@@ -365,6 +367,7 @@ namespace Checkers
                                 
                                 if (!isNextCellEmpty)
                                 {
+                                    landingDepth = end + 1;
                                     break;
                                 }
 
@@ -397,5 +400,45 @@ namespace Checkers
             return (noWhites || noBlacks);
         }
 
-    }
+        //public bool IsCheckerBlocked(Checker currentChecker)
+        //{
+        //    int[][] direction =
+        //    {
+        //        new [] {-1, -1},
+        //        new [] {-1,  1},
+        //        new [] {1,  -1},
+        //        new [] {1,   1}
+        //    };
+        //
+        //    var coordinateToCheck = new Coordinate[4];
+        //    var currentCoordinate = new Coordinate(currentChecker.CoordHorizontal, currentChecker.CoordVertical);
+        //
+        //    int directionStartNumber;
+        //    int directionEndNumber;
+        //
+        //    if (CurrentPlayer.PlaysWhites && !currentChecker.IsQueen)
+        //    {
+        //        directionStartNumber = 0;
+        //        directionEndNumber = 2;
+        //    }
+        //    else
+        //    {
+        //        directionStartNumber = 2;
+        //        directionEndNumber = 4;
+        //    }
+        //
+        //    for (int i = directionStartNumber; i < directionEndNumber; i++)
+        //    {
+        //        coordinateToCheck[i] = new Coordinate(
+        //                currentCoordinate.CellAddress[0] + direction[i][0],
+        //                currentCoordinate.CellAddress[1] + direction[i][1]);
+        //        if (Board.CellExists(coordinateToCheck[i]))
+        //        {
+        //            
+        //        }
+        //    }
+        //    return true;
+        //}
+      }
+   
 }
