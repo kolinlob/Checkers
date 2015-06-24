@@ -30,7 +30,7 @@ namespace Checkers
             //CreateCheckers(true);
 
             //CheckersSet.Add(new Checker(true, false, 3, 4)); // CHECKER WE TEST
-            CheckersSet.Add(new Checker(true, false, 6, 7));
+            CheckersSet.Add(new Checker(true, true, 6, 7));
             CheckersSet.Add(new Checker(false, false, 4, 5));
             CheckersSet.Add(new Checker(false, false, 5, 6));
             CheckersSet.Add(new Checker(true, false, 7, 0));
@@ -114,8 +114,7 @@ namespace Checkers
             }
         }
 
-        //надо добавить сюда проверку, что у шашки есть куда ходить - она не заблокирована другими шашками или границам поля
-        public bool CanSelectChecker(Checker checker)
+        public bool CanSelectChecker(Checker checker) //надо добавить проверку, что у шашки есть куда ходить, иначе её нельзя выбирать
         {
             try
             {
@@ -164,13 +163,13 @@ namespace Checkers
                     var coordinate =
                         PossibleTakes[checker].Coordinates.Find(
                             c => c.CellAddress[0] == adressNew[0]
-                                 && c.CellAddress[1] == adressNew[1]);
+                              && c.CellAddress[1] == adressNew[1]);
 
                     var x = coordinate.CellAddress[0];
                     var y = coordinate.CellAddress[1];
 
                     return x == adressNew[0]
-                           && y == adressNew[1];
+                        && y == adressNew[1];
                 }
                 catch (NullReferenceException)
                 {
@@ -181,10 +180,10 @@ namespace Checkers
             if (checker.IsQueen)
             {
                 return cellIsEmpty
-                       && Board.IsCellUsable(adressNew[0], adressNew[1])
-                       && IsDiagonalMove(adressOld, adressNew);
+                    && IsDiagonalMove(adressOld, adressNew);
             }
-            return OneCellMove(adressOld, adressNew)
+            return cellIsEmpty
+                   && OneCellMove(adressOld, adressNew)
                    && MoveForward(adressOld, adressNew);
         }
 
@@ -237,9 +236,11 @@ namespace Checkers
             while (rawInput == null || rawInput.Length != 2)
             {
                 ClearMessageBar();
+
                 Console.Write("Error! Incorrect input.");
                 Thread.Sleep(1000);
                 ClearMessageBar();
+                
                 Console.Write("Choose a checker: ");
                 rawInput = CurrentPlayer.InputCoordinates();
             }
