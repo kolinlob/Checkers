@@ -30,12 +30,12 @@ namespace Checkers
             //CreateCheckers(false);
             //CreateCheckers(true);
 
-            //CheckersSet.Add(new Checker(true, false, 3, 4)); // CHECKER WE TEST
-            CheckersSet.Add(new Checker(true, false, 6, 7));
+            //CheckersSet.Add(new Checker(true, false, 3, 4)); 
+            CheckersSet.Add(new Checker(true, false, 6, 7)); // CHECKER WE TEST
             CheckersSet.Add(new Checker(false, false, 4, 5));
             CheckersSet.Add(new Checker(false, false, 5, 6));
             CheckersSet.Add(new Checker(true, false, 7, 0));
-            CheckersSet.Add(new Checker(false, false, 6, 1));
+            //CheckersSet.Add(new Checker(false, false, 6, 1));
 
             Board = new Board();
             Board.Draw(CheckersSet);
@@ -116,7 +116,7 @@ namespace Checkers
             }
         }
 
-        public bool CanSelectChecker(Checker checker) //надо добавить проверку, что у шашки есть куда ходить, иначе её нельзя выбирать
+        public bool CanSelectChecker(Checker checker) 
         {
             try
             {
@@ -124,11 +124,13 @@ namespace Checkers
 
                 if (!isOwnChecker)
                     return false;
+
                 if (CheckersWithTakes.Count > 0)
                     return CheckersWithTakes.Contains(checker);
 
-                return true;
+                    return !IsCheckerBlocked(checker);
             }
+
             catch (ArgumentOutOfRangeException)
             {
                 return false;
@@ -367,7 +369,6 @@ namespace Checkers
                                 
                                 if (!isNextCellEmpty)
                                 {
-                                    landingDepth = end + 1;
                                     break;
                                 }
 
@@ -400,45 +401,89 @@ namespace Checkers
             return (noWhites || noBlacks);
         }
 
-        //public bool IsCheckerBlocked(Checker currentChecker)
-        //{
-        //    int[][] direction =
-        //    {
-        //        new [] {-1, -1},
-        //        new [] {-1,  1},
-        //        new [] {1,  -1},
-        //        new [] {1,   1}
-        //    };
-        //
-        //    var coordinateToCheck = new Coordinate[4];
-        //    var currentCoordinate = new Coordinate(currentChecker.CoordHorizontal, currentChecker.CoordVertical);
-        //
-        //    int directionStartNumber;
-        //    int directionEndNumber;
-        //
-        //    if (CurrentPlayer.PlaysWhites && !currentChecker.IsQueen)
-        //    {
-        //        directionStartNumber = 0;
-        //        directionEndNumber = 2;
-        //    }
-        //    else
-        //    {
-        //        directionStartNumber = 2;
-        //        directionEndNumber = 4;
-        //    }
-        //
-        //    for (int i = directionStartNumber; i < directionEndNumber; i++)
-        //    {
-        //        coordinateToCheck[i] = new Coordinate(
-        //                currentCoordinate.CellAddress[0] + direction[i][0],
-        //                currentCoordinate.CellAddress[1] + direction[i][1]);
-        //        if (Board.CellExists(coordinateToCheck[i]))
-        //        {
-        //            
-        //        }
-        //    }
-        //    return true;
-        //}
-      }
-   
+        /// Данная версия работает для одного направления, [-1, -1].
+        /// Метод нужно сделать универсальным - крутить циклом все 4 направления и проверять, если по всем 4 направлениям будет true - шашка заблокирована и не может ходить!
+        public bool IsCheckerBlocked(Checker checker)
+        {
+            var twoEnemiesInARow = false;
+            var friendlyChecker = false;
+            var reverseMove = false;
+
+            var x = checker.CoordHorizontal;
+            var y = checker.CoordVertical;
+            
+            var newX = x - 1;
+            var newY = y - 1;
+            
+            var lastX = newX - 1;
+            var lastY = newY - 1;
+            
+            //var coordinate = new Coordinate(x, y);
+            var newCoordinate = new Coordinate(newX, newY);
+            var lastCoordinate = new Coordinate(lastX, lastY);
+
+            if (Board.CellExists(newCoordinate))
+            {
+                int newId = GetCheckerId(newCoordinate);
+                int lastId = GetCheckerId(lastCoordinate);
+
+                if (newId > 0)
+                {
+                    if (CheckersSet[newId].IsWhite == CurrentPlayer.PlaysWhites)
+                    {
+                        friendlyChecker = true;
+                    }
+                    else if (Board.CellExists(lastCoordinate) && CheckersSet[lastId].IsWhite != CurrentPlayer.PlaysWhites)
+                    {
+                        twoEnemiesInARow = true;
+                    }
+                }
+            }
+
+            if (!checker.IsQueen && !MoveForward(new []{x,y}, new []{newX, newY}))
+            {
+                reverseMove = true;
+            }
+            
+            return twoEnemiesInARow || friendlyChecker || reverseMove;
+
+
+            //int[][] direction =
+            //{
+            //    new [] {-1, -1},
+            //    new [] {-1,  1},
+            //    new [] {1,  -1},
+            //    new [] {1,   1}
+            //};
+            //
+            //var coordinateToCheck = new Coordinate[4];
+            //var currentCoordinate = new Coordinate(checker.CoordHorizontal, checker.CoordVertical);
+        
+            //int directionStartNumber;
+            //int directionEndNumber;
+            //
+            //if (CurrentPlayer.PlaysWhites && !checker.IsQueen)
+            //{
+            //    directionStartNumber = 0;
+            //    directionEndNumber = 2;
+            //}
+            //else
+            //{
+            //    directionStartNumber = 2;
+            //    directionEndNumber = 4;
+            //}
+            //
+            //for (int i = directionStartNumber; i < directionEndNumber; i++)
+            //{
+            //    coordinateToCheck[i] = new Coordinate(
+            //            coordinate.CellAddress[0] + direction[i][0],
+            //            coordinate.CellAddress[1] + direction[i][1]);
+            //    if (Board.CellExists(coordinateToCheck[i]))
+            //    {
+            //        
+            //    }
+            //}
+            //return true;
+        } 
+    }
 }
