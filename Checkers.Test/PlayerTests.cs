@@ -16,7 +16,7 @@ namespace Checkers.Test
             game.CreateCheckers(false);
 
             var address = game.ConvertIntoCoordinates(validInput);
-            var actualCheckerId = game.GetCheckerId(new Coordinate(address));
+            var actualCheckerId = game.GetCheckerId(address);
 
             Assert.AreEqual(actualCheckerId, expectedCheckerId);
         }

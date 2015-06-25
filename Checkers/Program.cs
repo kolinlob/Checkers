@@ -9,14 +9,15 @@ namespace Checkers
             var game = new Game();
             game.Start();
             
-            while (!game.IsGameOver())
+            while (true)//!game.IsGameOver())
             {
                 game.FindCheckersWithTakes();
                 game.SetCoordinatesForMove();
                 game.MoveChecker();
+                game.CurrentPlayer = game.SwitchPlayer();
             }
-
-            Console.WriteLine("Game Over");
+            Console.SetCursorPosition(50, 10);
+            Console.Write("Game Over");
             Console.ReadLine();
         }
     }

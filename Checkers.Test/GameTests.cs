@@ -71,8 +71,8 @@ namespace Checkers.Test
             var game = new Game();
             game.Start();
 
-            int[] adressOld = { 0, 1 };
-            int[] adressNew = { 2, 2 };
+            var adressOld = new Coordinate(0, 1);
+            var adressNew = new Coordinate(2, 2);
             var expected = game.CanMoveThere(adressOld, adressNew); //not a queen
 
             Assert.IsFalse(expected);
@@ -84,8 +84,8 @@ namespace Checkers.Test
             var game = new Game();
             game.Start();
 
-            int[] adressOld = { 0, 1 };
-            int[] adressNew = { 2, 1 };
+            var adressOld = new Coordinate(0, 1);
+            var adressNew = new Coordinate(2, 1);
             var expected = game.CanMoveThere(adressOld, adressNew);
 
             Assert.IsFalse(expected);
@@ -137,7 +137,7 @@ namespace Checkers.Test
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
             var adressNew = game.ConvertIntoCoordinates("D4");
 
-            var checkerId = game.GetCheckerId(new Coordinate(adressOld));
+            var checkerId = game.GetCheckerId(adressOld);
             game.CheckersSet[checkerId].IsQueen = true;
 
             var expected = game.OneCellMove(adressOld, adressNew);
@@ -257,7 +257,7 @@ namespace Checkers.Test
 
             var validAdress = game.CurrentPlayer.InputCoordinates();
             var adress = game.ConvertIntoCoordinates(validAdress);
-            var coordinate = new Coordinate(adress[0], adress[1]);
+            var coordinate = new Coordinate(adress.X, adress.Y);
 
             var actual = game.GetCheckerId(coordinate);
 
@@ -281,7 +281,7 @@ namespace Checkers.Test
 
             const string validAdress = "A8";
             var adress = game.ConvertIntoCoordinates(validAdress);
-            var coordinate = new Coordinate(adress[0], adress[1]);
+            var coordinate = new Coordinate(adress.X, adress.Y);
 
             game.GetCheckerId(coordinate);
         }
@@ -303,7 +303,7 @@ namespace Checkers.Test
             game.CurrentPlayer = new FakePlayer(true);
 
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
-            var checkerId = game.GetCheckerId(new Coordinate(adressOld));
+            var checkerId = game.GetCheckerId(adressOld);
             game.CheckersSet[checkerId].ChangeSymbol();                 // make it queen
 
             var adressNew = game.ConvertIntoCoordinates("C4");

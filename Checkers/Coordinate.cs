@@ -6,15 +6,20 @@ namespace Checkers
     {
         public readonly int[] CellAddress = new int[2];
 
+        public int X
+        {
+            get { return CellAddress[0]; }
+        }
+
+        public int Y
+        {
+            get { return CellAddress[1]; }
+        }
+
         public Coordinate(int coordHorizontal, int coordVertical)
         {
             CellAddress[0] = coordHorizontal;
             CellAddress[1] = coordVertical;
-        }
-
-        public Coordinate(int[] cellAddress)
-        {
-            CellAddress = cellAddress;
         }
 
         public override int GetHashCode()
