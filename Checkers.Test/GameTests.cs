@@ -122,7 +122,7 @@ namespace Checkers.Test
             var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
             var adressNew = game.ConvertIntoCoordinates("D4");
 
-            var expected = game.OneCellMove(adressOld, adressNew);
+            var expected = game.IsOneCellMove(adressOld, adressNew);
             Assert.IsFalse(expected);
         }
 
@@ -133,14 +133,14 @@ namespace Checkers.Test
             game.Start();
 
             game.CurrentPlayer = new FakePlayer(true);
+            
+            var input = game.CurrentPlayer.InputCoordinates();
+            var moveStartCoordinate = game.ConvertIntoCoordinates(input);
+            var moveEndCoordinate = game.ConvertIntoCoordinates("D4");
 
-            var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
-            var adressNew = game.ConvertIntoCoordinates("D4");
-
-            var checkerId = game.GetCheckerId(adressOld);
-            game.CheckersSet[checkerId].IsQueen = true;
-
-            var expected = game.OneCellMove(adressOld, adressNew);
+            game.GetChecker(moveStartCoordinate).IsQueen = true;
+            
+            var expected = game.IsOneCellMove(moveStartCoordinate, moveEndCoordinate);
             Assert.IsFalse(expected);
         }
 
@@ -152,10 +152,10 @@ namespace Checkers.Test
 
             game.CurrentPlayer = new FakePlayer(true);
 
-            var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
-            var adressNew = game.ConvertIntoCoordinates("A7");
+            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var moveEndCoordinate = game.ConvertIntoCoordinates("A7");
 
-            var expected = game.MoveForward(adressOld, adressNew);
+            var expected = game.IsMoveForward(moveStartCoordinate, moveEndCoordinate);
             Assert.IsFalse(expected);
         }
 
@@ -242,7 +242,7 @@ namespace Checkers.Test
         }
 
         [TestMethod]
-        public void _015_Can_Get_Checker_Id()
+        public void _015_Can_Get_Checker()
         {
             var game = new Game
             {
@@ -259,14 +259,14 @@ namespace Checkers.Test
             var adress = game.ConvertIntoCoordinates(validAdress);
             var coordinate = new Coordinate(adress.X, adress.Y);
 
-            var actual = game.GetCheckerId(coordinate);
-
-            Assert.AreEqual(8, actual);
+            var actual = game.GetChecker(coordinate);
+            var expected = new Checker(false, false, 2, 1);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void _016_Cant_Get_Checker_Id_When_Empty_Cell_Selected()
+        //[ExpectedException(typeof(NullReferenceException))]
+        public void _016_Cant_Get_Checker_When_Empty_Cell_Selected()
         {
             var game = new Game
             {
@@ -283,7 +283,8 @@ namespace Checkers.Test
             var adress = game.ConvertIntoCoordinates(validAdress);
             var coordinate = new Coordinate(adress.X, adress.Y);
 
-            game.GetCheckerId(coordinate);
+            var isCheckerAbsentInEmptyCell = (game.GetChecker(coordinate) == null);
+            Assert.IsTrue(isCheckerAbsentInEmptyCell);
         }
 
         [TestMethod]
@@ -302,13 +303,13 @@ namespace Checkers.Test
 
             game.CurrentPlayer = new FakePlayer(true);
 
-            var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
-            var checkerId = game.GetCheckerId(adressOld);
-            game.CheckersSet[checkerId].ChangeSymbol();                 // make it queen
+            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var checker = game.GetChecker(moveStartCoordinate);
+            checker.IsQueen = true;
 
-            var adressNew = game.ConvertIntoCoordinates("C4");
+            var moveEndCoordinate = game.ConvertIntoCoordinates("C4");
 
-            var canMoveThere = game.CanMoveThere(adressOld, adressNew);
+            var canMoveThere = game.CanMoveThere(moveStartCoordinate, moveEndCoordinate);
             Assert.IsFalse(canMoveThere);
         }
 

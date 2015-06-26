@@ -11,14 +11,14 @@ namespace Checkers.Test
             var game = new Game();
             var validInput = new FakePlayer(true).InputCoordinates();
 
-            const int expectedCheckerId = 8;
+            var expectedChecker = new Checker(false, false, 2, 1);
 
             game.CreateCheckers(false);
 
-            var address = game.ConvertIntoCoordinates(validInput);
-            var actualCheckerId = game.GetCheckerId(address);
+            var moveStartCoordinate = game.ConvertIntoCoordinates(validInput);
+            var actualChecker = game.GetChecker(moveStartCoordinate);
 
-            Assert.AreEqual(actualCheckerId, expectedCheckerId);
+            Assert.AreEqual(actualChecker, expectedChecker);
         }
 
         [TestMethod]
@@ -27,8 +27,7 @@ namespace Checkers.Test
             var game = new Game();
             game.Start();
 
-            const int id = 5;
-            var blackChecker = game.CheckersSet[id];
+            var blackChecker = new Checker(false, false, 1, 0);
             var canSelectBlackChecker = game.CanSelectChecker(blackChecker);
 
             Assert.IsFalse(canSelectBlackChecker);
@@ -42,8 +41,7 @@ namespace Checkers.Test
             
             game.CurrentPlayer.PlaysWhites = false;
 
-            const int id = 15;
-            var whiteChecker = game.CheckersSet[id];
+            var whiteChecker = new Checker(true, false, 5, 6);
             var canSelectWhiteChecker = game.CanSelectChecker(whiteChecker);
 
             Assert.IsFalse(canSelectWhiteChecker);

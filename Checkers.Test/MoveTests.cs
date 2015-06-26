@@ -32,8 +32,7 @@ namespace Checkers.Test
 
             game.MoveChecker();
 
-            var id = game.GetCheckerId(adressNew);
-            var actual = game.CheckersSet[id];
+            var actual = game.GetChecker(adressNew);
             var expected = new Checker(false, false, 3, 2);
 
             Assert.AreEqual(expected, actual);

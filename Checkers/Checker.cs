@@ -19,7 +19,7 @@ namespace Checkers
 
             if (isQueen)
             {
-                ChangeSymbol();
+                GetQueenSymbol();
             }
         }
 
@@ -33,7 +33,7 @@ namespace Checkers
             return GetHashCode() == other.GetHashCode();
         }
 
-        public void ChangeSymbol()
+        public void GetQueenSymbol()
         {
             symbol = '☼';          
         }

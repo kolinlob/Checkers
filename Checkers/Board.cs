@@ -5,7 +5,7 @@ namespace Checkers
 {
     public class Board
     {
-        private Cell[,] board;
+        private readonly Cell[,] board;
 
         public Board()
         {
@@ -39,6 +39,7 @@ namespace Checkers
             {
                 DrawMargin(row); Console.Write("\r\n  ");
                 DrawRowNum(row);
+
                 for (var column = 0; column < board.GetLength(1); column++)
                 {
                     if (board[row, column].IsUsable)
@@ -46,7 +47,9 @@ namespace Checkers
                         Console.BackgroundColor = ConsoleColor.DarkBlue;
                         Console.Write("  ");
 
-                        var checkerExists = checkersSet.Exists(checker => checker.CoordHorizontal == row && checker.CoordVertical == column);
+                        var checkerExists =
+                                    checkersSet.Exists(checker => checker.CoordHorizontal == row
+                                                               && checker.CoordVertical   == column);
 
                         if (checkerExists)
                         {
@@ -81,8 +84,11 @@ namespace Checkers
         {
             Console.WriteLine();
             Console.Write("     ");
+
             for (var column = 0; column < board.GetLength(1); column++)
+            {
                 Console.Write("  " + Convert.ToChar(column + 65) + "  ");
+            }
             Console.WriteLine();
         }
 
@@ -107,27 +113,22 @@ namespace Checkers
             }
         }
 
-        public bool IsCellUsable(int row, int col)
+        public bool IsCellUsable(Coordinate coordinate)
         {
-            return (board[row, col].IsUsable);
-        }
-
-        public Cell GetCell(int row, int col)
-        {
-            return board[row, col];
+            return (board[coordinate.X, coordinate.Y].IsUsable);
         }
 
         public Cell GetCell(Coordinate coordinate)
         {
-            return board[coordinate.CellAddress[0], coordinate.CellAddress[1]];
+            return board[coordinate.X, coordinate.Y];
         }
 
         public bool CellExists(Coordinate coordinate)
         {
-            return coordinate.CellAddress[0] >= 0 
-                && coordinate.CellAddress[0] < 8 
-                && coordinate.CellAddress[1] >= 0 
-                && coordinate.CellAddress[1] < 8;
+            return coordinate.X >= 0 
+                && coordinate.X < 8 
+                && coordinate.Y >= 0 
+                && coordinate.Y < 8;
         }
 
         public override string ToString()

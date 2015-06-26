@@ -18,7 +18,8 @@ namespace Checkers.Test
         public void _002_IsCellUsable()
         {
             var board = new Board();
-            var expected = board.IsCellUsable(3, 0);
+            var coordinate = new Coordinate(3, 0);
+            var expected = board.IsCellUsable(coordinate);
 
             Assert.IsTrue(expected);
         }

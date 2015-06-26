@@ -14,7 +14,8 @@ namespace Checkers
                 game.FindCheckersWithTakes();
                 game.SetCoordinatesForMove();
                 game.MoveChecker();
-                game.CurrentPlayer = game.SwitchPlayer();
+                game.PossibleTakes.Clear();
+                game.SwitchPlayer();
             }
             Console.SetCursorPosition(50, 10);
             Console.Write("Game Over");
