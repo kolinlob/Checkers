@@ -13,7 +13,10 @@ namespace Checkers
             {
                 game.FindCheckersWithTakes();
                 game.SetCoordinatesForMove();
-                game.RemoveBeatenChecker();
+                if (game.CheckersWithTakes.Count>0)
+                {
+                    game.RemoveBeatenChecker();    
+                }
                 game.MoveChecker();
                 game.PossibleTakes.Clear();
                 game.SwitchPlayer();

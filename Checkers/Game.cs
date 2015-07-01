@@ -26,17 +26,17 @@ namespace Checkers
             Player2 = new HumanPlayer(false);
             CurrentPlayer = Player1;
             
-            //CreateCheckers(false);
-            //CreateCheckers(true);
+            CreateCheckers(false);
+            CreateCheckers(true);
 
             
             // TEST SITUATION #1
-            CheckersSet.Add(new Checker(true, true, 2, 3)); // CHECKER WE TEST
-            CheckersSet.Add(new Checker(false, true, 0, 1));
-            CheckersSet.Add(new Checker(false, true, 1, 2));
-            CheckersSet.Add(new Checker(false, true, 1, 4));
-            CheckersSet.Add(new Checker(false, true, 0, 5));
-            CheckersSet.Add(new Checker(true, true, 7, 0));
+            //CheckersSet.Add(new Checker(true, true, 2, 3)); // CHECKER WE TEST
+            //CheckersSet.Add(new Checker(false, true, 0, 1));
+            //CheckersSet.Add(new Checker(false, true, 1, 2));
+            //CheckersSet.Add(new Checker(false, true, 1, 4));
+            //CheckersSet.Add(new Checker(false, true, 0, 5));
+            //CheckersSet.Add(new Checker(true, true, 7, 0));
             
             // TEST SITUATION #2
             //CheckersSet.Add(new Checker(true, false, 2, 3)); // CHECKER WE TEST
@@ -322,8 +322,8 @@ namespace Checkers
                 for (int m = startY + signY; deltaY < 0 ? (m > finishY) : (m < finishY); m = m + signY)
                 {
                     var coordinate = new Coordinate(p, m);
-        
-                    if (GetChecker(coordinate) != null)
+
+                    if (GetChecker(coordinate) != null && Math.Abs(p - startX) == Math.Abs(m - startY))
                     {
                         CheckersSet.Remove(GetChecker(coordinate));
                     }
