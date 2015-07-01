@@ -31,18 +31,25 @@ namespace Checkers
 
             
             // TEST SITUATION #1
-            //CheckersSet.Add(new Checker(true, false, 2, 3)); // CHECKER WE TEST
-            //CheckersSet.Add(new Checker(false, false, 0, 1));
-            //CheckersSet.Add(new Checker(false, false, 1, 2));
-            //CheckersSet.Add(new Checker(false, false, 1, 4));
-            //CheckersSet.Add(new Checker(false, false, 0, 5));
-            //CheckersSet.Add(new Checker(true, false, 7, 0));
+            CheckersSet.Add(new Checker(true, true, 2, 3)); // CHECKER WE TEST
+            CheckersSet.Add(new Checker(false, true, 0, 1));
+            CheckersSet.Add(new Checker(false, true, 1, 2));
+            CheckersSet.Add(new Checker(false, true, 1, 4));
+            CheckersSet.Add(new Checker(false, true, 0, 5));
+            CheckersSet.Add(new Checker(true, true, 7, 0));
             
             // TEST SITUATION #2
-            CheckersSet.Add(new Checker(true, false, 2, 3)); // CHECKER WE TEST
-            CheckersSet.Add(new Checker(true, true, 7, 0));
-            CheckersSet.Add(new Checker(false, false, 6, 1));
-            CheckersSet.Add(new Checker(false, false, 5, 2));
+            //CheckersSet.Add(new Checker(true, false, 2, 3)); // CHECKER WE TEST
+            //CheckersSet.Add(new Checker(true, false, 7, 0));
+            //CheckersSet.Add(new Checker(false, false, 6, 1));
+            //CheckersSet.Add(new Checker(false, false, 5, 2));
+
+            // TEST SITUATION #3
+            //CheckersSet.Add(new Checker(true, true, 3, 4)); // CHECKER WE TEST
+            //CheckersSet.Add(new Checker(false, false, 2, 3));
+            //CheckersSet.Add(new Checker(false, false, 2, 5));
+            //CheckersSet.Add(new Checker(false, false, 4, 3));
+            //CheckersSet.Add(new Checker(false, false, 4, 5));
 
             Board = new Board();
             Board.Draw(CheckersSet);
@@ -269,16 +276,16 @@ namespace Checkers
 
             Thread.Sleep(500);
 
-            var moveStartCoordinate = GetCoordinate(selectCheckerToMoveMessage); //var id = GetCheckerId(moveStartCoordinate);
+            var moveStartCoordinate = GetCoordinate(selectCheckerToMoveMessage); 
             var checkerToMove = GetChecker(moveStartCoordinate);
 
-            while (!CanSelectChecker(checkerToMove))// || id < 0 || )
+            while (!CanSelectChecker(checkerToMove))
             {
                 ClearMessageBar();
                 Console.Write("Error! Cannot select!");
                 Thread.Sleep(1000);
 
-                moveStartCoordinate = GetCoordinate(selectCheckerToMoveMessage); //id = GetCheckerId(moveStartCoordinate);
+                moveStartCoordinate = GetCoordinate(selectCheckerToMoveMessage); 
                 checkerToMove = GetChecker(moveStartCoordinate);
             }
             Move.Coordinates.Add(moveStartCoordinate);
@@ -294,6 +301,34 @@ namespace Checkers
                 moveEndCoordinate = GetCoordinate(selectDestination);
             }
             Move.Coordinates.Add(moveEndCoordinate);
+        }
+
+        public void RemoveBeatenChecker()
+        {
+            var finishX = Move.Coordinates[1].X;
+            var startX = Move.Coordinates[0].X;
+            
+            var finishY = Move.Coordinates[1].Y;
+            var startY = Move.Coordinates[0].Y;
+        
+            var deltaX = finishX - startX;
+            var deltaY = finishY - startY;
+
+            var signX = deltaX/Math.Abs(deltaX);
+            var signY = deltaY/Math.Abs(deltaY);
+
+            for (int p = startX + signX; deltaX < 0 ? (p > finishX) : (p < finishX); p = p + signX)
+            {
+                for (int m = startY + signY; deltaY < 0 ? (m > finishY) : (m < finishY); m = m + signY)
+                {
+                    var coordinate = new Coordinate(p, m);
+        
+                    if (GetChecker(coordinate) != null)
+                    {
+                        CheckersSet.Remove(GetChecker(coordinate));
+                    }
+                }
+            }
         }
 
         public void MoveChecker()
