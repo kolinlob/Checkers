@@ -12,13 +12,17 @@ namespace Checkers
             while (!game.IsGameOver())
             {
                 game.FindCheckersWithTakes();
-                game.SetCoordinatesForMove();
+                game.SetMove();
 
-                if (game.CheckersWithTakes.Count > 0)
+                if (game.PossibleTakes.Count > 0)
                 {
                     game.RemoveTakenChecker();
                 }
                 game.MoveChecker();
+
+                Console.SetCursorPosition(0, 0);
+                game.Board.Draw(game.CheckersSet);
+
                 game.PossibleTakes.Clear();
                 game.SwitchPlayer();
             }
