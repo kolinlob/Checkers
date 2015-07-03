@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Checkers.Test
@@ -68,12 +69,25 @@ namespace Checkers.Test
         [TestMethod]
         public void _004_Cannot_Move_To_White_Cell()
         {
-            var game = new Game();
-            game.Start();
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>
+                {
+                    new Checker(true, true, 0, 1),
+                    new Checker(true, false, 3, 4),                 
+                    new Checker(false, false, 1, 2),
+                    new Checker(false, false, 2, 5),
+                    new Checker(false, false, 4, 5)
+                },
+            };
+            game.CurrentPlayer = game.Player1;
 
-            var adressOld = new Coordinate(0, 1);
-            var adressNew = new Coordinate(2, 2);
-            var expected = game.CanMoveThere(adressOld, adressNew); //not a queen
+            var moveStartCoordinate = new Coordinate(0, 1);
+            var moveEndCoordinate = new Coordinate(2, 2);
+            var expected = game.CanMoveThere(moveStartCoordinate, moveEndCoordinate);
 
             Assert.IsFalse(expected);
         }
@@ -81,12 +95,25 @@ namespace Checkers.Test
         [TestMethod]
         public void _005_Cannot_Move_To_Occupied_Black_Cell()
         {
-            var game = new Game();
-            game.Start();
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>
+                {
+                    new Checker(true, true, 0, 1),
+                    new Checker(true, false, 3, 4),                 
+                    new Checker(false, false, 2, 1),
+                    new Checker(false, false, 2, 5),
+                    new Checker(false, false, 4, 5),
+                }
+            };
+            game.CurrentPlayer = game.Player1;
 
-            var adressOld = new Coordinate(0, 1);
-            var adressNew = new Coordinate(2, 1);
-            var expected = game.CanMoveThere(adressOld, adressNew);
+            var moveStartCoordinate = new Coordinate(0, 1);
+            var moveEndCoordinate = new Coordinate(2, 1);
+            var expected = game.CanMoveThere(moveStartCoordinate, moveEndCoordinate);
 
             Assert.IsFalse(expected);
         }
@@ -94,9 +121,23 @@ namespace Checkers.Test
         [TestMethod]
         public void _006_Game_Is_Over_When_No_Black_Checkers_Remained()
         {
-            var game = new Game();
-            game.Start();
-            game.CheckersSet.RemoveAll(checker => checker.IsWhite == false);
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>
+                {
+                    new Checker(true, true, 0, 7),
+                    new Checker(true, false, 3, 4),                 
+                    new Checker(false, false, 1, 2),
+                    new Checker(false, false, 2, 5),
+                    new Checker(false, false, 4, 5),
+                }
+            };
+            game.CurrentPlayer = game.Player1;
+
+            game.CheckersSet.RemoveAll(checker => !checker.IsWhite);
 
             Assert.IsTrue(game.IsGameOver());
         }
@@ -104,8 +145,22 @@ namespace Checkers.Test
         [TestMethod]
         public void _007_Game_Is_Over_When_No_White_Checkers_Remained()
         {
-            var game = new Game();
-            game.Start();
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>
+                {
+                    new Checker(true, true, 0, 7),
+                    new Checker(true, false, 3, 4),                 
+                    new Checker(false, false, 1, 2),
+                    new Checker(false, false, 2, 5),
+                    new Checker(false, false, 4, 5),
+                }
+            };
+            game.CurrentPlayer = game.Player1;
+
             game.CheckersSet.RemoveAll(checker => checker.IsWhite);
 
             Assert.IsTrue(game.IsGameOver());
@@ -114,25 +169,47 @@ namespace Checkers.Test
         [TestMethod]
         public void _008_Ordinary_Checker_Moves_At_One_Cell_Only()
         {
-            var game = new Game();
-            game.Start();
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>
+                {
+                    new Checker(true, true, 0, 7),
+                    new Checker(true, false, 3, 4),                 
+                    new Checker(false, false, 1, 2),
+                    new Checker(false, false, 2, 5),
+                    new Checker(false, false, 4, 5),
+                }
+            };
+            game.CurrentPlayer = game.Player1;
 
-            game.CurrentPlayer = new FakePlayer(true);
+            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var moveEndCoordinate = game.ConvertIntoCoordinates("D4");
 
-            var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
-            var adressNew = game.ConvertIntoCoordinates("D4");
-
-            var expected = game.IsOneCellMove(adressOld, adressNew);
+            var expected = game.IsOneCellMove(moveStartCoordinate, moveEndCoordinate);
             Assert.IsFalse(expected);
         }
 
         [TestMethod]
         public void _009_Queen_Moves_At_More_than_1_Cell()
         {
-            var game = new Game();
-            game.Start();
-
-            game.CurrentPlayer = new FakePlayer(true);
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>
+                {
+                    new Checker(true, true, 2, 1),
+                    new Checker(true, false, 3, 4),                 
+                    new Checker(false, false, 1, 2),
+                    new Checker(false, false, 2, 5),
+                    new Checker(false, false, 4, 5),
+                }
+            };
+            game.CurrentPlayer = game.Player1;
             
             var input = game.CurrentPlayer.InputCoordinates();
             var moveStartCoordinate = game.ConvertIntoCoordinates(input);
@@ -147,42 +224,85 @@ namespace Checkers.Test
         [TestMethod]
         public void _010_Ordinary_Checkers_Cannot_Move_Backwards()
         {
-            var game = new Game();
-            game.Start();
-
-            game.CurrentPlayer = new FakePlayer(true);
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>
+                {
+                    new Checker(true, true, 2, 1),
+                    new Checker(true, false, 3, 4),                 
+                    new Checker(false, false, 1, 2),
+                    new Checker(false, false, 2, 5),
+                    new Checker(false, false, 4, 5),
+                }
+            };
+            game.CurrentPlayer = game.Player1;
 
             var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
-            var moveEndCoordinate = game.ConvertIntoCoordinates("A7");
+            var moveEndCoordinate = game.ConvertIntoCoordinates("A5");
 
             var expected = game.IsMoveForward(moveStartCoordinate, moveEndCoordinate);
             Assert.IsFalse(expected);
         }
 
         [TestMethod]
-        public void _011_Queen_Move_Only_on_Diagonals()
+        public void _011_Common_Checker_Can_Move_Only_on_Diagonals()
         {
-            var game = new Game();
-            game.Start();
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>
+                {
+                    new Checker(true, true, 2, 1),
+                    new Checker(true, false, 3, 4),                 
+                    new Checker(false, false, 1, 2),
+                    new Checker(false, false, 2, 5),
+                    new Checker(false, false, 4, 5),
+                }
+            };
+            game.CurrentPlayer = game.Player1;
 
-            game.CurrentPlayer = new FakePlayer(true);
+            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var moveEndCoordinate = game.ConvertIntoCoordinates("B4");
+            
+            var currentChecker = game.GetChecker(moveStartCoordinate);
+            currentChecker.IsQueen = false;
 
-
-            var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
-            var adressNew = game.ConvertIntoCoordinates("B4");
-
-            var expected = game.IsDiagonalMove(adressOld, adressNew);
+            var expected = game.IsDiagonalMove(moveStartCoordinate, moveEndCoordinate);
             Assert.IsFalse(expected);
         }
 
         [TestMethod]
-        public void _012_Checker_Can_Take_Opponents_Checkers()
+        public void _012_Queen_Can_Move_Only_on_Diagonals()
         {
-            var game = new Game();
-            game.Start();
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>
+                {
+                    new Checker(true, true, 2, 1),
+                    new Checker(true, false, 3, 4),                 
+                    new Checker(false, false, 1, 2),
+                    new Checker(false, false, 2, 5),
+                    new Checker(false, false, 4, 5),
+                }
+            };
+            game.CurrentPlayer = game.Player1;
 
-            var expected = false;
-            Assert.IsTrue(expected);
+            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var moveEndCoordinate = game.ConvertIntoCoordinates("B4");
+            
+            var currentChecker = game.GetChecker(moveStartCoordinate);
+            currentChecker.IsQueen = true;
+
+            var expected = game.IsDiagonalMove(moveStartCoordinate, moveEndCoordinate);
+            Assert.IsFalse(expected);
         }
 
         [TestMethod]
@@ -195,7 +315,7 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, true, 3, 4),
+                    new Checker(true, false, 3, 4),
                     new Checker(true, false, 4, 5),
 
                     new Checker(false, false, 2, 3),
@@ -203,18 +323,19 @@ namespace Checkers.Test
                     new Checker(false, false, 2, 5)
                 }
             };
-
             game.CurrentPlayer = game.Player1;
+            var checker = game.CheckersSet[0];
+            game.FindPossibleTakes(checker);
 
-            var expected = new List<Coordinate>()
-            {
-                new Coordinate(2, 3),
-                new Coordinate(2, 5),
-            };
+            var actual_1X = game.EnemiesCoordinates[0].X;
+            var actual_1Y = game.EnemiesCoordinates[0].Y;
+            var actual_2X = game.EnemiesCoordinates[1].X;
+            var actual_2Y = game.EnemiesCoordinates[1].Y;
 
-            //   var actual = game.visibleEnemies[0].Coordinates;
-
-            //  CollectionAssert.AreEqual(expected, actual);
+            Assert.AreEqual(actual_1X, 2);
+            Assert.AreEqual(actual_1Y, 3);
+            Assert.AreEqual(actual_2X, 2);
+            Assert.AreEqual(actual_2Y, 5);
         }
 
         [TestMethod]
@@ -235,10 +356,13 @@ namespace Checkers.Test
                     new Checker(false, false, 2, 5)
                 }
             };
+            game.CurrentPlayer = game.Player1;
 
-            //var enemyList = game.FindPossibleTakes(new Coordinate(game.CheckersSet[0].CoordHorizontal, game.CheckersSet[0].CoordVertical));
+            var checker = game.CheckersSet[0];
+            game.FindPossibleTakes(checker);
+            var emptyCellsAreAvailableBehindEnemy = game.PossibleTakes.Any();
 
-            //Assert.IsTrue(game.CanTake());
+            Assert.IsTrue(emptyCellsAreAvailableBehindEnemy);
         }
 
         [TestMethod]
@@ -248,33 +372,34 @@ namespace Checkers.Test
             {
                 Board = new Board(),
                 Player1 = new FakePlayer(true),
-                Player2 = new FakePlayer(false),
-                CurrentPlayer = new FakePlayer(true)
+                Player2 = new FakePlayer(false)
             };
+            game.CurrentPlayer = game.Player2;
 
             game.CreateCheckers(false);
             game.CreateCheckers(true);
 
-            var validAdress = game.CurrentPlayer.InputCoordinates();
-            var adress = game.ConvertIntoCoordinates(validAdress);
-            var coordinate = new Coordinate(adress.X, adress.Y);
+            game.FindCheckersWithTakes();
 
-            var actual = game.GetChecker(coordinate);
-            var expected = new Checker(false, false, 2, 1);
-            Assert.AreEqual(expected, actual);
+            var validAdress = game.CurrentPlayer.InputCoordinates();
+            var moveStartCoordinate = game.ConvertIntoCoordinates(validAdress);
+
+            var checker = game.GetChecker(moveStartCoordinate);
+            var canSelectChecker = game.CanSelectChecker(checker);
+
+            Assert.IsTrue(canSelectChecker);
         }
 
         [TestMethod]
-        //[ExpectedException(typeof(NullReferenceException))]
-        public void _016_Cant_Get_Checker_When_Empty_Cell_Selected()
+        public void _016_Cannot_Get_Any_Checker_If_Empty_Cell_Selected()
         {
             var game = new Game
             {
                 Board = new Board(),
                 Player1 = new FakePlayer(true),
-                Player2 = new FakePlayer(false),
-                CurrentPlayer = new FakePlayer(true)
+                Player2 = new FakePlayer(false)
             };
+            game.CurrentPlayer = game.Player1;
 
             game.CreateCheckers(false);
             game.CreateCheckers(true);
@@ -283,20 +408,22 @@ namespace Checkers.Test
             var adress = game.ConvertIntoCoordinates(validAdress);
             var coordinate = new Coordinate(adress.X, adress.Y);
 
-            var isCheckerAbsentInEmptyCell = (game.GetChecker(coordinate) == null);
-            Assert.IsTrue(isCheckerAbsentInEmptyCell);
+            var checker = game.GetChecker(coordinate);
+            var canSelect = game.CanSelectChecker(checker);
+
+            Assert.IsFalse(canSelect);
         }
 
         [TestMethod]
-        public void _017_Cant_Move_to_Unusable_Cell()
+        public void _017_Cannot_Move_to_Unusable_Cell()
         {
             var game = new Game
             {
                 Board = new Board(),
                 Player1 = new FakePlayer(true),
-                Player2 = new FakePlayer(false),
-                CurrentPlayer = new FakePlayer(true)
+                Player2 = new FakePlayer(false)
             };
+            game.CurrentPlayer = game.Player1;
 
             game.CreateCheckers(false);
             game.CreateCheckers(true);
@@ -323,30 +450,33 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, false, 3, 4), // CHECKER WE TEST
-                    new Checker(true, false, 1, 6),
-                    new Checker(false, false, 1, 2),
-                    new Checker(false, false, 4, 5),
-                    //new Checker(true, false, 5, 6),
-                    new Checker(false, false, 2, 5),
-                    //new Checker(true, false, 1, 2)
-                },
-                CurrentPlayer = new FakePlayer(true)
+                    new Checker(true, false, 3, 4),
+                    new Checker(false, false, 4, 5)
+                }
+            };
+            game.CurrentPlayer = game.Player1;
+
+            var takingMove = new List<Coordinate> {new Coordinate(3, 4), new Coordinate(5, 6)};
+
+            var expectedChecker = game.GetChecker(takingMove[0]);
+            var currentChecker = game.CheckersSet[0];
+
+            var expectedPossibleTakes = new Dictionary<Checker, List<Coordinate>>
+            {
+                {
+                    expectedChecker, takingMove
+                }
             };
 
-            //game.Board.Draw(game.CheckersSet);
+            game.FindPossibleTakes(currentChecker);
 
-            var newMove = new Move();
-            newMove.Coordinates.Add(new Coordinate(2, 3));
-            newMove.Coordinates.Add(new Coordinate(4, 5));
+            var expectedX = expectedPossibleTakes[expectedChecker][1].X; //5
+            var expectedY = expectedPossibleTakes[expectedChecker][1].Y; //6
+            var actualX = game.PossibleTakes[currentChecker][0].X;       //5
+            var actualY = game.PossibleTakes[currentChecker][0].Y;       //6
 
-            var expected = new Dictionary<int, Move> { { 0, newMove } };
-
-            game.FindPossibleTakes(game.CheckersSet[0]);
-
-            var actual = game.PossibleTakes;
-
-            CollectionAssert.AreEqual((System.Collections.ICollection)expected, (System.Collections.ICollection)actual); //references are not equal, hence test fail. However, dictionary is being filled properly, based on debug results
+            Assert.AreEqual(actualX, expectedX);
+            Assert.AreEqual(actualY, expectedY);
         }
 
         [TestMethod]
@@ -359,20 +489,58 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    //new Checker(true, false, 1, 6),
-                    new Checker(true, true, 0, 7),
-                    new Checker(true, false, 3, 4), // CHECKER WE TEST
-                    
+                    new Checker(true, false, 3, 4),                 
                     new Checker(false, false, 1, 2),
                     new Checker(false, false, 2, 5),
                     new Checker(false, false, 4, 5),
-                    //new Checker(true, false, 5, 6),
-                    //new Checker(true, false, 1, 2)
-                },
-                CurrentPlayer = new FakePlayer(true)
+
+                    new Checker(true, true, 7, 0),
+                    new Checker(false, false, 5, 2),
+                    new Checker(false, false, 5, 0),
+                }
             };
+            game.CurrentPlayer = game.Player1;
+
             game.FindCheckersWithTakes();
-            Assert.IsTrue(true);
+            
+            var actual_1X = game.CheckersWithTakes[0].CoordHorizontal;
+            var actual_1Y = game.CheckersWithTakes[0].CoordVertical;
+
+            var actual_2X = game.CheckersWithTakes[1].CoordHorizontal;
+            var actual_2Y = game.CheckersWithTakes[1].CoordVertical;
+
+            Assert.AreEqual(actual_1X, 3);
+            Assert.AreEqual(actual_1Y, 4);
+            Assert.AreEqual(actual_2X, 7);
+            Assert.AreEqual(actual_2Y, 0);
+        }
+
+        [TestMethod]
+        public void _020_Checker_Can_Jump_Over_FoeChecker()
+        {
+            var expected = false;
+            Assert.IsTrue(expected);
+        }
+
+        [TestMethod]
+        public void _021_Cannot_Select_Blocked_Checker()
+        {
+            var expected = false;
+            Assert.IsTrue(expected);
+        }
+
+        [TestMethod]
+        public void _022_Can_Remove_Taken_Checker()
+        {
+            var expected = false;
+            Assert.IsTrue(expected);
+        }
+
+        [TestMethod]
+        public void _023_Can_Make_Compound_Move()
+        {
+            var expected = false;
+            Assert.IsTrue(expected);
         }
     }
 }

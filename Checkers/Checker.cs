@@ -23,16 +23,6 @@ namespace Checkers
             }
         }
 
-        public override int GetHashCode()
-        {
-            return String.Format("({0} {1} {2} {3})", IsWhite, IsQueen, CoordHorizontal, CoordVertical).GetHashCode();
-        }
-
-        public override bool Equals(object other)
-        {
-            return GetHashCode() == other.GetHashCode();
-        }
-
         public void GetQueenSymbol()
         {
             symbol = '☼';          
@@ -47,6 +37,16 @@ namespace Checkers
         protected void SetColor(ConsoleColor color)
         {
             Console.ForegroundColor = color;
+        }
+
+        public override int GetHashCode()
+        {
+            return String.Format("({0} {1} {2} {3})", IsWhite, IsQueen, CoordHorizontal, CoordVertical).GetHashCode();
+        }
+
+        public override bool Equals(object other)
+        {
+            return GetHashCode() == other.GetHashCode();
         }
     }
 }

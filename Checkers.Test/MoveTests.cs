@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
 namespace Checkers.Test
@@ -18,22 +19,34 @@ namespace Checkers.Test
         [TestMethod]
         public void _002_Can_Make_Move()
         {
-            var game = new Game();
-            game.Start();
-            game.CurrentPlayer = new FakePlayer(true);
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>
+                {
+                    new Checker(true, false, 2, 1),
+                    new Checker(true, false, 3, 4),                 
+                    new Checker(false, false, 1, 2),
+                    new Checker(false, false, 2, 5),
+                    new Checker(false, false, 4, 5),
+                }
+            };
+            game.CurrentPlayer = game.Player1;
 
             game.Move = new Move();
 
-            var adressOld = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
-            game.Move.Coordinates.Add(adressOld);
+            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            game.Move.Coordinates.Add(moveStartCoordinate);
 
-            var adressNew = game.ConvertIntoCoordinates("c5");
-            game.Move.Coordinates.Add(adressNew);
+            var moveEndCoordinate = game.ConvertIntoCoordinates("c5");
+            game.Move.Coordinates.Add(moveEndCoordinate);
 
             game.MoveChecker();
 
-            var actual = game.GetChecker(adressNew);
-            var expected = new Checker(false, false, 3, 2);
+            var actual = game.GetChecker(moveEndCoordinate);
+            var expected = new Checker(true, false, 3, 2);
 
             Assert.AreEqual(expected, actual);
         }

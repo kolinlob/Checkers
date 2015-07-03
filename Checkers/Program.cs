@@ -8,19 +8,21 @@ namespace Checkers
         {
             var game = new Game();
             game.Start();
-            
-            while (true)//!game.IsGameOver())
+
+            while (!game.IsGameOver())
             {
                 game.FindCheckersWithTakes();
                 game.SetCoordinatesForMove();
-                if (game.CheckersWithTakes.Count>0)
+
+                if (game.CheckersWithTakes.Count > 0)
                 {
-                    game.RemoveBeatenChecker();    
+                    game.RemoveTakenChecker();
                 }
                 game.MoveChecker();
                 game.PossibleTakes.Clear();
                 game.SwitchPlayer();
             }
+            game.ClearMessageBar();
             Console.SetCursorPosition(50, 10);
             Console.Write("Game Over");
             Console.ReadLine();
