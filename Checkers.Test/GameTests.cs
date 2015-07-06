@@ -503,11 +503,11 @@ namespace Checkers.Test
 
             game.FindCheckersWithTakes();
             
-            var actual_1X = game.CheckersWithTakes[0].CoordHorizontal;
-            var actual_1Y = game.CheckersWithTakes[0].CoordVertical;
+            var actual_1X = game.CheckersWithTakes[0].Coordinate.X;
+            var actual_1Y = game.CheckersWithTakes[0].Coordinate.Y;
 
-            var actual_2X = game.CheckersWithTakes[1].CoordHorizontal;
-            var actual_2Y = game.CheckersWithTakes[1].CoordVertical;
+            var actual_2X = game.CheckersWithTakes[1].Coordinate.X;
+            var actual_2Y = game.CheckersWithTakes[1].Coordinate.Y;
 
             Assert.AreEqual(actual_1X, 3);
             Assert.AreEqual(actual_1Y, 4);

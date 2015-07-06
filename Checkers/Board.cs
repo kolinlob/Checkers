@@ -48,12 +48,12 @@ namespace Checkers
                         Console.Write("  ");
 
                         var checkerExists =
-                                    checkersSet.Exists(checker => checker.CoordHorizontal == row
-                                                               && checker.CoordVertical   == column);
+                                    checkersSet.Exists(checker => checker.Coordinate.X == row
+                                                               && checker.Coordinate.Y == column);
 
                         if (checkerExists)
                         {
-                            var checker = checkersSet.Find(c => c.CoordHorizontal == row && c.CoordVertical == column);
+                            var checker = checkersSet.Find(c => c.Coordinate.X == row && c.Coordinate.Y == column);
                             board[row, column].DrawCell(checker);
                         }
                         else

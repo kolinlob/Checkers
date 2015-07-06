@@ -88,7 +88,7 @@ namespace Checkers
                     if ((i % 2 == 0 && j % 2 != 0) ||
                         (i % 2 != 0 && j % 2 == 0))
                     {
-                        CheckersSet.Add(new Checker(isWhite, false, i, j));
+                        CheckersSet.Add(new Checker(isWhite, false, new Coordinate(i, j)));
                     }
                 }
             }
@@ -135,8 +135,8 @@ namespace Checkers
 
         public Checker GetChecker(Coordinate coordinate)
         {
-            return CheckersSet.Find(checker => checker.CoordHorizontal == coordinate.X
-                                            && checker.CoordVertical == coordinate.Y);
+            return CheckersSet.Find(checker => checker.Coordinate.X == coordinate.X
+                                            && checker.Coordinate.Y == coordinate.Y);
         }
 
         public bool CanSelectChecker(Checker checker)
@@ -238,8 +238,8 @@ namespace Checkers
 
         public void CheckerBecomesQueen(Checker checker)
         {
-            if ((checker.IsWhite || checker.CoordHorizontal != 7)
-            && (!checker.IsWhite || checker.CoordHorizontal != 0))
+            if ((checker.IsWhite || checker.Coordinate.X != 7)
+            && (!checker.IsWhite || checker.Coordinate.X != 0))
                 return;
 
             checker.IsQueen = true;
@@ -386,8 +386,8 @@ namespace Checkers
             {
                 var coordinateNew = Move.Coordinates[1];
 
-                checker.CoordHorizontal = coordinateNew.X;
-                checker.CoordVertical = coordinateNew.Y;
+                checker.Coordinate.X = coordinateNew.X;
+                checker.Coordinate.Y = coordinateNew.Y;
 
                 CheckerBecomesQueen(checker);
                 RemoveTakenChecker();
@@ -408,8 +408,8 @@ namespace Checkers
                 new [] {1,   1}  //down right
             };
 
-            var currentCoordinate = new Coordinate(currentChecker.CoordHorizontal,
-                                                   currentChecker.CoordVertical);
+            var currentCoordinate = new Coordinate(currentChecker.Coordinate.X,
+                                                   currentChecker.Coordinate.Y);
 
             EnemiesCoordinates = new List<Coordinate>();
             var emptyCellsBehindEnemy = new List<Coordinate>();
@@ -492,8 +492,8 @@ namespace Checkers
 
             var isDirectionBlocked = new bool[4];
 
-            var x = checker.CoordHorizontal;
-            var y = checker.CoordVertical;
+            var x = checker.Coordinate.X;
+            var y = checker.Coordinate.Y;
 
             for (var i = 0; i < directions.Length; i++)
             {
