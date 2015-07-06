@@ -6,9 +6,12 @@ namespace Checkers
     {
         static void Main()
         {
+            Console.WindowWidth = 90;
+            Console.WindowHeight = 30;
+
             var game = new Game();
             game.Start();
-
+            
             while (!game.IsGameOver())
             {
                 game.FindCheckersWithTakes();

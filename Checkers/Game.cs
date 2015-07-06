@@ -25,8 +25,8 @@ namespace Checkers
             Player2 = new HumanPlayer(false);
             CurrentPlayer = Player1;
 
-            //CreateCheckers(false);
-            //CreateCheckers(true);
+            CreateCheckers(false);
+            CreateCheckers(true);
 
 
             // TEST SITUATION #1
@@ -51,10 +51,11 @@ namespace Checkers
             //            CheckersSet.Add(new Checker(false, false, 4, 5));
 
             // TEST SITUATION #4 - compound move
-            CheckersSet.Add(new Checker(true, false, 4, 3)); // CHECKER WE TEST
-            CheckersSet.Add(new Checker(false, false, 3, 4));
-            CheckersSet.Add(new Checker(false, false, 1, 4));
-            CheckersSet.Add(new Checker(false, false, 1, 2));
+            //CheckersSet.Add(new Checker(true, false, 4, 3)); // CHECKER WE TEST
+            //CheckersSet.Add(new Checker(false, false, 3, 4));
+            //CheckersSet.Add(new Checker(false, false, 1, 4));
+            //CheckersSet.Add(new Checker(false, false, 1, 2));
+            //CheckersSet.Add(new Checker(false, false, 3, 2));
 
 
             // TEST SITUATION #5 - the only white checker is blocked
@@ -279,32 +280,29 @@ namespace Checkers
         public void SetMove()
         {
             SelectChecker();
-            SetDestination(Move.Coordinates[0]);
 
-
-            PossibleTakes.Clear();
-
-            var checker = GetChecker(Move.Coordinates[0]);
-            var futureChecker = new Checker(checker.IsWhite, checker.IsQueen, Move.Coordinates[1].X, Move.Coordinates[1].Y);
-
-            CheckersSet.Add(futureChecker);
-
-            FindPossibleTakes(futureChecker);
-            //        PossibleTakes[futureChecker].Remove(Move.Coordinates[0]);
-
-            if (PossibleTakes.Count > 0)
+            if (PossibleTakes.Values.Count == 0)
             {
-                var coordinate = new Coordinate(futureChecker.CoordHorizontal, futureChecker.CoordVertical);
-
-                SetDestination(coordinate);
-                CheckersSet.Remove(futureChecker);
+                SetDestination(Move.Coordinates[0]);
+                MoveChecker();
             }
 
+            else
+            {
+                while (PossibleTakes.Values.Count > 0)
+                {
+                    Checker currentChecker = GetChecker(Move.Coordinates[0]);
+
+                    SetDestination(Move.Coordinates[0]);
+                    PossibleTakes.Clear();
+                    MoveChecker();
+                    FindPossibleTakes(currentChecker);
+                }
+            }
         }
 
         public void SelectChecker()
         {
-
             const string selectCheckerToMoveMessage = "Choose a checker: ";
 
             Move = new Move();
@@ -327,28 +325,14 @@ namespace Checkers
                 checkerToMove = GetChecker(moveStartCoordinate);
             }
             Move.Coordinates.Add(moveStartCoordinate);
-
         }
-
-
+        
         public void SetDestination(Coordinate coordinate)
         {
             const string selectDestination = "Target cell: ";
             const string cantMoveHereMessage = "Error! Wrong move!";
 
             Coordinate moveStartCoordinate = coordinate;
-
-
-            //            if (Move.Coordinates.Count > 1)
-            //            {
-            //                int index = Move.Coordinates.IndexOf(Move.Coordinates.Last());
-            //                moveStartCoordinate = Move.Coordinates[index];
-            //            }
-            //            else
-            //            {
-            //                moveStartCoordinate = Move.Coordinates[0];
-            //            }
-
 
             var moveEndCoordinate = GetCoordinate(selectDestination);
 
@@ -409,9 +393,8 @@ namespace Checkers
                 RemoveTakenChecker();
                 Move.Coordinates.RemoveAt(0);
               
-
-                //                Console.SetCursorPosition(0, 0);
-                //                Board.Draw(CheckersSet);
+                Console.SetCursorPosition(0, 0);
+                Board.Draw(CheckersSet);
             }
         }
 
@@ -475,7 +458,7 @@ namespace Checkers
                     }
                 }
             }
-            if (EnemiesCoordinates.Count > 0 && !PossibleTakes.ContainsKey(currentChecker))
+            if (EnemiesCoordinates.Count > 0 && !PossibleTakes.ContainsKey(currentChecker) && emptyCellsBehindEnemy.Count > 0)
             {
                 PossibleTakes.Add(currentChecker, emptyCellsBehindEnemy);
             }
