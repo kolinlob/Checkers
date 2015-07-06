@@ -4,7 +4,7 @@ namespace Checkers
 {
     public class Coordinate
     {
-        public int[] CellAddress = new int[2];
+        public readonly int[] CellAddress = new int[2];
 
         public int X
         {
