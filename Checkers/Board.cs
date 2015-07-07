@@ -60,8 +60,6 @@ namespace Checkers
                         {
                             board[row, column].DrawEmptyCell();
                         }
-
-                        Console.ForegroundColor = ConsoleColor.White;
                         Console.Write("  ");
                     }
                     else
@@ -72,7 +70,7 @@ namespace Checkers
                     Console.BackgroundColor = ConsoleColor.Black;
                 }
                 Console.BackgroundColor = ConsoleColor.Black;
-                Console.ForegroundColor = ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.Green;
                 DrawRowNum(row);
                 DrawMargin(row);
             }
@@ -86,7 +84,8 @@ namespace Checkers
             Console.Write("     ");
 
             for (var column = 0; column < board.GetLength(1); column++)
-            {
+            {   
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write("  " + Convert.ToChar(column + 65) + "  ");
             }
             Console.WriteLine();

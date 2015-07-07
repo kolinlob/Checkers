@@ -12,7 +12,7 @@ namespace Checkers.Test
             var game = new Game();
             var validInput = new FakePlayer(true).InputCoordinates();
 
-            var expectedChecker = new Checker(false, false, 2, 1);
+            var expectedChecker = new Checker(false, false, new Coordinate(2, 1));
 
             game.CreateCheckers(false);
 
@@ -32,11 +32,11 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, true, 2, 1),
-                    new Checker(true, false, 3, 4),                 
-                    new Checker(false, false, 1, 2),
-                    new Checker(false, false, 2, 5),
-                    new Checker(false, false, 4, 5),
+                    new Checker(true, true,   new Coordinate(2, 1)),
+                    new Checker(true, false,  new Coordinate(3, 4)),                 
+                    new Checker(false, false, new Coordinate(1, 2)),
+                    new Checker(false, false, new Coordinate(2, 5)),
+                    new Checker(false, false, new Coordinate(4, 5)),
                 }
             };
             game.CurrentPlayer = game.Player1;
@@ -57,11 +57,11 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, true, 2, 1),
-                    new Checker(true, false, 3, 4),                 
-                    new Checker(false, false, 1, 2),
-                    new Checker(false, false, 2, 5),
-                    new Checker(false, false, 4, 5),
+                    new Checker(true, true,   new Coordinate(2, 1)),
+                    new Checker(true, false,  new Coordinate(3, 4)),                 
+                    new Checker(false, false, new Coordinate(1, 2)),
+                    new Checker(false, false, new Coordinate(2, 5)),
+                    new Checker(false, false, new Coordinate(4, 5)),
                 }
             };
             game.CurrentPlayer = game.Player2;

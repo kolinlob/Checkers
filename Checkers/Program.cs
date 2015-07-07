@@ -6,6 +6,7 @@ namespace Checkers
     {
         static void Main()
         {
+            Console.Title = "ITLabs - AndriiCheckers v1.0";
             Console.WindowWidth = 90;
             Console.WindowHeight = 30;
 

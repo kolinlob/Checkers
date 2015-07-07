@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -24,18 +23,18 @@ namespace Checkers.Test
 
             var expected = new List<Checker>
             {
-                new Checker(false, false, 0, 1),
-                new Checker(false, false, 0, 3),
-                new Checker(false, false, 0, 5),
-                new Checker(false, false, 0, 7),
-                new Checker(false, false, 1, 0),
-                new Checker(false, false, 1, 2),
-                new Checker(false, false, 1, 4),
-                new Checker(false, false, 1, 6),
-                new Checker(false, false, 2, 1),
-                new Checker(false, false, 2, 3),
-                new Checker(false, false, 2, 5),
-                new Checker(false, false, 2, 7)           
+                new Checker(false, false, new Coordinate(0, 1)),
+                new Checker(false, false, new Coordinate(0, 3)),
+                new Checker(false, false, new Coordinate(0, 5)),
+                new Checker(false, false, new Coordinate(0, 7)),
+                new Checker(false, false, new Coordinate(1, 0)),
+                new Checker(false, false, new Coordinate(1, 2)),
+                new Checker(false, false, new Coordinate(1, 4)),
+                new Checker(false, false, new Coordinate(1, 6)),
+                new Checker(false, false, new Coordinate(2, 1)),
+                new Checker(false, false, new Coordinate(2, 3)),
+                new Checker(false, false, new Coordinate(2, 5)),
+                new Checker(false, false, new Coordinate(2, 7))           
             };
 
             CollectionAssert.AreEqual(expected, game.CheckersSet);
@@ -49,18 +48,18 @@ namespace Checkers.Test
 
             var expected = new List<Checker>
             {
-                new Checker(true, false, 5, 0),
-                new Checker(true, false, 5, 2),
-                new Checker(true, false, 5, 4),
-                new Checker(true, false, 5, 6),
-                new Checker(true, false, 6, 1),
-                new Checker(true, false, 6, 3),
-                new Checker(true, false, 6, 5),
-                new Checker(true, false, 6, 7),
-                new Checker(true, false, 7, 0),
-                new Checker(true, false, 7, 2),
-                new Checker(true, false, 7, 4),
-                new Checker(true, false, 7, 6)
+                new Checker(true, false, new Coordinate(5, 0)),
+                new Checker(true, false, new Coordinate(5, 2)),
+                new Checker(true, false, new Coordinate(5, 4)),
+                new Checker(true, false, new Coordinate(5, 6)),
+                new Checker(true, false, new Coordinate(6, 1)),
+                new Checker(true, false, new Coordinate(6, 3)),
+                new Checker(true, false, new Coordinate(6, 5)),
+                new Checker(true, false, new Coordinate(6, 7)),
+                new Checker(true, false, new Coordinate(7, 0)),
+                new Checker(true, false, new Coordinate(7, 2)),
+                new Checker(true, false, new Coordinate(7, 4)),
+                new Checker(true, false, new Coordinate(7, 6))
             };
 
             CollectionAssert.AreEqual(expected, game.CheckersSet);
@@ -76,11 +75,11 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, true, 0, 1),
-                    new Checker(true, false, 3, 4),                 
-                    new Checker(false, false, 1, 2),
-                    new Checker(false, false, 2, 5),
-                    new Checker(false, false, 4, 5)
+                    new Checker(true, true,   new Coordinate(0, 1)),
+                    new Checker(true, false,  new Coordinate(3, 4)),                 
+                    new Checker(false, false, new Coordinate(1, 2)),
+                    new Checker(false, false, new Coordinate(2, 5)),
+                    new Checker(false, false, new Coordinate(4, 5))
                 },
             };
             game.CurrentPlayer = game.Player1;
@@ -102,11 +101,11 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, true, 0, 1),
-                    new Checker(true, false, 3, 4),                 
-                    new Checker(false, false, 2, 1),
-                    new Checker(false, false, 2, 5),
-                    new Checker(false, false, 4, 5),
+                    new Checker(true, true,   new Coordinate(0, 1)),
+                    new Checker(true, false,  new Coordinate(3, 4)),                 
+                    new Checker(false, false, new Coordinate(2, 1)),
+                    new Checker(false, false, new Coordinate(2, 5)),
+                    new Checker(false, false, new Coordinate(4, 5)),
                 }
             };
             game.CurrentPlayer = game.Player1;
@@ -128,11 +127,11 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, true, 0, 7),
-                    new Checker(true, false, 3, 4),                 
-                    new Checker(false, false, 1, 2),
-                    new Checker(false, false, 2, 5),
-                    new Checker(false, false, 4, 5),
+                    new Checker(true, true,   new Coordinate(0, 7)),
+                    new Checker(true, false,  new Coordinate(3, 4)),                 
+                    new Checker(false, false, new Coordinate(1, 2)),
+                    new Checker(false, false, new Coordinate(2, 5)),
+                    new Checker(false, false, new Coordinate(4, 5)),
                 }
             };
             game.CurrentPlayer = game.Player1;
@@ -152,11 +151,11 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, true, 0, 7),
-                    new Checker(true, false, 3, 4),                 
-                    new Checker(false, false, 1, 2),
-                    new Checker(false, false, 2, 5),
-                    new Checker(false, false, 4, 5),
+                    new Checker(true, true,   new Coordinate(0, 7)),
+                    new Checker(true, false,  new Coordinate(3, 4)),                 
+                    new Checker(false, false, new Coordinate(1, 2)),
+                    new Checker(false, false, new Coordinate(2, 5)),
+                    new Checker(false, false, new Coordinate(4, 5)),
                 }
             };
             game.CurrentPlayer = game.Player1;
@@ -176,11 +175,11 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, true, 0, 7),
-                    new Checker(true, false, 3, 4),                 
-                    new Checker(false, false, 1, 2),
-                    new Checker(false, false, 2, 5),
-                    new Checker(false, false, 4, 5),
+                    new Checker(true, true,   new Coordinate(0, 7)),
+                    new Checker(true, false,  new Coordinate(3, 4)),                 
+                    new Checker(false, false, new Coordinate(1, 2)),
+                    new Checker(false, false, new Coordinate(2, 5)),
+                    new Checker(false, false, new Coordinate(4, 5)),
                 }
             };
             game.CurrentPlayer = game.Player1;
@@ -202,11 +201,11 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, true, 2, 1),
-                    new Checker(true, false, 3, 4),                 
-                    new Checker(false, false, 1, 2),
-                    new Checker(false, false, 2, 5),
-                    new Checker(false, false, 4, 5),
+                    new Checker(true, true,   new Coordinate(2, 1)),
+                    new Checker(true, false,  new Coordinate(3, 4)),                 
+                    new Checker(false, false, new Coordinate(1, 2)),
+                    new Checker(false, false, new Coordinate(2, 5)),
+                    new Checker(false, false, new Coordinate(4, 5)),
                 }
             };
             game.CurrentPlayer = game.Player1;
@@ -231,11 +230,11 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, true, 2, 1),
-                    new Checker(true, false, 3, 4),                 
-                    new Checker(false, false, 1, 2),
-                    new Checker(false, false, 2, 5),
-                    new Checker(false, false, 4, 5),
+                    new Checker(true, true,   new Coordinate(2, 1)),
+                    new Checker(true, false,  new Coordinate(3, 4)),                 
+                    new Checker(false, false, new Coordinate(1, 2)),
+                    new Checker(false, false, new Coordinate(2, 5)),
+                    new Checker(false, false, new Coordinate(4, 5)),
                 }
             };
             game.CurrentPlayer = game.Player1;
@@ -257,11 +256,11 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, true, 2, 1),
-                    new Checker(true, false, 3, 4),                 
-                    new Checker(false, false, 1, 2),
-                    new Checker(false, false, 2, 5),
-                    new Checker(false, false, 4, 5),
+                    new Checker(true, true,   new Coordinate(2, 1)),
+                    new Checker(true, false,  new Coordinate(3, 4)),                 
+                    new Checker(false, false, new Coordinate(1, 2)),
+                    new Checker(false, false, new Coordinate(2, 5)),
+                    new Checker(false, false, new Coordinate(4, 5)),
                 }
             };
             game.CurrentPlayer = game.Player1;
@@ -286,11 +285,11 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, true, 2, 1),
-                    new Checker(true, false, 3, 4),                 
-                    new Checker(false, false, 1, 2),
-                    new Checker(false, false, 2, 5),
-                    new Checker(false, false, 4, 5),
+                    new Checker(true, true,   new Coordinate(2, 1)),
+                    new Checker(true, false,  new Coordinate(3, 4)),                 
+                    new Checker(false, false, new Coordinate(1, 2)),
+                    new Checker(false, false, new Coordinate(2, 5)),
+                    new Checker(false, false, new Coordinate(4, 5)),
                 }
             };
             game.CurrentPlayer = game.Player1;
@@ -315,12 +314,12 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, false, 3, 4),
-                    new Checker(true, false, 4, 5),
+                    new Checker(true, false,  new Coordinate(3, 4)),
+                    new Checker(true, false,  new Coordinate(4, 5)),
 
-                    new Checker(false, false, 2, 3),
-                    new Checker(false, false, 6, 7),
-                    new Checker(false, false, 2, 5)
+                    new Checker(false, false, new Coordinate(2, 3)),
+                    new Checker(false, false, new Coordinate(6, 7)),
+                    new Checker(false, false, new Coordinate(2, 5))
                 }
             };
             game.CurrentPlayer = game.Player1;
@@ -348,12 +347,11 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, false, 3, 4), // CHECKER WE TEST
-                    new Checker(true, false, 4, 5),
-
-                    new Checker(false, false, 2, 3),
-                    new Checker(false, false, 6, 7),
-                    new Checker(false, false, 2, 5)
+                    new Checker(true, false,  new Coordinate(3, 4)), // CHECKER WE TEST
+                    new Checker(true, false,  new Coordinate(4, 5)),
+                    new Checker(false, false, new Coordinate(2, 3)),
+                    new Checker(false, false, new Coordinate(6, 7)),
+                    new Checker(false, false, new Coordinate(2, 5))
                 }
             };
             game.CurrentPlayer = game.Player1;
@@ -450,8 +448,8 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, false, 3, 4),
-                    new Checker(false, false, 4, 5)
+                    new Checker(true, false,  new Coordinate(3, 4)),
+                    new Checker(false, false, new Coordinate(4, 5))
                 }
             };
             game.CurrentPlayer = game.Player1;
@@ -489,14 +487,13 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, false, 3, 4),                 
-                    new Checker(false, false, 1, 2),
-                    new Checker(false, false, 2, 5),
-                    new Checker(false, false, 4, 5),
-
-                    new Checker(true, true, 7, 0),
-                    new Checker(false, false, 5, 2),
-                    new Checker(false, false, 5, 0),
+                    new Checker(true, false,  new Coordinate(3, 4)),                 
+                    new Checker(false, false, new Coordinate(1, 2)),
+                    new Checker(false, false, new Coordinate(2, 5)),
+                    new Checker(false, false, new Coordinate(4, 5)),
+                    new Checker(true, true,   new Coordinate(7, 0)),
+                    new Checker(false, false, new Coordinate(5, 2)),
+                    new Checker(false, false, new Coordinate(5, 0)),
                 }
             };
             game.CurrentPlayer = game.Player1;

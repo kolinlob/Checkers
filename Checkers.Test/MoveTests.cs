@@ -26,11 +26,11 @@ namespace Checkers.Test
                 Player2 = new FakePlayer(false),
                 CheckersSet = new List<Checker>
                 {
-                    new Checker(true, false, 2, 1),
-                    new Checker(true, false, 3, 4),                 
-                    new Checker(false, false, 1, 2),
-                    new Checker(false, false, 2, 5),
-                    new Checker(false, false, 4, 5),
+                    new Checker(true, false,  new Coordinate(2, 1)),
+                    new Checker(true, false,  new Coordinate(3, 4)),                 
+                    new Checker(false, false, new Coordinate(1, 2)),
+                    new Checker(false, false, new Coordinate(2, 5)),
+                    new Checker(false, false, new Coordinate(4, 5)),
                 }
             };
             game.CurrentPlayer = game.Player1;
@@ -46,7 +46,7 @@ namespace Checkers.Test
             game.MoveChecker();
 
             var actual = game.GetChecker(moveEndCoordinate);
-            var expected = new Checker(true, false, 3, 2);
+            var expected = new Checker(true, false, new Coordinate(3, 2));
 
             Assert.AreEqual(expected, actual);
         }

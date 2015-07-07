@@ -26,7 +26,7 @@ namespace Checkers
 
         public override int GetHashCode()
         {
-            return String.Format("({0})", CellAddress).GetHashCode();
+            return String.Format("({0} {1})", X, Y).GetHashCode();
         }
 
         public override bool Equals(object other)
