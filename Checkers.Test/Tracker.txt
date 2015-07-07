@@ -1,15 +1,15 @@
 ﻿POSSIBLE IMPROVEMENTS:
 
-* 1. Create a Coordinate class - int array
+* 1. Create a Coordinate class - int[]
 * 2. Create a Coordinate field for a checker
 * 3. Extend ExcludeNontakableEnemies() for a Queen search
 * 4. CanSelectChecker проверяет что у шашки есть куда ходить - она не заблокирована другими шашками или границам поля
 * 5. GetChecker() добавлен, принимает координату и возвращает шашку - чтобы избегать промежуточного мансирования с GetCheckerId()
 * 6. SwitchPlayer() приукрасил
-7. добавить строку, где будет отображаться общий текущий ход игрока, например: "C5-D6" или "C5-E7-F5" и этот текст будет обновляться по мере ввода
-8a. Убрать координаты из шашки. Достаточно координат клетки. Клетка и есть координата. (?)
-8b. А что если в шашке заменить public int CoordHorizontal, public int CoordVertical на Coordinate coordinate?
-9.  А длинный ход (compound move) еще работает? надо бы его не забыть учесть!
+* 7. Заменили public int CoordHorizontal, public int CoordVertical на Coordinate coordinate
+* 8. Длинный ход (compound move) добавлен
+9. Добавить строку, где будет отображаться общий текущий ход игрока, например: "C5-D6" или "C5-E7-F5" и этот текст будет обновляться по мере ввода
+10. Убрать координаты из шашки. Достаточно координат клетки. Клетка и есть координата. (?) - 
 
 ...
 99. подумать о low coupling - high cohesion
