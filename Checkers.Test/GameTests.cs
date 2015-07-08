@@ -515,29 +515,157 @@ namespace Checkers.Test
         [TestMethod]
         public void _020_Checker_Can_Jump_Over_FoeChecker()
         {
-            var expected = false;
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>
+                {
+                    new Checker(true, false,  new Coordinate(2, 1)),                 
+                    new Checker(false, false, new Coordinate(1, 2)),
+                }
+            };
+            game.CurrentPlayer = game.Player1;
+
+            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var moveEndCoordinate = game.ConvertIntoCoordinates("D8");
+
+            game.FindCheckersWithTakes();
+
+            var expected = game.CanMoveThere(moveStartCoordinate, moveEndCoordinate);
             Assert.IsTrue(expected);
         }
 
         [TestMethod]
         public void _021_Cannot_Select_Blocked_Checker()
         {
-            var expected = false;
-            Assert.IsTrue(expected);
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>()
+            };
+
+            game.CurrentPlayer = game.Player1;
+
+            game.CreateCheckers(false);
+            game.CreateCheckers(true);
+
+            var checker = game.CheckersSet.Last();
+
+            game.FindCheckersWithTakes();
+
+            var expected = game.CanSelectChecker(checker);
+            Assert.IsFalse(expected);
         }
 
         [TestMethod]
         public void _022_Can_Remove_Taken_Checker()
         {
-            var expected = false;
-            Assert.IsTrue(expected);
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>
+                {
+                    new Checker(true, false,  new Coordinate(2, 1)),                 
+                    new Checker(false, false, new Coordinate(1, 2)),
+                }
+            };
+            game.CurrentPlayer = game.Player1;
+
+            game.FindCheckersWithTakes();
+
+            game.Move = new Move();
+
+            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            game.Move.Coordinates.Add(moveStartCoordinate);
+
+            var moveEndCoordinate = game.ConvertIntoCoordinates("D8");
+            game.Move.Coordinates.Add(moveEndCoordinate);
+
+            game.RemoveTakenChecker();
+
+            var expected = game.GetChecker(game.ConvertIntoCoordinates("C7"));
+            
+            Assert.IsNull(expected);
         }
 
         [TestMethod]
         public void _023_Can_Make_Compound_Move()
         {
-            var expected = false;
-            Assert.IsTrue(expected);
+            var game = new Game
+            {
+                Board = new Board(),
+                Player1 = new FakePlayer(true),
+                Player2 = new FakePlayer(false),
+                CheckersSet = new List<Checker>
+                {
+                    new Checker(true, false,  new Coordinate(4, 3)), // CHECKER WE TEST
+                    new Checker(false, false, new Coordinate(3, 4)),
+                    new Checker(false, false, new Coordinate(1, 4)),
+                    new Checker(false, false, new Coordinate(1, 2)),
+                    new Checker(false, false, new Coordinate(3, 2)),
+                }
+            };
+            game.CurrentPlayer = game.Player1;
+
+            game.FindCheckersWithTakes();
+
+            game.Move = new Move();
+
+            var moveStartCoordinate1 = game.ConvertIntoCoordinates("D4");
+            game.Move.Coordinates.Add(moveStartCoordinate1);
+
+            var moveEndCoordinate1 = game.ConvertIntoCoordinates("F6");
+            game.Move.Coordinates.Add(moveEndCoordinate1);
+
+            game.MoveChecker();
+            game.PossibleTakes.Clear();
+            game.FindCheckersWithTakes();
+
+            var moveEndCoordinate2 = game.ConvertIntoCoordinates("D8");
+            game.Move.Coordinates.Add(moveEndCoordinate2);
+
+            game.MoveChecker();
+            game.PossibleTakes.Clear();
+            game.FindCheckersWithTakes();
+
+            var moveEndCoordinate3 = game.ConvertIntoCoordinates("B6");
+            game.Move.Coordinates.Add(moveEndCoordinate3);
+
+            game.MoveChecker();
+            game.PossibleTakes.Clear();
+            game.FindCheckersWithTakes();
+
+            var moveEndCoordinate4 = game.ConvertIntoCoordinates("D4");
+            game.Move.Coordinates.Add(moveEndCoordinate4);
+
+            game.MoveChecker();
+            game.PossibleTakes.Clear();
+            game.FindCheckersWithTakes();
+
+
+            var noPossibleTakes = game.PossibleTakes.Keys.Count == 0;
+            Assert.IsTrue(noPossibleTakes);
+
+            var checkerInRightPlace = game.CheckersSet[0].Coordinate.X == 4 && game.CheckersSet[0].Coordinate.Y == 3;
+            Assert.IsTrue(checkerInRightPlace);
+
+            var checker1IsTaken = game.GetChecker(game.ConvertIntoCoordinates("E5"));
+            Assert.IsNull(checker1IsTaken);
+
+            var checker2IsTaken = game.GetChecker(game.ConvertIntoCoordinates("E7"));
+            Assert.IsNull(checker2IsTaken);
+
+            var checker3IsTaken = game.GetChecker(game.ConvertIntoCoordinates("C7"));
+            Assert.IsNull(checker3IsTaken);
+
+            var checker4IsTaken = game.GetChecker(game.ConvertIntoCoordinates("C5"));
+            Assert.IsNull(checker4IsTaken);
         }
     }
 }

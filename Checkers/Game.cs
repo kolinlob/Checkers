@@ -25,8 +25,8 @@ namespace Checkers
             Player2 = new HumanPlayer(false);
             CurrentPlayer = Player1;
 
-            CreateCheckers(false);
-            CreateCheckers(true);
+            //CreateCheckers(false);
+            //CreateCheckers(true);
 
             // TEST SITUATION #1
             //CheckersSet.Add(new Checker(true, true, 2, 3)); // CHECKER WE TEST
@@ -50,11 +50,11 @@ namespace Checkers
             //CheckersSet.Add(new Checker(false, false, 4, 5));
 
             // TEST SITUATION #4 - compound move
-            //CheckersSet.Add(new Checker(true, false, 4, 3)); // CHECKER WE TEST
-            //CheckersSet.Add(new Checker(false, false, 3, 4));
-            //CheckersSet.Add(new Checker(false, false, 1, 4));
-            //CheckersSet.Add(new Checker(false, false, 1, 2));
-            //CheckersSet.Add(new Checker(false, false, 3, 2));
+            CheckersSet.Add(new Checker(true, false,  new Coordinate(4, 3))); // CHECKER WE TEST
+            CheckersSet.Add(new Checker(false, false, new Coordinate(3, 4)));
+            CheckersSet.Add(new Checker(false, false, new Coordinate(1, 4)));
+            CheckersSet.Add(new Checker(false, false, new Coordinate(1, 2)));
+            CheckersSet.Add(new Checker(false, false, new Coordinate(3, 2)));
 
 
             // TEST SITUATION #5 - the only white checker is blocked
@@ -63,6 +63,12 @@ namespace Checkers
             //CheckersSet.Add(new Checker(false, false, 2, 5));
             //CheckersSet.Add(new Checker(false, false, 3, 2));
             //CheckersSet.Add(new Checker(false, false, 2, 1));
+
+            // TEST SITUATION #6 - for Take tests
+            //CheckersSet.Add(new Checker(true, false, new Coordinate(2, 1)));
+            //CheckersSet.Add(new Checker(false, false, new Coordinate(1, 2)));
+            
+
 
             Board = new Board();
             Board.Draw(CheckersSet);
@@ -151,10 +157,10 @@ namespace Checkers
                 return !IsCheckerBlocked(checker);
             }
 
-            catch (ArgumentOutOfRangeException)
-            {
-                return false;
-            }
+            //catch (ArgumentOutOfRangeException)
+            //{
+            //    return false;
+            //}
 
             catch (NullReferenceException)
             {
