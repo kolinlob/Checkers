@@ -4,13 +4,13 @@ namespace Checkers
 {
     public class HumanPlayer : IUserInput
     {
+        public bool PlaysWhites { get; set; }
+        
         public HumanPlayer(bool playsWhites)
         {
             PlaysWhites = playsWhites;
         }
-
-        public bool PlaysWhites { get; set; }
-
+        
         public string InputCoordinates()
         {
             var input = string.Empty;

@@ -115,6 +115,11 @@ namespace Checkers
             Console.SetCursorPosition(50, 3);
         }
 
+        public IUserInput SwitchPlayer()
+        {
+            return CurrentPlayer = (CurrentPlayer == Player1) ? Player2 : Player1;
+        }
+
         public Coordinate GetCoordinate(string message)
         {
             Coordinate coordinate;
@@ -134,7 +139,7 @@ namespace Checkers
                 var validInput = ValidateInput();
 
                 coordinate = ConvertIntoCoordinates(validInput);
-                isCoordinateWithinBoard = Board.CellExists(coordinate);
+                isCoordinateWithinBoard = Board.DoesCellExist(coordinate);
 
             } while (!isCoordinateWithinBoard);
 
@@ -146,6 +151,240 @@ namespace Checkers
             return CheckersSet.Find(checker => checker.Coordinate.X == coordinate.X && checker.Coordinate.Y == coordinate.Y);
         }
 
+        public string ValidateInput()
+        {
+            var rawInput = CurrentPlayer.InputCoordinates();
+
+            while (rawInput == null || rawInput.Length != 2)
+            {
+                ClearMessageBar();
+
+                Console.Write(incorrectInputMessage);
+                Thread.Sleep(1000);
+                ClearMessageBar();
+
+                Console.Write(selectCheckerToMoveMessage);
+                rawInput = CurrentPlayer.InputCoordinates();
+            }
+            var validInput = rawInput;
+
+            return validInput;
+        }
+
+        public Coordinate ConvertIntoCoordinates(string validInput)
+        {
+            var ascii = Encoding.ASCII;
+            var bytes = ascii.GetBytes(validInput.ToUpper());
+
+            var row = 56 - Convert.ToInt32(bytes[1]);
+            var column = Convert.ToInt32(bytes[0]) - 65;
+
+            return new Coordinate(row, column);
+        }
+        
+        public void FindCheckersWithTakes()
+        {
+            CheckersWithTakes = new List<Checker>();// CheckersWithTakes.Clear ?
+            foreach (var checker in CheckersSet.Where(checker => CurrentPlayer.PlaysWhites == checker.IsWhite))
+            {
+                FindPossibleTakes(checker);
+                if (PossibleTakes.ContainsKey(checker))
+                {
+                    CheckersWithTakes.Add(checker);
+                }
+            }
+        }
+        
+        public void FindPossibleTakes(Checker currentChecker)
+        {
+            int[][] directions =
+            {
+                new [] {-1, -1}, //up left
+                new [] {-1,  1}, //up right
+                new [] {1,  -1}, //down left
+                new [] {1,   1}  //down right
+            };
+
+            var currentCoordinate = new Coordinate(currentChecker.Coordinate.X, currentChecker.Coordinate.Y);
+
+            EnemiesCoordinates = new List<Coordinate>();
+            var emptyCellsBehindEnemy = new List<Coordinate>();
+
+            var searchEnd = 1;
+            if (currentChecker.IsQueen)
+            {
+                searchEnd = 7;
+            }
+
+            foreach (var direction in directions)
+            {
+                for (var depth = 1; depth <= searchEnd; depth++)
+                {
+                    var coordinateToCheck = new Coordinate(currentCoordinate.X + depth * direction[0],
+                                                           currentCoordinate.Y + depth * direction[1]);
+
+                    if (!Board.DoesCellExist(coordinateToCheck) || IsCellEmpty(coordinateToCheck)) continue;
+
+                    var checkerToCheck = GetChecker(coordinateToCheck);
+
+                    if (currentChecker.IsWhite == checkerToCheck.IsWhite) break;
+
+                    EnemiesCoordinates.Add(coordinateToCheck);
+
+                    for (var landingDepth = 1; landingDepth <= searchEnd; landingDepth++)
+                    {
+                        var nextCoordinate = new Coordinate(
+                            coordinateToCheck.X + landingDepth * direction[0],
+                            coordinateToCheck.Y + landingDepth * direction[1]);
+
+                        var isNextCellEmpty = IsCellEmpty(nextCoordinate);
+
+                        if (!isNextCellEmpty)
+                        {
+                            depth = searchEnd;
+                            break;
+                        }
+
+                        if (Board.DoesCellExist(nextCoordinate))
+                        {
+                            emptyCellsBehindEnemy.Add(nextCoordinate);
+                        }
+                    }
+                }
+            }
+            if (EnemiesCoordinates.Count > 0 && emptyCellsBehindEnemy.Count > 0 && !PossibleTakes.ContainsKey(currentChecker))
+            {
+                PossibleTakes.Add(currentChecker, emptyCellsBehindEnemy);
+            }
+        }
+
+        public void SelectChecker()
+        {
+            Move = new Move();
+
+            ClearMessageBar();
+            DisplayCurrentPlayerMessage();
+
+            Thread.Sleep(500);
+
+            var moveStartCoordinate = GetCoordinate(selectCheckerToMoveMessage);
+            var checkerToMove = GetChecker(moveStartCoordinate);
+
+            while (!CanSelectChecker(checkerToMove))
+            {
+                ClearMessageBar();
+                Console.Write(cantSelectMessage);
+                Thread.Sleep(1000);
+
+                moveStartCoordinate = GetCoordinate(selectCheckerToMoveMessage);
+                checkerToMove = GetChecker(moveStartCoordinate);
+            }
+            Move.Coordinates.Add(moveStartCoordinate);
+        }
+        
+        public void SetDestination()
+        {
+            var moveStartCoordinate = Move.Coordinates[0];
+            var moveEndCoordinate = GetCoordinate(selectDestinationMessage);
+
+            while (!CanMoveThere(moveStartCoordinate, moveEndCoordinate))
+            {
+                ClearMessageBar();
+                Console.Write(cantMoveHereMessage);
+                Thread.Sleep(1000);
+
+                moveEndCoordinate = GetCoordinate(selectDestinationMessage);
+            }
+            Move.Coordinates.Add(moveEndCoordinate);
+        }
+
+        public void SetMove()
+        {
+            SelectChecker();
+
+            if (PossibleTakes.Values.Count == 0)
+            {
+                SetDestination();
+                MoveChecker();
+            }
+            else
+            {
+                while (PossibleTakes.Values.Count > 0)
+                {
+                    var currentChecker = GetChecker(Move.Coordinates[0]);
+
+                    SetDestination();
+                    PossibleTakes.Clear();
+                    MoveChecker();
+                    FindPossibleTakes(currentChecker);
+                }
+            }
+        }
+
+        public void MoveChecker()
+        {
+            var checker = GetChecker(Move.Coordinates[0]);
+            var moves = Move.Coordinates.Count;
+
+            for (var i = 1; i < moves; i++)
+            {
+                var coordinateNew = Move.Coordinates[1];
+
+                checker.Coordinate.X = coordinateNew.X;
+                checker.Coordinate.Y = coordinateNew.Y;
+
+                CheckerBecomesQueen(checker);
+                RemoveTakenChecker();
+
+                Move.Coordinates.RemoveAt(0);
+
+                Console.SetCursorPosition(0, 0);
+                Board.Draw(CheckersSet);
+            }
+        }
+        
+        public void RemoveTakenChecker()
+        {
+            var finishX = Move.Coordinates[1].X;
+            var startX = Move.Coordinates[0].X;
+
+            var finishY = Move.Coordinates[1].Y;
+            var startY = Move.Coordinates[0].Y;
+
+            var deltaX = finishX - startX;
+            var deltaY = finishY - startY;
+
+            var signX = deltaX / Math.Abs(deltaX);
+            var signY = deltaY / Math.Abs(deltaY);
+
+            for (var x = startX + signX; deltaX < 0 ? (x > finishX) : (x < finishX); x = x + signX)
+            {
+                for (var y = startY + signY; deltaY < 0 ? (y > finishY) : (y < finishY); y = y + signY)
+                {
+                    var coordinate = new Coordinate(x, y);
+
+                    var moveByX = Math.Abs(x - startX);
+                    var moveByY = Math.Abs(y - startY);
+                    var isDiagonalMove = moveByX == moveByY;
+
+                    if (isDiagonalMove && !IsCellEmpty(coordinate))
+                    {
+                        CheckersSet.Remove(GetChecker(coordinate));
+                    }
+                }
+            }
+        }
+        
+        public void CheckerBecomesQueen(Checker checker)
+        {
+            const int topRow = 0;
+            const int bottomRow = 7;
+
+            if ((checker.IsWhite || checker.Coordinate.X != bottomRow) && (!checker.IsWhite || checker.Coordinate.X != topRow)) return;
+
+            checker.ChangeToQueen();
+        }
+        
         public bool CanSelectChecker(Checker checker)
         {
             try
@@ -164,19 +403,6 @@ namespace Checkers
             catch (NullReferenceException)
             {
                 return false;
-            }
-        }
-
-        public void FindCheckersWithTakes()
-        {
-            CheckersWithTakes = new List<Checker>();// CheckersWithTakes.Clear ?
-            foreach (var checker in CheckersSet.Where(checker => CurrentPlayer.PlaysWhites == checker.IsWhite))
-            {
-                FindPossibleTakes(checker);
-                if (PossibleTakes.ContainsKey(checker))
-                {
-                    CheckersWithTakes.Add(checker);
-                }
             }
         }
 
@@ -232,253 +458,7 @@ namespace Checkers
         {
             return (Math.Abs(moveEndCoordinate.X - moveStartCoordinate.X) == Math.Abs(moveEndCoordinate.Y - moveStartCoordinate.Y));
         }
-
-        public void CheckerBecomesQueen(Checker checker)
-        {
-            const int topRow = 0;
-            const int bottomRow = 7;
-
-            if ((checker.IsWhite || checker.Coordinate.X != bottomRow) && (!checker.IsWhite || checker.Coordinate.X != topRow)) return;
-
-            checker.IsQueen = true;
-            checker.GetQueenSymbol();
-        }
-
-        public Coordinate ConvertIntoCoordinates(string validInput)
-        {
-            var ascii = Encoding.ASCII;
-            var bytes = ascii.GetBytes(validInput.ToUpper());
-
-            var row = 56 - Convert.ToInt32(bytes[1]);
-            var column = Convert.ToInt32(bytes[0]) - 65;
-
-            return new Coordinate(row, column);
-        }
-
-        public string ValidateInput()
-        {
-            var rawInput = CurrentPlayer.InputCoordinates();
-
-            while (rawInput == null || rawInput.Length != 2)
-            {
-                ClearMessageBar();
-
-                Console.Write(incorrectInputMessage);
-                Thread.Sleep(1000);
-                ClearMessageBar();
-
-                Console.Write(selectCheckerToMoveMessage);
-                rawInput = CurrentPlayer.InputCoordinates();
-            }
-            var validInput = rawInput;
-
-            return validInput;
-        }
-
-        public void SetMove()
-        {
-            SelectChecker();
-
-            if (PossibleTakes.Values.Count == 0)
-            {
-                SetDestination();
-                MoveChecker();
-            }
-            else
-            {
-                while (PossibleTakes.Values.Count > 0)
-                {
-                    var currentChecker = GetChecker(Move.Coordinates[0]);
-
-                    SetDestination();
-                    PossibleTakes.Clear();
-                    MoveChecker();
-                    FindPossibleTakes(currentChecker);
-                }
-            }
-        }
-
-        public void SelectChecker()
-        {
-            Move = new Move();
-
-            ClearMessageBar();
-            DisplayCurrentPlayerMessage();
-
-            Thread.Sleep(500);
-
-            var moveStartCoordinate = GetCoordinate(selectCheckerToMoveMessage);
-            var checkerToMove = GetChecker(moveStartCoordinate);
-
-            while (!CanSelectChecker(checkerToMove))
-            {
-                ClearMessageBar();
-                Console.Write(cantSelectMessage);
-                Thread.Sleep(1000);
-
-                moveStartCoordinate = GetCoordinate(selectCheckerToMoveMessage);
-                checkerToMove = GetChecker(moveStartCoordinate);
-            }
-            Move.Coordinates.Add(moveStartCoordinate);
-        }
-
-        public void SetDestination()
-        {
-            var moveStartCoordinate = Move.Coordinates[0];
-            var moveEndCoordinate = GetCoordinate(selectDestinationMessage);
-
-            while (!CanMoveThere(moveStartCoordinate, moveEndCoordinate))
-            {
-                ClearMessageBar();
-                Console.Write(cantMoveHereMessage);
-                Thread.Sleep(1000);
-
-                moveEndCoordinate = GetCoordinate(selectDestinationMessage);
-            }
-            Move.Coordinates.Add(moveEndCoordinate);
-        }
-
-        public void RemoveTakenChecker()
-        {
-            var finishX = Move.Coordinates[1].X;
-            var startX = Move.Coordinates[0].X;
-
-            var finishY = Move.Coordinates[1].Y;
-            var startY = Move.Coordinates[0].Y;
-
-            var deltaX = finishX - startX;
-            var deltaY = finishY - startY;
-
-            var signX = deltaX / Math.Abs(deltaX);
-            var signY = deltaY / Math.Abs(deltaY);
-
-            for (var x = startX + signX; deltaX < 0 ? (x > finishX) : (x < finishX); x = x + signX)
-            {
-                for (var y = startY + signY; deltaY < 0 ? (y > finishY) : (y < finishY); y = y + signY)
-                {
-                    var coordinate = new Coordinate(x, y);
-
-                    var moveByX = Math.Abs(x - startX);
-                    var moveByY = Math.Abs(y - startY);
-                    var isDiagonalMove = moveByX == moveByY;
-
-                    if (isDiagonalMove && !IsCellEmpty(coordinate))
-                    {
-                        CheckersSet.Remove(GetChecker(coordinate));
-                    }
-                }
-            }
-        }
-
-        public void MoveChecker()
-        {
-            var checker = GetChecker(Move.Coordinates[0]);
-            var moves = Move.Coordinates.Count;
-
-            for (var i = 1; i < moves; i++)
-            {
-                var coordinateNew = Move.Coordinates[1];
-
-                checker.Coordinate.X = coordinateNew.X;
-                checker.Coordinate.Y = coordinateNew.Y;
-
-                CheckerBecomesQueen(checker);
-                RemoveTakenChecker();
-
-                Move.Coordinates.RemoveAt(0);
-
-                Console.SetCursorPosition(0, 0);
-                Board.Draw(CheckersSet);
-            }
-        }
-
-        public void FindPossibleTakes(Checker currentChecker)
-        {
-            int[][] directions =
-            {
-                new [] {-1, -1}, //up left
-                new [] {-1,  1}, //up right
-                new [] {1,  -1}, //down left
-                new [] {1,   1}  //down right
-            };
-
-            var currentCoordinate = new Coordinate(currentChecker.Coordinate.X, currentChecker.Coordinate.Y);
-
-            EnemiesCoordinates = new List<Coordinate>();
-            var emptyCellsBehindEnemy = new List<Coordinate>();
-
-            var searchEnd = 1;
-            if (currentChecker.IsQueen)
-            {
-                searchEnd = 7;
-            }
-
-            foreach (var direction in directions)
-            {
-                for (var depth = 1; depth <= searchEnd; depth++)
-                {
-                    var coordinateToCheck = new Coordinate(currentCoordinate.X + depth * direction[0],
-                                                           currentCoordinate.Y + depth * direction[1]);
-
-                    if (!Board.CellExists(coordinateToCheck) || IsCellEmpty(coordinateToCheck)) continue;
-
-                    var checkerToCheck = GetChecker(coordinateToCheck);
-
-                    if (currentChecker.IsWhite == checkerToCheck.IsWhite) break;
-
-                    EnemiesCoordinates.Add(coordinateToCheck);
-
-                    for (var landingDepth = 1; landingDepth <= searchEnd; landingDepth++)
-                    {
-                        var nextCoordinate = new Coordinate(
-                            coordinateToCheck.X + landingDepth * direction[0],
-                            coordinateToCheck.Y + landingDepth * direction[1]);
-
-                        var isNextCellEmpty = IsCellEmpty(nextCoordinate);
-
-                        if (!isNextCellEmpty)
-                        {
-                            depth = searchEnd;
-                            break;
-                        }
-
-                        if (Board.CellExists(nextCoordinate))
-                        {
-                            emptyCellsBehindEnemy.Add(nextCoordinate);
-                        }
-                    }
-                }
-            }
-            if (EnemiesCoordinates.Count > 0 && emptyCellsBehindEnemy.Count > 0 && !PossibleTakes.ContainsKey(currentChecker))
-            {
-                PossibleTakes.Add(currentChecker, emptyCellsBehindEnemy);
-            }
-        }
-
-        public IUserInput SwitchPlayer()
-        {
-            return CurrentPlayer = (CurrentPlayer == Player1) ? Player2 : Player1;
-        }
-
-        public bool IsGameOver()
-        {
-            var noWhites = CheckersSet.All(checker => !checker.IsWhite);
-            var noBlacks = CheckersSet.All(checker => checker.IsWhite);
-
-            if (noWhites || noBlacks)
-                return true;
-
-            return CheckersSet.Where(checker => checker.IsWhite == CurrentPlayer.PlaysWhites).All(IsCheckerBlocked);
-        }
-
-        public void Over()
-        {
-            ClearMessageBar();
-            Console.SetCursorPosition(50, 10);
-            Console.Write("Game Over");
-            Console.ReadLine();
-        }
-
+        
         public bool IsCheckerBlocked(Checker checker)
         {
             int[][] directions =
@@ -515,7 +495,7 @@ namespace Checkers
                 var secondCoordinate = new Coordinate(secondX, secondY);
                 var secondChecker = GetChecker(secondCoordinate);
 
-                if (Board.CellExists(firstCoordinate))
+                if (Board.DoesCellExist(firstCoordinate))
                 {
                     var isFirstCellEmpty = IsCellEmpty(firstCoordinate);
                     var isSecondCellEmpty = IsCellEmpty(secondCoordinate);
@@ -526,7 +506,7 @@ namespace Checkers
                         {
                             friendlyChecker = true;
                         }
-                        else if (Board.CellExists(secondCoordinate) && !isSecondCellEmpty && (secondChecker.IsWhite != CurrentPlayer.PlaysWhites))
+                        else if (Board.DoesCellExist(secondCoordinate) && !isSecondCellEmpty && (secondChecker.IsWhite != CurrentPlayer.PlaysWhites))
                         {
                             twoEnemiesInARow = true;
                         }
@@ -550,6 +530,25 @@ namespace Checkers
         public bool IsCellEmpty(Coordinate coordinate)
         {
             return GetChecker(coordinate) == null;
+        }
+        
+        public bool IsGameOver()
+        {
+            var noWhites = CheckersSet.All(checker => !checker.IsWhite);
+            var noBlacks = CheckersSet.All(checker => checker.IsWhite);
+
+            if (noWhites || noBlacks)
+                return true;
+
+            return CheckersSet.Where(checker => checker.IsWhite == CurrentPlayer.PlaysWhites).All(IsCheckerBlocked);
+        }
+
+        public void Over()
+        {
+            ClearMessageBar();
+            Console.SetCursorPosition(50, 10);
+            Console.Write("Game Over");
+            Console.ReadLine();
         }
     }
 }

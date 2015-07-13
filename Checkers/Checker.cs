@@ -5,24 +5,20 @@ namespace Checkers
     public class Checker
     {
         char symbol = '█';
-        public bool IsWhite { get; set; }
-        public bool IsQueen { get; set; }
+        public bool IsWhite { get; private set; }
+        public bool IsQueen { get; set; } // private set
         public Coordinate Coordinate { get; set; }
 
-        public Checker(bool isWhite, bool isQueen, Coordinate coordinate)
+        public Checker(bool isWhite, bool isQueen, Coordinate coordinate) // delete isQueen
         {
             IsWhite = isWhite;
-            IsQueen = isQueen;
+            IsQueen = isQueen; // false
             Coordinate = coordinate;
-
-            if (isQueen)
-            {
-                GetQueenSymbol();
-            }
         }
 
-        public void GetQueenSymbol()
+        public void ChangeToQueen()
         {
+            IsQueen = true;
             symbol = '☼';          
         }
 

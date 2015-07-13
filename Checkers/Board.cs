@@ -12,6 +12,7 @@ namespace Checkers
             board = new Cell[8, 8];
 
             var counter = 0;
+
             for (var row = 0; row < board.GetLength(0); row++)
             {
                 for (var column = 0; column < board.GetLength(1); column++)
@@ -35,10 +36,11 @@ namespace Checkers
         public void Draw(List<Checker> checkersSet)
         {
             DrawColumnHeader();
+
             for (var row = 0; row < board.GetLength(0); row++)
             {
                 DrawMargin(row); Console.Write("\r\n  ");
-                DrawRowNum(row);
+                DrawRowNumber(row);
 
                 for (var column = 0; column < board.GetLength(1); column++)
                 {
@@ -71,7 +73,7 @@ namespace Checkers
                 }
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.Green;
-                DrawRowNum(row);
+                DrawRowNumber(row);
                 DrawMargin(row);
             }
             Console.WriteLine();
@@ -91,7 +93,7 @@ namespace Checkers
             Console.WriteLine();
         }
 
-        private void DrawRowNum(int row)
+        private void DrawRowNumber(int row)
         {
             Console.Write(" " + (board.GetLength(0) - row) + " ");
         }
@@ -112,22 +114,22 @@ namespace Checkers
             }
         }
 
+        public bool DoesCellExist(Coordinate coordinate)
+        {
+            return coordinate.X >= 0
+                && coordinate.X < 8
+                && coordinate.Y >= 0
+                && coordinate.Y < 8;
+        }
+
         public bool IsCellUsable(Coordinate coordinate)
         {
             return (board[coordinate.X, coordinate.Y].IsUsable);
         }
-
+        
         public Cell GetCell(Coordinate coordinate)
         {
             return board[coordinate.X, coordinate.Y];
-        }
-
-        public bool CellExists(Coordinate coordinate)
-        {
-            return coordinate.X >= 0 
-                && coordinate.X < 8 
-                && coordinate.Y >= 0 
-                && coordinate.Y < 8;
         }
 
         public override string ToString()

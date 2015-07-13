@@ -47,4 +47,4 @@ SOLVED ISSUES / FIXED BUGS:
 6. if vs. continue (to reduce nesting)?
 7. Is do/while ok?
 8. Копипаст кода от теста к тесту приветствуется?
-9.
+9. Инкапсуляция cellAddress в Coordinate нам подозрительна
