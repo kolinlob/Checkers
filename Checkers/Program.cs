@@ -19,10 +19,9 @@ namespace Checkers
                 game.SetMove();
                 game.SwitchPlayer();
             }
-            game.ClearMessageBar();
-            Console.SetCursorPosition(50, 10);
-            Console.Write("Game Over");
-            Console.ReadLine();
+            game.Over();
         }
+
+        
     }
 }
