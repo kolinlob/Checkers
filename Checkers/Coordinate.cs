@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Checkers
+﻿namespace Checkers
 {
-    public class Coordinate : IEquatable<Coordinate>
+    public class Coordinate
     {
         private readonly int[] cellAddress = new int[2];
 
@@ -22,11 +20,17 @@ namespace Checkers
             cellAddress[1] = coordVertical;
         }
 
+        public void Change(Coordinate newCoordinate)
+        {
+            cellAddress[0] = newCoordinate.X;
+            cellAddress[1] = newCoordinate.Y;
+        }
+
         public bool Equals(Coordinate other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return cellAddress.Equals(other.cellAddress);
+            return X.Equals(other.X) && Y.Equals(other.Y);
         }
 
         public override bool Equals(object obj)
@@ -41,21 +45,5 @@ namespace Checkers
         {
             return cellAddress.GetHashCode();
         }
-
-        public void Change(Coordinate newCoordinate)
-        {
-            cellAddress[0] = newCoordinate.X;
-            cellAddress[1] = newCoordinate.Y;
-        }
-
-        //public override int GetHashCode()
-        //{
-        //    return String.Format("({0} {1})", X, Y).GetHashCode();
-        //}
-        //
-        //public override bool Equals(object other)
-        //{
-        //    return GetHashCode() == other.GetHashCode();
-        //}
     }
 }

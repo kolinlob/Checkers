@@ -38,10 +38,10 @@ namespace Checkers.Test
             game.Move = new Move();
 
             var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.EnterCoordinates());
-            game.Move.Coordinates.Add(moveStartCoordinate);
+            game.Move.AddCoordinate(moveStartCoordinate);
 
             var moveEndCoordinate = game.ConvertIntoCoordinates("c5");
-            game.Move.Coordinates.Add(moveEndCoordinate);
+            game.Move.AddCoordinate(moveEndCoordinate);
 
             game.MoveChecker();
 

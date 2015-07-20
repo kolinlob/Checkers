@@ -209,13 +209,13 @@ namespace Checkers.Test
                 }
             };
             game.CurrentPlayer = game.Player1;
-            
+
             var input = game.CurrentPlayer.EnterCoordinates();
             var moveStartCoordinate = game.ConvertIntoCoordinates(input);
             var moveEndCoordinate = game.ConvertIntoCoordinates("D4");
 
             game.GetChecker(moveStartCoordinate).IsQueen = true;
-            
+
             var expected = game.IsOneCellMove(moveStartCoordinate, moveEndCoordinate);
             Assert.IsFalse(expected);
         }
@@ -267,7 +267,7 @@ namespace Checkers.Test
 
             var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.EnterCoordinates());
             var moveEndCoordinate = game.ConvertIntoCoordinates("B4");
-            
+
             var currentChecker = game.GetChecker(moveStartCoordinate);
             currentChecker.IsQueen = false;
 
@@ -296,7 +296,7 @@ namespace Checkers.Test
 
             var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.EnterCoordinates());
             var moveEndCoordinate = game.ConvertIntoCoordinates("B4");
-            
+
             var currentChecker = game.GetChecker(moveStartCoordinate);
             currentChecker.IsQueen = true;
 
@@ -326,19 +326,14 @@ namespace Checkers.Test
             var checker = game.CheckersSet[0];
             game.FindPossibleTakes(checker);
 
-            var actual_1X = game.EnemiesCoordinates[0].X;
-            var actual_1Y = game.EnemiesCoordinates[0].Y;
-            var actual_2X = game.EnemiesCoordinates[1].X;
-            var actual_2Y = game.EnemiesCoordinates[1].Y;
-            
-            //var actual = game.EnemiesCoordinates;
-            //var expected = new List<Coordinate>() {new Coordinate(2,3), new Coordinate(2,5)};
-            //CollectionAssert.AreEqual(actual, expected);
+            var actual = game.EnemiesCoordinates;
+            var expected = new List<Coordinate>()
+            {
+                new Coordinate(2,3),
+                new Coordinate(2,5)
+            };
 
-            Assert.AreEqual(actual_1X, 2);
-            Assert.AreEqual(actual_1Y, 3);
-            Assert.AreEqual(actual_2X, 2);
-            Assert.AreEqual(actual_2Y, 5);
+            CollectionAssert.AreEqual(actual, expected);
         }
 
         [TestMethod]
@@ -458,7 +453,7 @@ namespace Checkers.Test
             };
             game.CurrentPlayer = game.Player1;
 
-            var takingMove = new List<Coordinate> {new Coordinate(3, 4), new Coordinate(5, 6)};
+            var takingMove = new List<Coordinate> { new Coordinate(3, 4), new Coordinate(5, 6) };
 
             var expectedChecker = game.GetChecker(takingMove[0]);
             var currentChecker = game.CheckersSet[0];
@@ -466,19 +461,16 @@ namespace Checkers.Test
             var expectedPossibleTakes = new Dictionary<Checker, List<Coordinate>>
             {
                 {
-                    expectedChecker, takingMove
+                    expectedChecker, new List<Coordinate>(){new Coordinate(5,6)}
                 }
             };
 
             game.FindPossibleTakes(currentChecker);
 
-            var expectedX = expectedPossibleTakes[expectedChecker][1].X; //5
-            var expectedY = expectedPossibleTakes[expectedChecker][1].Y; //6
-            var actualX = game.PossibleTakes[currentChecker][0].X;       //5
-            var actualY = game.PossibleTakes[currentChecker][0].Y;       //6
+            var expected = expectedPossibleTakes[expectedChecker]; //5,6
+            var actual = game.PossibleTakes[currentChecker];
 
-            Assert.AreEqual(actualX, expectedX);
-            Assert.AreEqual(actualY, expectedY);
+            CollectionAssert.AreEqual(actual, expected);
         }
 
         [TestMethod]
@@ -503,17 +495,16 @@ namespace Checkers.Test
             game.CurrentPlayer = game.Player1;
 
             game.FindCheckersWithTakes();
+
+            var actual = game.CheckersWithTakes;
             
-            var actual_1X = game.CheckersWithTakes[0].Coordinate.X;
-            var actual_1Y = game.CheckersWithTakes[0].Coordinate.Y;
+            var expected = new List<Checker>()
+            {
+                new Checker(true, false,  new Coordinate(3, 4)),
+                new Checker(true, true,  new Coordinate(7, 0))
+            };
 
-            var actual_2X = game.CheckersWithTakes[1].Coordinate.X;
-            var actual_2Y = game.CheckersWithTakes[1].Coordinate.Y;
-
-            Assert.AreEqual(actual_1X, 3);
-            Assert.AreEqual(actual_1Y, 4);
-            Assert.AreEqual(actual_2X, 7);
-            Assert.AreEqual(actual_2Y, 0);
+            CollectionAssert.AreEqual(actual, expected);
         }
 
         [TestMethod]
@@ -586,15 +577,15 @@ namespace Checkers.Test
             game.Move = new Move();
 
             var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.EnterCoordinates());
-            game.Move.Coordinates.Add(moveStartCoordinate);
+            game.Move.AddCoordinate(moveStartCoordinate);
 
             var moveEndCoordinate = game.ConvertIntoCoordinates("D8");
-            game.Move.Coordinates.Add(moveEndCoordinate);
+            game.Move.AddCoordinate(moveEndCoordinate);
 
             game.RemoveTakenChecker();
 
             var expected = game.GetChecker(game.ConvertIntoCoordinates("C7"));
-            
+
             Assert.IsNull(expected);
         }
 
@@ -622,31 +613,31 @@ namespace Checkers.Test
             game.Move = new Move();
 
             var moveStartCoordinate1 = game.ConvertIntoCoordinates("D4");
-            game.Move.Coordinates.Add(moveStartCoordinate1);
+            game.Move.AddCoordinate(moveStartCoordinate1);
 
             var moveEndCoordinate1 = game.ConvertIntoCoordinates("F6");
-            game.Move.Coordinates.Add(moveEndCoordinate1);
+            game.Move.AddCoordinate(moveEndCoordinate1);
 
             game.MoveChecker();
             game.PossibleTakes.Clear();
             game.FindCheckersWithTakes();
 
             var moveEndCoordinate2 = game.ConvertIntoCoordinates("D8");
-            game.Move.Coordinates.Add(moveEndCoordinate2);
+            game.Move.AddCoordinate(moveEndCoordinate2);
 
             game.MoveChecker();
             game.PossibleTakes.Clear();
             game.FindCheckersWithTakes();
 
             var moveEndCoordinate3 = game.ConvertIntoCoordinates("B6");
-            game.Move.Coordinates.Add(moveEndCoordinate3);
+            game.Move.AddCoordinate(moveEndCoordinate3);
 
             game.MoveChecker();
             game.PossibleTakes.Clear();
             game.FindCheckersWithTakes();
 
             var moveEndCoordinate4 = game.ConvertIntoCoordinates("D4");
-            game.Move.Coordinates.Add(moveEndCoordinate4);
+            game.Move.AddCoordinate(moveEndCoordinate4);
 
             game.MoveChecker();
             game.PossibleTakes.Clear();

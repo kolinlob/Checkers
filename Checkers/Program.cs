@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Checkers
+﻿namespace Checkers
 {
     class Program
     {
