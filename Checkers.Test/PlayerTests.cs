@@ -10,7 +10,7 @@ namespace Checkers.Test
         public void _001_Player_Can_Select_Checker()
         {
             var game = new Game();
-            var validInput = new FakePlayer(true).InputCoordinates();
+            var validInput = new FakePlayer(true).EnterCoordinates();
 
             var expectedChecker = new Checker(false, false, new Coordinate(2, 1));
 

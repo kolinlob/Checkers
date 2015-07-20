@@ -11,7 +11,7 @@ namespace Checkers
             PlaysWhites = playsWhites;
         }
         
-        public string InputCoordinates()
+        public string EnterCoordinates()
         {
             var input = string.Empty;
             const int limit = 2;

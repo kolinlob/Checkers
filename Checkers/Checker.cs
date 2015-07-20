@@ -33,14 +33,40 @@ namespace Checkers
             Console.ForegroundColor = color;
         }
 
+        protected bool Equals(Checker other)
+        {
+            return IsWhite.Equals(other.IsWhite) && IsQueen.Equals(other.IsQueen) && Coordinate.Equals(other.Coordinate) && symbol == other.symbol;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Checker) obj);
+        }
+
         public override int GetHashCode()
         {
-            return String.Format("({0} {1} {2} {3})", IsWhite, IsQueen, Coordinate.X, Coordinate.Y).GetHashCode();
+            unchecked
+            {
+                var hashCode = IsWhite.GetHashCode();
+                hashCode = (hashCode*397) ^ IsQueen.GetHashCode();
+                hashCode = (hashCode*397) ^ Coordinate.GetHashCode();
+                hashCode = (hashCode*397) ^ symbol.GetHashCode();
+                return hashCode;
+            }
         }
-        
-        public override bool Equals(object other)
-        {
-            return GetHashCode() == other.GetHashCode();
-        }
+
+
+        //public override int GetHashCode()
+        //{
+        //    return String.Format("({0} {1} {2} {3})", IsWhite, IsQueen, Coordinate.X, Coordinate.Y).GetHashCode();
+        //}
+        //
+        //public override bool Equals(object other)
+        //{
+        //    return GetHashCode() == other.GetHashCode();
+        //}
     }
 }

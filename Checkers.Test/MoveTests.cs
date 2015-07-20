@@ -37,7 +37,7 @@ namespace Checkers.Test
 
             game.Move = new Move();
 
-            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.EnterCoordinates());
             game.Move.Coordinates.Add(moveStartCoordinate);
 
             var moveEndCoordinate = game.ConvertIntoCoordinates("c5");

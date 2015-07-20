@@ -184,7 +184,7 @@ namespace Checkers.Test
             };
             game.CurrentPlayer = game.Player1;
 
-            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.EnterCoordinates());
             var moveEndCoordinate = game.ConvertIntoCoordinates("D4");
 
             var expected = game.IsOneCellMove(moveStartCoordinate, moveEndCoordinate);
@@ -210,7 +210,7 @@ namespace Checkers.Test
             };
             game.CurrentPlayer = game.Player1;
             
-            var input = game.CurrentPlayer.InputCoordinates();
+            var input = game.CurrentPlayer.EnterCoordinates();
             var moveStartCoordinate = game.ConvertIntoCoordinates(input);
             var moveEndCoordinate = game.ConvertIntoCoordinates("D4");
 
@@ -239,7 +239,7 @@ namespace Checkers.Test
             };
             game.CurrentPlayer = game.Player1;
 
-            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.EnterCoordinates());
             var moveEndCoordinate = game.ConvertIntoCoordinates("A5");
 
             var expected = game.IsMoveForward(moveStartCoordinate, moveEndCoordinate);
@@ -265,7 +265,7 @@ namespace Checkers.Test
             };
             game.CurrentPlayer = game.Player1;
 
-            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.EnterCoordinates());
             var moveEndCoordinate = game.ConvertIntoCoordinates("B4");
             
             var currentChecker = game.GetChecker(moveStartCoordinate);
@@ -294,7 +294,7 @@ namespace Checkers.Test
             };
             game.CurrentPlayer = game.Player1;
 
-            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.EnterCoordinates());
             var moveEndCoordinate = game.ConvertIntoCoordinates("B4");
             
             var currentChecker = game.GetChecker(moveStartCoordinate);
@@ -330,6 +330,10 @@ namespace Checkers.Test
             var actual_1Y = game.EnemiesCoordinates[0].Y;
             var actual_2X = game.EnemiesCoordinates[1].X;
             var actual_2Y = game.EnemiesCoordinates[1].Y;
+            
+            //var actual = game.EnemiesCoordinates;
+            //var expected = new List<Coordinate>() {new Coordinate(2,3), new Coordinate(2,5)};
+            //CollectionAssert.AreEqual(actual, expected);
 
             Assert.AreEqual(actual_1X, 2);
             Assert.AreEqual(actual_1Y, 3);
@@ -379,7 +383,7 @@ namespace Checkers.Test
 
             game.FindCheckersWithTakes();
 
-            var validAdress = game.CurrentPlayer.InputCoordinates();
+            var validAdress = game.CurrentPlayer.EnterCoordinates();
             var moveStartCoordinate = game.ConvertIntoCoordinates(validAdress);
 
             var checker = game.GetChecker(moveStartCoordinate);
@@ -428,7 +432,7 @@ namespace Checkers.Test
 
             game.CurrentPlayer = new FakePlayer(true);
 
-            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.EnterCoordinates());
             var checker = game.GetChecker(moveStartCoordinate);
             checker.IsQueen = true;
 
@@ -528,7 +532,7 @@ namespace Checkers.Test
             };
             game.CurrentPlayer = game.Player1;
 
-            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.EnterCoordinates());
             var moveEndCoordinate = game.ConvertIntoCoordinates("D8");
 
             game.FindCheckersWithTakes();
@@ -581,7 +585,7 @@ namespace Checkers.Test
 
             game.Move = new Move();
 
-            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.InputCoordinates());
+            var moveStartCoordinate = game.ConvertIntoCoordinates(game.CurrentPlayer.EnterCoordinates());
             game.Move.Coordinates.Add(moveStartCoordinate);
 
             var moveEndCoordinate = game.ConvertIntoCoordinates("D8");

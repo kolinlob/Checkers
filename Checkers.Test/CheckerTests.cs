@@ -18,8 +18,7 @@ namespace Checkers.Test
         {
             var checker = new Checker(true, false, new Coordinate(0, 1));
             
-            checker.Coordinate.X = 3;
-            checker.Coordinate.Y = 0;
+            checker.Coordinate.Change(new Coordinate(3,0));
 
             var actual = checker;
             var expected = new Checker(true, false, new Coordinate(3, 0));
@@ -45,8 +44,7 @@ namespace Checkers.Test
             var game = new Game();
             game.CreateCheckers(false);
 
-            game.CheckersSet[5].Coordinate.X = 7;
-            game.CheckersSet[5].Coordinate.Y = 0;
+            game.CheckersSet[5].Coordinate.Change(new Coordinate(7,0));
             game.CheckerBecomesQueen(game.CheckersSet[5]);
 
             var expected = game.CheckersSet[5].IsQueen;
@@ -60,8 +58,7 @@ namespace Checkers.Test
             var game = new Game();
             game.CreateCheckers(true);
 
-            game.CheckersSet[7].Coordinate.X = 0;
-            game.CheckersSet[7].Coordinate.Y = 1;
+            game.CheckersSet[7].Coordinate.Change(new Coordinate(0,1));
 
             game.CheckerBecomesQueen(game.CheckersSet[7]);
 
@@ -76,8 +73,7 @@ namespace Checkers.Test
             var game = new Game();
             game.CreateCheckers(false);
 
-            game.CheckersSet[5].Coordinate.X = 7;
-            game.CheckersSet[5].Coordinate.Y = 0;
+            game.CheckersSet[5].Coordinate.Change(new Coordinate(7, 0));
 
             game.CheckerBecomesQueen(game.CheckersSet[5]);
 
@@ -90,8 +86,7 @@ namespace Checkers.Test
             var game = new Game();
             game.CreateCheckers(true);
 
-            game.CheckersSet[7].Coordinate.X = 0;
-            game.CheckersSet[7].Coordinate.Y = 1;
+            game.CheckersSet[7].Coordinate.Change(new Coordinate(0, 1));
 
             game.CheckerBecomesQueen(game.CheckersSet[7]);
 

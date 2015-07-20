@@ -9,7 +9,7 @@
 
         public bool PlaysWhites { get; set; }
 
-        public string InputCoordinates()
+        public string EnterCoordinates()
         {
             return "B6";
         }

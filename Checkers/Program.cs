@@ -6,20 +6,8 @@ namespace Checkers
     {
         static void Main()
         {
-            Console.Title = "ITLabs - Checkers v1.0";
-            Console.WindowWidth = 90;
-            Console.WindowHeight = 30;
-
             var game = new Game();
             game.Start();
-            
-            while (!game.IsGameOver())
-            {
-                game.FindCheckersWithTakes();
-                game.SetMove();
-                game.SwitchPlayer();
-            }
-            game.Over();
         }
     }
 }
