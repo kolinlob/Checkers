@@ -57,16 +57,5 @@ namespace Checkers
                 return hashCode;
             }
         }
-
-
-        //public override int GetHashCode()
-        //{
-        //    return String.Format("({0} {1} {2} {3})", IsWhite, IsQueen, Coordinate.X, Coordinate.Y).GetHashCode();
-        //}
-        //
-        //public override bool Equals(object other)
-        //{
-        //    return GetHashCode() == other.GetHashCode();
-        //}
     }
 }

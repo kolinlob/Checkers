@@ -83,11 +83,11 @@ namespace Checkers
             //CheckersSet.Add(new Checker(false, false, new Coordinate(1, 2)));
 
             Board = new Board();
-            
+
             Screen.SetGraphicParameters();
 
             Board.Draw(CheckersSet);
-           
+
             while (!IsGameOver())
             {
                 FindCheckersWithTakes();
@@ -167,7 +167,7 @@ namespace Checkers
             var rawInput = CurrentPlayer.EnterCoordinates();
 
             while (!IsInputValid(rawInput))
-            {           
+            {
                 Screen.ClearMessageBar();
 
                 Console.Write(incorrectInputMessage);
@@ -210,10 +210,10 @@ namespace Checkers
 
             return new Coordinate(row, column);
         }
-        
+
         public void FindCheckersWithTakes()
         {
-            CheckersWithTakes = new List<Checker>();// CheckersWithTakes.Clear ?
+            CheckersWithTakes = new List<Checker>();
 
             foreach (var checker in GetOwnCheckers())
             {
@@ -224,7 +224,7 @@ namespace Checkers
                 }
             }
         }
-        
+
         public void FindPossibleTakes(Checker currentChecker)
         {
             var currentCoordinate = new Coordinate(currentChecker.Coordinate.X, currentChecker.Coordinate.Y);
@@ -249,7 +249,9 @@ namespace Checkers
 
                     var checkerToCheck = GetChecker(coordinateToCheck);
 
-                    if (currentChecker.IsWhite == checkerToCheck.IsWhite) break;
+                    var isOwnChecker = currentChecker.IsWhite == checkerToCheck.IsWhite;
+
+                    if (isOwnChecker) break;
 
                     EnemiesCoordinates.Add(coordinateToCheck);
 
@@ -274,10 +276,15 @@ namespace Checkers
                     }
                 }
             }
-            if (EnemiesCoordinates.Count > 0 && emptyCellsBehindEnemy.Count > 0 && !PossibleTakes.ContainsKey(currentChecker))
+            if (IsTakePossible(currentChecker, emptyCellsBehindEnemy))
             {
                 PossibleTakes.Add(currentChecker, emptyCellsBehindEnemy);
             }
+        }
+
+        private bool IsTakePossible(Checker currentChecker, List<Coordinate> emptyCellsBehindEnemy)
+        {
+            return EnemiesCoordinates.Count > 0 && emptyCellsBehindEnemy.Count > 0 && !PossibleTakes.ContainsKey(currentChecker);
         }
 
         public void SelectChecker()
@@ -303,7 +310,7 @@ namespace Checkers
             }
             Move.AddCoordinate(moveStartCoordinate);
         }
-        
+
         public void SetDestination()
         {
             var moveStartCoordinate = Move.GetStartCoordinate();
@@ -358,7 +365,7 @@ namespace Checkers
             Console.SetCursorPosition(0, 0);
             Board.Draw(CheckersSet);
         }
-        
+
         public void RemoveTakenChecker()
         {
             var finishX = Move.GetEndCoordinate().X;
@@ -397,39 +404,37 @@ namespace Checkers
                 }
             }
         }
-        
+
         public void CheckerBecomesQueen(Checker checker)
         {
             const int topRow = 0;
             const int bottomRow = 7;
 
-            var isAtBottomRow   = checker.Coordinate.X == bottomRow;
-            var isAtTopRow      = checker.Coordinate.X == topRow;
-            
+            var isAtBottomRow = checker.Coordinate.X == bottomRow;
+            var isAtTopRow = checker.Coordinate.X == topRow;
+
             if ((checker.IsWhite || !isAtBottomRow) && (!checker.IsWhite || !isAtTopRow)) return;
 
             checker.ChangeToQueen();
         }
-        
+
         public bool CanSelectChecker(Checker checker)
         {
-            try
+            if (checker != null)
             {
                 var isOwnChecker = CurrentPlayer.PlaysWhites == checker.IsWhite;
 
                 if (!isOwnChecker)
+                {
                     return false;
-
+                }
                 if (CheckersWithTakes.Count > 0)
+                {
                     return CheckersWithTakes.Contains(checker);
-
+                }
                 return !IsCheckerBlocked(checker);
             }
-
-            catch (NullReferenceException)
-            {
-                return false;
-            }
+            return false;
         }
 
         public bool CanMoveThere(Coordinate moveStartCoordinate, Coordinate moveEndCoordinate)
@@ -437,25 +442,22 @@ namespace Checkers
             var checkerToMove = GetChecker(moveStartCoordinate);
             var isCellEmpty = IsCellEmpty(moveEndCoordinate);
 
-            if (PossibleTakes.ContainsKey(checkerToMove))
+            if (checkerToMove != null && PossibleTakes.ContainsKey(checkerToMove))
             {
-                try
-                {
-                    var targetCoordinateToCheck =
-                        PossibleTakes[checkerToMove].
-                                Find(coord => coord.X == moveEndCoordinate.X
-                                           && coord.Y == moveEndCoordinate.Y);
+                var targetCoordinateToCheck =
+                    PossibleTakes[checkerToMove].
+                            Find(coord => coord.X == moveEndCoordinate.X
+                                       && coord.Y == moveEndCoordinate.Y);
 
+                if (targetCoordinateToCheck != null)
+                {
                     return targetCoordinateToCheck.X == moveEndCoordinate.X
                         && targetCoordinateToCheck.Y == moveEndCoordinate.Y;
                 }
-                catch (NullReferenceException)
-                {
-                    return false;
-                }
+                return false;
             }
 
-            if (checkerToMove.IsQueen)
+            if (checkerToMove != null && checkerToMove.IsQueen)
             {
                 return isCellEmpty && IsDiagonalMove(moveStartCoordinate, moveEndCoordinate);
             }
@@ -484,7 +486,7 @@ namespace Checkers
         {
             return (Math.Abs(moveEndCoordinate.X - moveStartCoordinate.X) == Math.Abs(moveEndCoordinate.Y - moveStartCoordinate.Y));
         }
-        
+
         public bool IsCheckerBlocked(Checker checker)
         {
             var isDirectionBlocked = new bool[4];
@@ -502,29 +504,29 @@ namespace Checkers
                 var firstX = x + directions[i][0];
                 var firstY = y + directions[i][1];
 
-                var secondX = x + 2 * directions[i][0];
-                var secondY = y + 2 * directions[i][1];
-
                 var currentCoordinate = new Coordinate(x, y);
 
                 var firstCoordinate = new Coordinate(firstX, firstY);
                 var firstChecker = GetChecker(firstCoordinate);
 
-                var secondCoordinate = new Coordinate(secondX, secondY);
-                var secondChecker = GetChecker(secondCoordinate);
-
                 if (Board.DoesCellExist(firstCoordinate))
                 {
+                    var secondX = x + 2 * directions[i][0];
+                    var secondY = y + 2 * directions[i][1];
+
+                    var secondCoordinate = new Coordinate(secondX, secondY);
+                    var secondChecker = GetChecker(secondCoordinate);
+
                     var isFirstCellEmpty = IsCellEmpty(firstCoordinate);
                     var isSecondCellEmpty = IsCellEmpty(secondCoordinate);
 
                     if (!isFirstCellEmpty)
                     {
-                        if (firstChecker.IsWhite == CurrentPlayer.PlaysWhites)
+                        if (IsOwnChecker(firstChecker))
                         {
                             friendlyChecker = true;
                         }
-                        else if (Board.DoesCellExist(secondCoordinate) && !isSecondCellEmpty && (secondChecker.IsWhite != CurrentPlayer.PlaysWhites))
+                        else if (Board.DoesCellExist(secondCoordinate) && !isSecondCellEmpty && !IsOwnChecker(secondChecker))
                         {
                             twoEnemiesInARow = true;
                         }
@@ -545,11 +547,16 @@ namespace Checkers
             return isDirectionBlocked.All(value => value.Equals(true));
         }
 
+        private bool IsOwnChecker(Checker checker)
+        {
+            return checker.IsWhite == CurrentPlayer.PlaysWhites;
+        }
+
         public bool IsCellEmpty(Coordinate coordinate)
         {
             return GetChecker(coordinate) == null;
         }
-        
+
         public bool IsGameOver()
         {
             var noWhites = CheckersSet.All(checker => !checker.IsWhite);
@@ -558,7 +565,7 @@ namespace Checkers
             if (noWhites || noBlacks)
                 return true;
 
-            return CheckersSet.Where(checker => checker.IsWhite == CurrentPlayer.PlaysWhites).All(IsCheckerBlocked);
+            return GetOwnCheckers().All(IsCheckerBlocked);
         }
     }
 }
