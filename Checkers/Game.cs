@@ -400,6 +400,7 @@ namespace Checkers
                     {
                         var currentChecker = GetChecker(coordinate);
                         CheckersSet.Remove(currentChecker);
+                        Console.Beep();
                     }
                 }
             }
