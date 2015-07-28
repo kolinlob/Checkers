@@ -33,7 +33,7 @@ namespace Checkers
             }
         }
 
-        public void Draw(List<Checker> checkersSet)
+        public void Draw(Checkers checkers)
         {
             DrawColumnHeader();
 
@@ -50,12 +50,12 @@ namespace Checkers
                         Console.Write("  ");
 
                         var checkerExists =
-                                    checkersSet.Exists(checker => checker.Coordinate.X == row
+                                    checkers.Set.Exists(checker => checker.Coordinate.X == row
                                                                && checker.Coordinate.Y == column);
 
                         if (checkerExists)
                         {
-                            var checker = checkersSet.Find(c => c.Coordinate.X == row && c.Coordinate.Y == column);
+                            var checker = checkers.Set.Find(c => c.Coordinate.X == row && c.Coordinate.Y == column);
                             board[row, column].DrawCell(checker);
                         }
                         else
