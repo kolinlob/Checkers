@@ -6,8 +6,8 @@ namespace Checkers
     {
         char symbol = '█';
         public bool IsWhite { get; private set; }
-        public bool IsQueen { get; set; } // private set
-        public Coordinate Coordinate { get; set; }
+        public bool IsQueen { get; private set; }
+        public Coordinate Coordinate { get; private set; }
 
         public Checker(bool isWhite, bool isQueen, Coordinate coordinate) // delete isQueen
         {

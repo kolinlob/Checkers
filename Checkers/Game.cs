@@ -8,15 +8,17 @@ namespace Checkers
 {
     public class Game
     {
-        private Board Board { get; set; } 
-        private readonly Checkers checkers = new Checkers(); 
+        private Move  Move  { get; set; }
+        private Board Board { get; set; }
         private List<Coordinate> EnemiesCoordinates { get; set; }
-        private Move Move { get; set; }
-        private IUserInput Player1;
-        private IUserInput Player2;
         private IUserInput CurrentPlayer { get; set; }
-        private readonly Dictionary<Checker, List<Coordinate>> PossibleTakes = new Dictionary<Checker, List<Coordinate>>();
-        private List<Checker> CheckersWithTakes; 
+
+        private IUserInput player1;
+        private IUserInput player2;
+        private List<Checker> checkersWithTakes;
+
+        private readonly Checkers checkers = new Checkers();
+        private readonly Dictionary<Checker, List<Coordinate>> possibleTakes = new Dictionary<Checker, List<Coordinate>>();
 
 
         private readonly int[][] directions =
@@ -29,26 +31,26 @@ namespace Checkers
 
         public void Start()
         {
-            Player1 = new HumanPlayer(true);
-            Player2 = new HumanPlayer(false);
-            CurrentPlayer = Player1;
+            player1 = new HumanPlayer(true);
+            player2 = new HumanPlayer(false);
+            CurrentPlayer = player1;
 
             checkers.Create(false);
             checkers.Create(true);
 
             // TEST SITUATION #1
-            //checkers.Add(new Checker(true, true, 2, 3)); // CHECKER WE TEST
-            //checkers.Add(new Checker(false, true, 0, 1));
-            //checkers.Add(new Checker(false, true, 1, 2));
-            //checkers.Add(new Checker(false, true, 1, 4));
-            //checkers.Add(new Checker(false, true, 0, 5));
-            //checkers.Add(new Checker(true, true, 7, 0));
+            //checkers.Set.Add(new Checker(true,  true, new Coordinate(2, 3))); // CHECKER WE TEST
+            //checkers.Set.Add(new Checker(true,  true, new Coordinate(7, 0)));
+            //checkers.Set.Add(new Checker(false, true, new Coordinate(0, 1)));
+            //checkers.Set.Add(new Checker(false, true, new Coordinate(1, 2)));
+            //checkers.Set.Add(new Checker(false, true, new Coordinate(1, 4)));
+            //checkers.Set.Add(new Checker(false, true, new Coordinate(0, 5)));
 
             // TEST SITUATION #2
-            //checkers.Add(new Checker(true, false, 2, 3)); // CHECKER WE TEST
-            //checkers.Add(new Checker(true, false, 7, 0));
-            //checkers.Add(new Checker(false, false, 6, 1));
-            //checkers.Add(new Checker(false, false, 5, 2));
+            //checkers.Set.Add(new Checker(true,  false, new Coordinate(2, 3))); // CHECKER WE TEST
+            //checkers.Set.Add(new Checker(true,  false, new Coordinate(7, 0)));
+            //checkers.Set.Add(new Checker(false, false, new Coordinate(6, 1)));
+            //checkers.Set.Add(new Checker(false, false, new Coordinate(5, 2)));
 
             // TEST SITUATION #3 - white cheker is surrounded with reds
             //checkers.Set.Add(new Checker(true, false,  new Coordinate(3, 4))); // CHECKER WE TEST
@@ -58,23 +60,23 @@ namespace Checkers
             //checkers.Set.Add(new Checker(false, false, new Coordinate(4, 5)));
 
             // TEST SITUATION #4 - compound move
-            //checkers.Add(new Checker(true, false,  new Coordinate(4, 3))); // CHECKER WE TEST
-            //checkers.Add(new Checker(false, false, new Coordinate(3, 4)));
-            //checkers.Add(new Checker(false, false, new Coordinate(1, 4)));
-            //checkers.Add(new Checker(false, false, new Coordinate(1, 2)));
-            //checkers.Add(new Checker(false, false, new Coordinate(3, 2)));
+            //checkers.Set.Add(new Checker(true,  false, new Coordinate(4, 3))); // CHECKER WE TEST
+            //checkers.Set.Add(new Checker(false, false, new Coordinate(3, 4)));
+            //checkers.Set.Add(new Checker(false, false, new Coordinate(1, 4)));
+            //checkers.Set.Add(new Checker(false, false, new Coordinate(1, 2)));
+            //checkers.Set.Add(new Checker(false, false, new Coordinate(3, 2)));
 
 
             // TEST SITUATION #5 - the only white checker is blocked
-            //checkers.Set.Add(new Checker(true, false,  new Coordinate(4, 3))); // CHECKER WE TEST
+            //checkers.Set.Add(new Checker(true,  false, new Coordinate(4, 3))); // CHECKER WE TEST
             //checkers.Set.Add(new Checker(false, false, new Coordinate(3, 4)));
             //checkers.Set.Add(new Checker(false, false, new Coordinate(2, 5)));
             //checkers.Set.Add(new Checker(false, false, new Coordinate(3, 2)));
             //checkers.Set.Add(new Checker(false, false, new Coordinate(2, 1)));
 
             // TEST SITUATION #6 - for Take tests
-            //checkers.Add(new Checker(true, false, new Coordinate(2, 1)));
-            //checkers.Add(new Checker(false, false, new Coordinate(1, 2)));
+            //checkers.Set.Add(new Checker(true,  false, new Coordinate(2, 1)));
+            //checkers.Set.Add(new Checker(false, false, new Coordinate(1, 2)));
 
             Board = new Board();
 
@@ -95,7 +97,7 @@ namespace Checkers
 
         public IUserInput SwitchPlayer()
         {
-            return CurrentPlayer = (CurrentPlayer == Player1) ? Player2 : Player1;
+            return CurrentPlayer = (CurrentPlayer == player1) ? player2 : player1;
         }
 
         public Coordinate GetCoordinate(string message)
@@ -175,14 +177,14 @@ namespace Checkers
 
         public void FindCheckersWithTakes()
         {
-            CheckersWithTakes = new List<Checker>();
+            checkersWithTakes = new List<Checker>();
 
             foreach (var checker in checkers.GetOwnCheckers(CurrentPlayer))
             {
                 FindPossibleTakes(checker);
-                if (PossibleTakes.ContainsKey(checker))
+                if (possibleTakes.ContainsKey(checker))
                 {
-                    CheckersWithTakes.Add(checker);
+                    checkersWithTakes.Add(checker);
                 }
             }
         }
@@ -240,13 +242,13 @@ namespace Checkers
             }
             if (IsTakePossible(currentChecker, emptyCellsBehindEnemy))
             {
-                PossibleTakes.Add(currentChecker, emptyCellsBehindEnemy);
+                possibleTakes.Add(currentChecker, emptyCellsBehindEnemy);
             }
         }
 
         private bool IsTakePossible(Checker currentChecker, List<Coordinate> emptyCellsBehindEnemy)
         {
-            return EnemiesCoordinates.Count > 0 && emptyCellsBehindEnemy.Count > 0 && !PossibleTakes.ContainsKey(currentChecker);
+            return EnemiesCoordinates.Count > 0 && emptyCellsBehindEnemy.Count > 0 && !possibleTakes.ContainsKey(currentChecker);
         }
 
         public void SelectChecker()
@@ -293,19 +295,19 @@ namespace Checkers
         {
             SelectChecker();
 
-            if (PossibleTakes.Values.Count == 0)
+            if (possibleTakes.Values.Count == 0)
             {
                 SetDestination();
                 MoveChecker();
             }
             else
             {
-                while (PossibleTakes.Values.Count > 0)
+                while (possibleTakes.Values.Count > 0)
                 {
                     var currentChecker = checkers.GetChecker(Move.GetStartCoordinate());
 
                     SetDestination();
-                    PossibleTakes.Clear();
+                    possibleTakes.Clear();
                     MoveChecker();
                     FindPossibleTakes(currentChecker);
                 }
@@ -391,9 +393,9 @@ namespace Checkers
                 {
                     return false;
                 }
-                if (CheckersWithTakes.Count > 0)
+                if (checkersWithTakes.Count > 0)
                 {
-                    return CheckersWithTakes.Contains(checker);
+                    return checkersWithTakes.Contains(checker);
                 }
                 return !IsCheckerBlocked(checker);
             }
@@ -405,10 +407,10 @@ namespace Checkers
             var checkerToMove = checkers.GetChecker(moveStartCoordinate);
             var isCellEmpty = IsCellEmpty(moveEndCoordinate);
 
-            if (checkerToMove != null && PossibleTakes.ContainsKey(checkerToMove))
+            if (checkerToMove != null && possibleTakes.ContainsKey(checkerToMove))
             {
                 var targetCoordinateToCheck =
-                    PossibleTakes[checkerToMove].
+                    possibleTakes[checkerToMove].
                             Find(coord => coord.X == moveEndCoordinate.X
                                        && coord.Y == moveEndCoordinate.Y);
 
